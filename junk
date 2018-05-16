@@ -1,0 +1,40 @@
+!
+!  Find the roots of P^(db,da)_dnu in the interval (0,\pi/2)
+!
+
+xx   = pi/2
+int0 = 1
+do i=1,n-nroots
+do int=int0,nints-1
+if (xx .lt. abinv2(2,int)) exit
+end do
+a    = abinv2(1,int)
+b    = abinv2(2,int)
+int0 = int
+call chebeval(a,b,k,chebdata%xs,alphainv2(:,int),xx,xs(i))
+xx = xx + pi
+end do
+
+!
+!  Evaluate the corresponding weights
+!
+
+
+int0 = 1 
+do i=1,n/2
+t = xs(i) 
+
+do int=int0,nints-1
+if (t .lt. ab(2,int)) exit
+end do
+a    = ab(1,int)
+b    = ab(2,int)
+int0 = int
+call chebeval(a,b,k,chebdata%xs,avals2(:,int),t,apval)
+
+r              = cos(t/2)**(2*da+1) * sin(t/2)**(2*db+1)
+whts(i)        = r*dconst/apval
+xs(i)          = pi-t
+end do
+
+
