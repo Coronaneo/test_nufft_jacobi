@@ -1,4 +1,4 @@
-dprogram test_nufft
+program test_nufft
 use utils
 use chebyshev
 implicit double precision (a-h,o-z)
@@ -7,12 +7,12 @@ type(chebexps_data)           :: chebdata
 double precision, allocatable :: ab(:,:)
 double precision, allocatable :: psivals(:),avals(:)
 double precision, allocatable :: ts(:),avals0(:),psivals0(:),polvals(:),polvals0(:)
-double precision, allocatable :: xx(:),xs(:)
+double precision, allocatable :: xx(:),xs(:),twhts(:)
 complex*16,allocatable :: jacobi1(:,:),jacobi2(:,:)
 integer nts
 
 pi  = acos(-1.0d0)
-nts = 2**15-16
+nts = 2**9-26
 allocate(jacobi1(nts,nts),jacobi2(nts,nts))
 allocate(ts(nts),xs(nts),twhts(nts),avals0(nts),psivals0(nts),polvals(nts),polvals0(nts))
 
@@ -27,11 +27,11 @@ end do
 call quicksort(nts,ts)
 call quicksort(nts,xs)
 !call prin2("ts = ",ts)
-
+print *,'done0'
 
 do i = 27,nts
 
-k  = i
+k  = 20
 call chebexps(k,chebdata)
 if (i.ge.28) then
    deallocate(xx,psivals,avals,ab)
@@ -76,8 +76,8 @@ call elapsed(t2)
 !call prin2("average eval time = ",(t2-t1)/nts)
 !polvals0 = cos(psivals0)*avals0
 !print *,size(avals0),size(psivals0)
-jacobi1(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-k*ts))
-jacobi2(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-k*xs))
+jacobi1(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-i*ts))
+jacobi2(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-i*xs))
 end do
 
 open(unit=10,file = "jacobi1r.txt")

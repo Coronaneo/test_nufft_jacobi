@@ -1,4 +1,4 @@
-nts=2^15-26;
+nts=2^9-26;
 jacobi1r=zeros(nts,nts);
 jacobi1i=zeros(nts,nts);
 jacobi2r=zeros(nts,nts);
