@@ -7,11 +7,12 @@ type(chebexps_data)           :: chebdata
 double precision, allocatable :: ab(:,:)
 double precision, allocatable :: psivals(:),avals(:)
 double precision, allocatable :: ts(:),avals0(:),psivals0(:),polvals(:),polvals0(:)
-double precision, allocatable :: xx(:)
+double precision, allocatable :: xx(:),xs(:)
 complex*16,allocatable :: jacobi1(:,:),jacobi2(:,:)
+integer nts
 
 pi  = acos(-1.0d0)
-nts = 2^15-26
+nts = 2**15-16
 allocate(jacobi1(nts,nts),jacobi2(nts,nts))
 allocate(ts(nts),xs(nts),avals0(nts),psivals0(nts),polvals(nts),polvals0(nts))
 
@@ -25,14 +26,16 @@ xs(i) = floor(ts(i)/2/pi*nts+0.5)*2*pi/nts
 end do
 call quicksort(nts,ts)
 call quicksort(nts,xs)
-call prin2("ts = ",ts)
+!call prin2("ts = ",ts)
 
 
 do i = 27,nts
 
 k  = i
 call chebexps(k,chebdata)
-
+if (i.ge.28) then
+   deallocate(xx,psivals,avals,ab)
+end if
 
 
 ! this must be integer because we use the recurrence relations to test accuracy
@@ -72,9 +75,11 @@ call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,nts,ts,avals0,p
 call elapsed(t2)
 !call prin2("average eval time = ",(t2-t1)/nts)
 !polvals0 = cos(psivals0)*avals0
-jacobi1(:,i-26)=matmul(avals0,exp(dcmplx(0,1)*(psivals0-k*ts)))
-jacobi2(:,i-26)=matmul(avals0,exp(dcmplx(0,1)*(psivals0-k*xs)))
-end
+!print *,size(avals0),size(psivals0)
+jacobi1(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-k*ts))
+jacobi2(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-k*xs))
+end do
+
 open(unit=10,file = "jacobi1.txt")
 write(10,*) jacobi1
 open(unit=10,file = "jacobi2.txt")

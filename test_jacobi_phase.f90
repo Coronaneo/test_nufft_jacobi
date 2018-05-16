@@ -64,7 +64,7 @@ call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,nts,ts,avals0,p
 call elapsed(t2)
 call prin2("average eval time = ",(t2-t1)/nts)
 polvals0 = cos(psivals0)*avals0
-
+print *,size(exp(dcmplx(0,1)*(psivals0-ts)),1)
 
 dconst = sqrt( (2*dnu+da+db+1)/pi)
 call elapsed(t1)
