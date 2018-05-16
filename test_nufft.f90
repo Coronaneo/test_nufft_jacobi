@@ -80,9 +80,15 @@ jacobi1(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-k*ts))
 jacobi2(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-k*xs))
 end do
 
-open(unit=10,file = "jacobi1.txt")
-write(10,*) jacobi1
-open(unit=10,file = "jacobi2.txt")
-write(10,*) jacobi2
+open(unit=10,file = "jacobi1r.txt")
+write(10,*) real(jacobi1)
+open(unit=10,file = "jacobi1i.txt")
+write(10,*) real(-dcmplx(0,1)*jacobi1)
+
+open(unit=10,file = "jacobi2r.txt")
+write(10,*) real(jacobi2)
+open(unit=10,file = "jacobi2i.txt")
+write(10,*) real(-dcmplx(0,1)*jacobi2)
+
 
 end program
