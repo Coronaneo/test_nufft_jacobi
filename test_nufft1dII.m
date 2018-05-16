@@ -1,21 +1,19 @@
 nts=2^9-26;
-jacobi1r=zeros(nts,nts);
-jacobi1i=zeros(nts,nts);
-jacobi2r=zeros(nts,nts);
-jacobi2i=zeros(nts,nts);
-jocabi1r=textread('jacobi1r.txt');
-jocabi1i=textread('jacobi1i.txt');
-jocabi2r=textread('jacobi2r.txt');
-jocabi2i=textread('jacobi2i.txt');
-jacobi1=zeros(nts,nts);
-jacobi2=zeros(nts,nts);
+load jacobi1i.txt
+load jacobi1r.txt
+load jacobi2r.txt
+load jacobi2i.txt
+jacobi1r=reshape(jacobi1r,[nts,nts]);
+jacobi1i=reshape(jacobi1i,[nts,nts]);
+jacobi2r=reshape(jacobi2r,[nts,nts]);
+jacobi2i=reshape(jacobi2i,[nts,nts]);
 jacobi1=jacobi1r+1i*jacobi1i;
 jacobi2=jacobi2r+1i*jacobi2i;
-size(jacobi1)
-size(jacobi2)
+size(jacobi1);
+size(jacobi2);
 tol=1e-12;
-tR=500;
-mR=500;
+tR=60;
+mR=60;
 [U1,V1]=lowrank(jacobi1,tol,tR,mR);
 [U2,V2]=lowrank(jacobi2,tol,tR,mR);
 rank1=size(U1,2)
