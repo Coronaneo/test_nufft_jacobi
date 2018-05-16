@@ -1,4 +1,4 @@
-program test_nufft
+dprogram test_nufft
 use utils
 use chebyshev
 implicit double precision (a-h,o-z)
@@ -14,14 +14,14 @@ integer nts
 pi  = acos(-1.0d0)
 nts = 2**15-16
 allocate(jacobi1(nts,nts),jacobi2(nts,nts))
-allocate(ts(nts),xs(nts),avals0(nts),psivals0(nts),polvals(nts),polvals0(nts))
+allocate(ts(nts),xs(nts),twhts(nts),avals0(nts),psivals0(nts),polvals(nts),polvals0(nts))
 
 a = pi/2*(2**(-13))
-b = pi - a
+b = pi - a				  
+
+call jacobi_quad_mod(nts,da,db,ts,twhts)
 
 do i=1,nts
-call random_number(dd)
-ts(i) = a + (b-a)*dd
 xs(i) = floor(ts(i)/2/pi*nts+0.5)*2*pi/nts
 end do
 call quicksort(nts,ts)
