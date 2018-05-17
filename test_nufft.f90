@@ -12,8 +12,8 @@ complex*16,allocatable :: jacobi1(:,:),jacobi2(:,:)
 integer nts
 
 pi  = acos(-1.0d0)
-nts = 2**9-26
-allocate(jacobi1(nts,nts),jacobi2(nts,nts))
+nts = 2**9
+allocate(jacobi1(nts,nts-27),jacobi2(nts,nts-27))
 allocate(ts(nts),xs(nts),twhts(nts),avals0(nts),psivals0(nts),polvals(nts),polvals0(nts))
 
 a = pi/2*(2**(-13))
@@ -26,12 +26,14 @@ xs(i) = floor(ts(i)/2/pi*nts+0.5)*2*pi/nts
 end do
 call quicksort(nts,ts)
 call quicksort(nts,xs)
+open(unit=10,file = "ts.txt")
+write(10,*) ts
 !call prin2("ts = ",ts)
 print *,'done0'
 
-do i = 27,nts
+do i = 27,nts-1
 
-k  = 20
+k  = 24
 call chebexps(k,chebdata)
 if (i.ge.28) then
    deallocate(xx,psivals,avals,ab)
@@ -80,14 +82,14 @@ jacobi1(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-i*ts))
 jacobi2(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-i*xs))
 end do
 
-open(unit=10,file = "jacobi1r.txt")
+open(unit=10,file = "jacobi1r.bin")
 write(10,*) real(jacobi1)
-open(unit=10,file = "jacobi1i.txt")
+open(unit=10,file = "jacobi1i.bin")
 write(10,*) real(-dcmplx(0,1)*jacobi1)
 
-open(unit=10,file = "jacobi2r.txt")
+open(unit=10,file = "jacobi2r.bin")
 write(10,*) real(jacobi2)
-open(unit=10,file = "jacobi2i.txt")
+open(unit=10,file = "jacobi2i.bin")
 write(10,*) real(-dcmplx(0,1)*jacobi2)
 
 
