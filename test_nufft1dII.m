@@ -70,6 +70,7 @@ result3=(jacobi1.*F2)*d;
 fout=fopen('result3.txt','w');
 fprintf(fout,'%12.26f %12.26f %12.26f\n',real(result3));
 fclose(fout);
+
 fout=fopen('U1r.txt','w');
 fprintf(fout,'%12.26f %12.26f %12.26f\n',real(U1));
  fclose(fout);
@@ -81,4 +82,17 @@ fprintf(fout,'%12.26f %12.26f %12.26f\n',real(V1));
  fclose(fout);
 fout=fopen('V1i.txt','w');
 fprintf(fout,'%12.26f %12.26f %12.26f\n',real(-1i*V1));
+ fclose(fout);
+
+fout=fopen('U2r.txt','w');
+fprintf(fout,'%12.26f %12.26f %12.26f\n',real(U2.'));
+ fclose(fout);
+fout=fopen('U2i.txt','w');
+fprintf(fout,'%12.26f %12.26f %12.26f\n',real(-1i*U2.'));
+ fclose(fout);
+fout=fopen('V2r.txt','w');
+fprintf(fout,'%12.26f %12.26f %12.26f\n',real(V2.'));
+ fclose(fout);
+fout=fopen('V2i.txt','w');
+fprintf(fout,'%12.26f %12.26f %12.26f\n',real(-1i*V2.'));
  fclose(fout);

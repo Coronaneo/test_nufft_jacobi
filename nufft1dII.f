@@ -42,7 +42,7 @@
 
 
 	do k = 1,ns
-	   M(:,k) = V(:,k)*c2(k)
+	   M(:,k) = conjg(V(:,k))*c2(k)
 	enddo
 
 
