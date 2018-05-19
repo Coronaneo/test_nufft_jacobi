@@ -22,12 +22,15 @@ b = pi - a
 call jacobi_quad_mod(nts,da,db,ts,twhts)
 
 do i=1,nts
-xs(i) = floor(ts(i)/2/pi*nts+0.5)*2*pi/nts
+xs(i) = (mod(floor(ts(i)/2/pi*nts+0.5),nts))*2*pi/nts
+
 end do
 call quicksort(nts,ts)
 call quicksort(nts,xs)
 open(unit=10,file = "ts.txt")
 write(10,*) ts
+open(unit=10,file = "xs.bin")
+write(10,*) xs
 !call prin2("ts = ",ts)
 print *,'done0'
 
@@ -81,7 +84,7 @@ call elapsed(t2)
 jacobi1(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-i*ts))
 jacobi2(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-i*xs))
 end do
-
+print *,jacobi1(1,1),jacobi1(2,1)
 open(unit=10,file = "jacobi1r.bin")
 write(10,*) real(jacobi1)
 open(unit=10,file = "jacobi1i.bin")
