@@ -44,14 +44,15 @@
 	do k = 1,ns
 	   M(:,k) = conjg(V(:,k))*c2(k)
 	enddo
-
+        !print *,'M(1,1:5)=',M(1,1:5)
 
 	do i = 1,r
 	   in1 = M(i,:)
 	   call dfftw_execute_dft(plan, in1, out1)
 	   N(i,:) = out1
 	enddo
-
+        !print *,'N(1,1:5)=',N(1,1:5)
+        !print *,'xsub(1:5)',xsub(1:5)
 	S = sum(U*N(:,xsub),1)
 
 	end subroutine

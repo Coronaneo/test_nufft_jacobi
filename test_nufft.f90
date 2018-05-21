@@ -12,7 +12,7 @@ complex*16,allocatable :: jacobi1(:,:),jacobi2(:,:)
 integer nts
 
 pi  = acos(-1.0d0)
-nts = 2**9
+nts = 2**14
 allocate(jacobi1(nts,nts-27),jacobi2(nts,nts-27))
 allocate(ts(nts),xs(nts),twhts(nts),avals0(nts),psivals0(nts),polvals(nts),polvals0(nts))
 
