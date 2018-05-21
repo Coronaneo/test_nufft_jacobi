@@ -22,11 +22,12 @@ double precision, allocatable :: psivals(:),avals(:)
 double precision, allocatable :: ts(:),avals0(:),psivals0(:),polvals(:),polvals0(:)
 double precision, allocatable :: xx(:),xs(:),twhts(:)
 complex*16,allocatable :: jacobi1(:,:),jacobi2(:,:)
-integer nts
+integer*4 nts,k
 double precision pi
 
 pi  = acos(-1.0d0)
-call mxCopyPtrToInteger4(mxGetPr(prhs(1)),nts,1)
+!call mxCopyPtrToInteger4(mxGetPr(prhs(1)),nts,1)
+nts = 2**9
 allocate(jacobi1(nts,nts-27),jacobi2(nts,nts-27))
 allocate(ts(nts),xs(nts),twhts(nts),avals0(nts),psivals0(nts),polvals(nts),polvals0(nts))				  
 
@@ -93,4 +94,4 @@ call mxCopyComplex16ToPtr(jacobi1, mxGetPr(plhs(2)),mxGetPi(plhs(2)),nts*(nts-27
 call mxCopyComplex16ToPtr(jacobi2, mxGetPr(plhs(3)),mxGetPi(plhs(3)),nts*(nts-27)) 
 
 deallocate(jacobi1,jacobi2,ts,xs,twhts,avals0,psivals0,polvals,polvals0)
-end subroutine
+end subroutine mexfunction

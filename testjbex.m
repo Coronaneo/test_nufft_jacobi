@@ -1,7 +1,7 @@
-nts=2^9;
+nts=2^9
 tR=60;
 mR=60;
-tol=1e-12;
+tol=1e-12
 [ts jacobi1 jacobi2]=jacobiexample(nts);
 jacobi1=[zeros(nts,27) jacobi1];
 jacobi2=[zeros(nts,27) jacobi2];
