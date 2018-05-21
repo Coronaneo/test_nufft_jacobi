@@ -72,19 +72,11 @@ call jacobi_phase_disc(nints,ab)
 
 allocate(psivals(k*nints),avals(k*nints))
 
-call elapsed(t1)
 call jacobi_phase(chebdata,dnu,da,db,nints,ab,avals,psivals)
-call elapsed(t2)
 !call prin2("time to construct phase = ",(t2-t1))
 
 
-
-
-
-
-call elapsed(t1)
 call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,nts,ts,avals0,psivals0)
-call elapsed(t2)
 !call prin2("average eval time = ",(t2-t1)/nts)
 !polvals0 = cos(psivals0)*avals0
 !print *,size(avals0),size(psivals0)
@@ -92,7 +84,7 @@ jacobi1(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-i*ts))
 jacobi2(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-i*xs))
 end do
 
-plhs(1) = mxCreateDoubleMatrix(nts, 1, 1)
+plhs(1) = mxCreateDoubleMatrix(nts, 1, 0)
 plhs(2) = mxCreateDoubleMatrix(nts, nts-27, 1)
 plhs(3) = mxCreateDoubleMatrix(nts, nts-27, 1)
 
