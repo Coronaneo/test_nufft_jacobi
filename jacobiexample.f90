@@ -1,7 +1,20 @@
-program test_nufft
+#include "fintrf.h"
+
+! standard header for mex functions
+subroutine mexfunction(nlhs, plhs, nrhs, prhs)
 use utils
 use chebyshev
-implicit double precision (a-h,o-z)
+
+  implicit double precision (a-h,o-z)
+
+  ! number of input arguments, number of output arguments
+  integer      :: nlhs, nrhs  
+  ! pointer to inputs and outputs
+  mwPointer    :: plhs(*), prhs(*) 
+  ! get some of the matlab mex functions
+  mwPointer    :: mxGetPr, mxGetPi, mxCreateDoubleMatrix 
+  ! define a size integer so that we can get its type
+  mwSize       :: nj
 
 type(chebexps_data)           :: chebdata
 double precision, allocatable :: ab(:,:)
@@ -10,29 +23,23 @@ double precision, allocatable :: ts(:),avals0(:),psivals0(:),polvals(:),polvals0
 double precision, allocatable :: xx(:),xs(:),twhts(:)
 complex*16,allocatable :: jacobi1(:,:),jacobi2(:,:)
 integer nts
+double precision pi
 
 pi  = acos(-1.0d0)
-nts = 2**14
+call mxCopyPtrToInteger4(mxGetPr(prhs(1)),nts,1)
 allocate(jacobi1(nts,nts-27),jacobi2(nts,nts-27))
-allocate(ts(nts),xs(nts),twhts(nts),avals0(nts),psivals0(nts),polvals(nts),polvals0(nts))
+allocate(ts(nts),xs(nts),twhts(nts),avals0(nts),psivals0(nts),polvals(nts),polvals0(nts))				  
 
-a = pi/2*(2**(-13))
-b = pi - a				  
-
+da=0.25d0
+db=0.25d0
 call jacobi_quad_mod(nts,da,db,ts,twhts)
 
 do i=1,nts
 xs(i) = (mod(floor(ts(i)/2/pi*nts+0.5),nts))*2*pi/nts
-
 end do
 call quicksort(nts,ts)
 call quicksort(nts,xs)
-open(unit=10,file = "ts.txt")
-write(10,*) ts
-open(unit=10,file = "xs.bin")
-write(10,*) xs
-!call prin2("ts = ",ts)
-print *,'done0'
+
 
 do i = 27,nts-1
 
@@ -84,16 +91,14 @@ call elapsed(t2)
 jacobi1(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-i*ts))
 jacobi2(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-i*xs))
 end do
-print *,jacobi1(1,1),jacobi1(2,1)
-open(unit=10,file = "jacobi1r.bin")
-write(10,*) real(jacobi1)
-open(unit=10,file = "jacobi1i.bin")
-write(10,*) real(-dcmplx(0,1)*jacobi1)
 
-open(unit=10,file = "jacobi2r.bin")
-write(10,*) real(jacobi2)
-open(unit=10,file = "jacobi2i.bin")
-write(10,*) real(-dcmplx(0,1)*jacobi2)
+plhs(1) = mxCreateDoubleMatrix(nts, 1, 1)
+plhs(2) = mxCreateDoubleMatrix(nts, nts-27, 1)
+plhs(3) = mxCreateDoubleMatrix(nts, nts-27, 1)
 
+call mxCopyReal8ToPtr(ts, mxGetPr(plhs(1)),nts) 
+call mxCopyComplex16ToPtr(jacobi1, mxGetPr(plhs(2)),mxGetPi(plhs(2)),nts*(nts-27)) 
+call mxCopyComplex16ToPtr(jacobi2, mxGetPr(plhs(3)),mxGetPi(plhs(3)),nts*(nts-27)) 
 
-end program
+deallocate(jacobi1,jacobi2,ts,xs,twhts,avals0,psivals0,polvals,polvals0)
+end subroutine
