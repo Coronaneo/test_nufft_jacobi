@@ -10,4 +10,4 @@ FORTRAN   = gfortran
 OPTS      = -O3
 FPPFLAGS  = -DLAP -DSLAP -fPIC
 
-LIBNAME = 
+LIBNAME = -lfftw3 -lblas
