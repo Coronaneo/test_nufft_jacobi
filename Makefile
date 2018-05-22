@@ -23,6 +23,7 @@ clean :
 	rm -f *.o
 	rm -f *.x
 	rm -f *.mod
+	rm -f *.mexa64
 
 .f.o : 
 	$(FORTRAN) $(OPTS) $(FPPFLAGS) -c $<  -o $@ $(LIBNAME)

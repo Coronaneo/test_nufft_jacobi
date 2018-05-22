@@ -21,7 +21,7 @@ result2 = nts*squeeze(sum(reshape(repmat(U2,1,ncol).*fftc,nts,rank2,ncol),2));
 
 ex = exp(1i*nts/2*ts);
 result1=zeros(nts,1)
-do i=1:rank1
+for i=1:rank1
    cj = nufft1dIInyumex(ts,1,tol,conj(V1(:,i))*c);
    result1 = result1 + U1(:,i).*ex.*cj;
 end
