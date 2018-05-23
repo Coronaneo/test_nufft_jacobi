@@ -5,7 +5,8 @@ OS = $(shell uname)
 .SUFFIXES: .o .a .x  .f90 .F90 .f
 
 ALLOBJ = dfft.o dfftpack.o dirft1d.o next235.o nufft1df90.o 
-ALLOBJ1 = utils.o amos.o chebyshev.o jacobi_asym.o jacobi_taylor.o jacobi_phase.o jacobi_quad.o 
+ALLOBJ1 = utils.o amos.o gspiv.o orthom.o idecomp.o chebyshev.o jacobi_asym.o jacobi_taylor.o jacobi_phase.o jacobi_quad.o jacobi_exp.o jacobi_transform.o
+
 
 all : ${ALLOBJ} ${ALLOBJ1} nufft1dIInyumex.mex jacobiexample.mex
 
@@ -15,8 +16,10 @@ nufft1dIInyumex.mex: nufft1dIInyumex.F90
 jacobiexample.mex: jacobiexample.F90
 	${MEX} ${FLAGS} jacobiexample.F90 $(ALLOBJ1) $(LIBNAME)
 
+chebjacex.mex: chebjacex.F90
+	${MEX} ${FLAGS} chebjacex.F90 $(ALLOBJ1) $(LIBNAME) 
 
-LINK_MACRO = $< nufft1dIInyumex.o jacobiexample.o -o $@
+LINK_MACRO = $< nufft1dIInyumex.o jacobiexample.o chebjacex.o -o $@
 
 clean : 
 	rm -f *.a
