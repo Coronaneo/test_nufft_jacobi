@@ -43,9 +43,7 @@ call mxCopyPtrToReal8(mxGetPr(prhs(2)),da,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(3)),db,1)
 call jacobi_quad_mod(nts,da,db,ts,twhts)
 
-do i=1,nts
-   xs(i) = (mod(floor(ts(i)/2/pi*nts+0.5),nts))*2*pi/nts
-end do
+xs = int(ts/2/pi*(nts+0.0d0))*2*pi/nts
 !call quicksort(nt,ts)
 !call quicksort(nt,xs)
 
@@ -91,8 +89,8 @@ call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,nts,ts,avals0,p
 !call prin2("average eval time = ",(t2-t1)/nts)
 !polvals0 = cos(psivals0)*avals0
 !print *,size(avals0),size(psivals0)
-jacobi1(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-i*ts))*twhts
-jacobi2(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-i*xs))*twhts
+jacobi1(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-i*ts))
+jacobi2(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-i*xs))
 end do
 
 plhs(1) = mxCreateDoubleMatrix(nts, 1, 0)

@@ -5,10 +5,11 @@ OS = $(shell uname)
 .SUFFIXES: .o .a .x  .f90 .F90 .f
 
 ALLOBJ = dfft.o dfftpack.o dirft1d.o next235.o nufft1df90.o 
-ALLOBJ1 = utils.o amos.o gspiv.o orthom.o idecomp.o chebyshev.o jacobi_asym.o jacobi_taylor.o jacobi_phase.o jacobi_quad.o jacobi_exp.o jacobi_transform.o
+ALLOBJ1 = utils.o amos.o chebyshev.o jacobi_asym.o jacobi_taylor.o jacobi_phase.o jacobi_quad.o
+ALLOBJ2 = gspiv.o orthom.o idecomp.o jacobi_exp.o jacobi_transform.o
 
 
-all : ${ALLOBJ} ${ALLOBJ1} nufft1dIInyumex.mex jacobiexample.mex
+all : ${ALLOBJ} ${ALLOBJ1} ${ALLOBJ2} nufft1dIInyumex.mex jacobiexample.mex chebjacex.mex
 
 nufft1dIInyumex.mex: nufft1dIInyumex.F90
 	${MEX} ${FLAGS} nufft1dIInyumex.F90 $(ALLOBJ)
@@ -17,7 +18,9 @@ jacobiexample.mex: jacobiexample.F90
 	${MEX} ${FLAGS} jacobiexample.F90 $(ALLOBJ1) $(LIBNAME)
 
 chebjacex.mex: chebjacex.F90
-	${MEX} ${FLAGS} chebjacex.F90 $(ALLOBJ1) $(LIBNAME) 
+	${MEX} ${FLAGS} chebjacex.F90 $(ALLOBJ1) $(ALLOBJ2) $(LIBNAME) 
+#libdfftpack.a:
+#	cd dfftpack && $(MAKE) clean && $(MAKE) && cp libdfftpack.a ..
 
 LINK_MACRO = $< nufft1dIInyumex.o jacobiexample.o chebjacex.o -o $@
 

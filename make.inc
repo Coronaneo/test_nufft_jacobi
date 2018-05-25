@@ -11,4 +11,4 @@ OPTS      = -O3
 FPPFLAGS  = -DLAP -DSLAP -fPIC
 FOPTS     = -w -Ofast -cpp
 
-LIBNAME = -lfftw3 -lblas
+LIBNAME = -lfftw3 -lblas 

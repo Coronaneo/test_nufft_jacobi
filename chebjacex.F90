@@ -23,23 +23,38 @@ use jacobi_transform
 
 type(jacobi_expansion_data)   :: expdata
 type(jacobi_transform_data)   :: jacdata
+real*8,allocatable :: r(:,:),ts(:)
+!integer*4,allocatable :: idxs(:)
+complex*16,allocatable :: expvals(:,:)
+real*8   da,db,eps,rdmax
+integer*4  n,iffactor
+integer krank
 
-real*8 :: da,db,eps
 
-
+iffactor=1
 dmax = mxGetM(prhs(1))
+n = dmax
+rdmax = dmax
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),da,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(3)),db,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(4)),eps,1)
 
-call jacobi_expansion(eps,1,dmax,da,db,expdata)
-call jacobi_transform_prepare(expdata,dmax,jacdata)
+call jacobi_expansion(eps,iffactor,rdmax,da,db,expdata)
+call jacobi_transform_prepare(expdata,n,jacdata)
+krank = jacdata%krank
+allocate(r(dmax,krank),expvals(dmax,krank),ts(dmax))
+r = jacdata%r
+ts = jacdata%ts
+expvals = jacdata%expvals
 
-plhs(2) = mxCreateDoubleMatrix(dmax, jacdata%krank, 0)
-plhs(3) = mxCreateDoubleMatrix(dmax, jacdata%krank, 1)
+!plhs(1) = mxCreateDoubleMatrix(1,1,0)
+plhs(1) = mxCreateDoubleMatrix(dmax, krank, 0)
+plhs(2) = mxCreateDoubleMatrix(dmax, krank, 1)
+plhs(3) = mxCreateDoubleMatrix(dmax,1,0)
 
-call mxCopyInteger2ToPtr(jacdata%krank,mxGetPr(plhs(1)),1)
-call mxCopyReal8ToPtr(jacdata%r,mxGetPr(plhs(2)),dmax*jacdata%krank)
-call mxCopyComplex16ToPtr(jacdata%expvals,mxGetPr(plhs(3)),mxGetPi(plhs(3)),dmax*jacdata%krank)
-
+!call mxCopyInteger4ToPtr(krank,mxGetPr(plhs(1)),1)
+call mxCopyReal8ToPtr(r,mxGetPr(plhs(1)),dmax*krank)
+call mxCopyComplex16ToPtr(expvals,mxGetPr(plhs(2)),mxGetPi(plhs(2)),dmax*krank)
+call mxCopyReal8ToPtr(ts,mxGetPr(plhs(3)),dmax)
+deallocate(r,expvals,ts)
 end subroutine mexfunction

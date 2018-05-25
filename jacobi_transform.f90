@@ -279,8 +279,8 @@ end do
 #ifdef USE_FFTW
 call dfftw_plan_dft_1d(jacdata%iplan,n,jacdata%z1,jacdata%z2,FFTW_BACKWARD,FFTW_ESTIMATE)
 #else
-allocate( jacdata%wsave(3*n+15) )
-call zffti(n,jacdata%wsave)
+!allocate( jacdata%wsave(3*n+15) )
+!call zffti(n,jacdata%wsave)
 #endif
 
 ! record the values of the polynomials of low degree
@@ -327,8 +327,8 @@ jacdata%z1 = jacdata%r(:,j)*x
 call dfftw_execute_dft(iplan, jacdata%z1, jacdata%z2)
 jacdata%z3  = jacdata%z3 + jacdata%z2(jacdata%idxs)*jacdata%expvals(:,j)
 #else
-call zfftb(n,jacdata%z1,jacdata%wsave)
-jacdata%z3  = jacdata%z3 + jacdata%z1(jacdata%idxs)*jacdata%expvals(:,j)
+!call zfftb(n,jacdata%z1,jacdata%wsave)
+!jacdata%z3  = jacdata%z3 + jacdata%z1(jacdata%idxs)*jacdata%expvals(:,j)
 #endif
 end do
 
@@ -388,9 +388,9 @@ jacdata%z2(n/2+1) = jacdata%z1(n)
 call dfftw_execute_dft(iplan, jacdata%z2, jacdata%z1)
 jacdata%z3  = jacdata%z3 + jacdata%z1*jacdata%r(:,j)
 #else
-jacdata%z1 = jacdata%z2
-call zfftb(n,jacdata%z1,jacdata%wsave)
-jacdata%z3  = jacdata%z3 + jacdata%z1*jacdata%r(:,j)
+!jacdata%z1 = jacdata%z2
+!call zfftb(n,jacdata%z1,jacdata%wsave)
+!jacdata%z3  = jacdata%z3 + jacdata%z1*jacdata%r(:,j)
 #endif
 
 end do
@@ -405,9 +405,9 @@ jacdata%z2(1:n/2) = jacdata%z1(1:n/2:2)+jacdata%z1(2:n/2:2)
 call dfftw_execute_dft(iplan, jacdata%z2, jacdata%z1)
 jacdata%z3  = jacdata%z3 + jacdata%z1*jacdata%r(:,j)
 #else
-jacdata%z1 = jacdata%z2
-call zfftb(n,jacdata%z1,jacdata%wsave)
-jacdata%z3  = jacdata%z3 + jacdata%z1*jacdata%r(:,j)
+!jacdata%z1 = jacdata%z2
+!call zfftb(n,jacdata%z1,jacdata%wsave)
+!jacdata%z3  = jacdata%z3 + jacdata%z1*jacdata%r(:,j)
 #endif
 
 end do
