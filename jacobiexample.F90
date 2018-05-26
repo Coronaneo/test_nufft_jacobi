@@ -33,7 +33,7 @@ pi  = acos(-1.0d0)
 nts = mxGetM(prhs(1))
 nt = nts
 !nts = 2**9
-allocate(jacobi1(nts,nts-27),jacobi2(nts,nts-27))
+allocate(jacobi1(nts,nts-26),jacobi2(nts,nts-26))
 allocate(ts(nts),xs(nts),twhts(nts),avals0(nts),tss(nts,1))
 allocate(psivals0(nts),polvals(nts),polvals0(nts))
 
@@ -53,8 +53,8 @@ xs = int(ts/2/pi*(nts+0.0d0))*2*pi/nts
 k  = 24
 call chebexps(k,chebdata)
 
-do i=27,nts-1
-if (i.ge.28) then
+do i=26,nts-1
+if (i.ge.27) then
     deallocate(psivals,avals,ab)
 end if
 
@@ -94,12 +94,12 @@ jacobi2(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-i*xs))
 end do
 
 plhs(1) = mxCreateDoubleMatrix(nts, 1, 0)
-plhs(2) = mxCreateDoubleMatrix(nts, nts-27, 1)
-plhs(3) = mxCreateDoubleMatrix(nts, nts-27, 1)
+plhs(2) = mxCreateDoubleMatrix(nts, nts-26, 1)
+plhs(3) = mxCreateDoubleMatrix(nts, nts-26, 1)
 !tss(:,1) = ts
 call mxCopyReal8ToPtr(ts, mxGetPr(plhs(1)),nts) 
-call mxCopyComplex16ToPtr(jacobi1, mxGetPr(plhs(2)),mxGetPi(plhs(2)),nts*(nts-27)) 
-call mxCopyComplex16ToPtr(jacobi2, mxGetPr(plhs(3)),mxGetPi(plhs(3)),nts*(nts-27)) 
+call mxCopyComplex16ToPtr(jacobi1, mxGetPr(plhs(2)),mxGetPi(plhs(2)),nts*(nts-26)) 
+call mxCopyComplex16ToPtr(jacobi2, mxGetPr(plhs(3)),mxGetPi(plhs(3)),nts*(nts-26)) 
 
 deallocate(jacobi1,jacobi2,ts,xs,twhts,avals0)
 deallocate(psivals0,polvals,polvals0)
