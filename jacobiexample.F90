@@ -25,15 +25,21 @@ complex*16,allocatable :: jacobi1(:,:),jacobi2(:,:)
 real*8 :: nts1,da,db
 integer*4  k,nt
 real*8 pi
+integer nints,it
 
 !allocate(nts1(2,1))
 pi  = acos(-1.0d0)
 !call mxCopyPtrToReal8(mxGetPr(prhs(1)),nts1,1)
 !nts = ceiling(nts1(1,1))
 nts = mxGetM(prhs(1))
+if (nts .lt. 2**12) then
+it = 27
+else
+it = 9
+end if
 nt = nts
 !nts = 2**9
-allocate(jacobi1(nts,nts-26),jacobi2(nts,nts-26))
+allocate(jacobi1(nts,nts-it),jacobi2(nts,nts-it))
 allocate(ts(nts),xs(nts),twhts(nts),avals0(nts),tss(nts,1))
 allocate(psivals0(nts),polvals(nts),polvals0(nts))
 
@@ -50,11 +56,11 @@ xs = int(ts/2/pi*(nts+0.0d0))*2*pi/nts
 
 
 
-k  = 24
+k  = 16
 call chebexps(k,chebdata)
 
-do i=26,nts-1
-if (i.ge.27) then
+do i=it,nts-1
+if (i.gt.it) then
     deallocate(psivals,avals,ab)
 end if
 
@@ -69,11 +75,11 @@ dnu = nu
 !p   = dnu + (da+db+1)/2
 !allocate(xx(0:nu))
 
-dd      = nu
-dd      = 1/(dd) * 2/pi
+dd      = nts*1.0d0
+dd      = min(0.10d0,1/dd)
 dd      = log(dd)/log(2.0d0)
-nints   = ceiling(-dd)*2
-nints   = max(nints,20)
+nints   = ceiling(-dd)+1
+nints   = 2*nints
 allocate(ab(2,nints))
 
 call jacobi_phase_disc(nints,ab)
@@ -89,17 +95,17 @@ call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,nts,ts,avals0,p
 !call prin2("average eval time = ",(t2-t1)/nts)
 !polvals0 = cos(psivals0)*avals0
 !print *,size(avals0),size(psivals0)
-jacobi1(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-i*ts))
-jacobi2(:,i-26)=avals0*exp(dcmplx(0,1)*(psivals0-i*xs))
+jacobi1(:,i-it+1)=avals0*exp(dcmplx(0,1)*(psivals0-i*ts))
+jacobi2(:,i-it+1)=avals0*exp(dcmplx(0,1)*(psivals0-i*xs))
 end do
 
 plhs(1) = mxCreateDoubleMatrix(nts, 1, 0)
-plhs(2) = mxCreateDoubleMatrix(nts, nts-26, 1)
-plhs(3) = mxCreateDoubleMatrix(nts, nts-26, 1)
+plhs(2) = mxCreateDoubleMatrix(nts, nts-it, 1)
+plhs(3) = mxCreateDoubleMatrix(nts, nts-it, 1)
 !tss(:,1) = ts
 call mxCopyReal8ToPtr(ts, mxGetPr(plhs(1)),nts) 
-call mxCopyComplex16ToPtr(jacobi1, mxGetPr(plhs(2)),mxGetPi(plhs(2)),nts*(nts-26)) 
-call mxCopyComplex16ToPtr(jacobi2, mxGetPr(plhs(3)),mxGetPi(plhs(3)),nts*(nts-26)) 
+call mxCopyComplex16ToPtr(jacobi1, mxGetPr(plhs(2)),mxGetPi(plhs(2)),nts*(nts-it)) 
+call mxCopyComplex16ToPtr(jacobi2, mxGetPr(plhs(3)),mxGetPi(plhs(3)),nts*(nts-it)) 
 
 deallocate(jacobi1,jacobi2,ts,xs,twhts,avals0)
 deallocate(psivals0,polvals,polvals0)

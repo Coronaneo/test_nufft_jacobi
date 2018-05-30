@@ -19,6 +19,11 @@ fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,st
 
 for m=9:15
     nts=2^m;
+    if nts < 2^12
+       it = 27;
+    else
+       it = 9;
+    end
     nt=zeros(nts,1);
     nn=[nts,0]';
     [ts,jacobi1,jacobi2] = jacobiexample(nt,da,db);
@@ -29,8 +34,8 @@ for m=9:15
     %K=ceil(5*gamma*exp(lw));
     tR=3*nts/4;
     mR=3*nts/4;
-    jacobi1=[zeros(nts,26) jacobi1];
-    jacobi2=[zeros(nts,26) jacobi2];
+    jacobi1=[zeros(nts,it) jacobi1];
+    jacobi2=[zeros(nts,it) jacobi2];
     [U1,V1]=lowrank(jacobi1,tol,tR,mR);
     [U2,V2]=lowrank(jacobi2,tol,tR,mR);
     rank1=size(U1,2);
@@ -73,6 +78,7 @@ for m=9:15
     
     
     [r,expvals,tss] = chebjacex(nt,da,db,tol);
+    r(1:it,:)=0;
     rank3 = size(r,2);
     xs=mod(floor(tss*nts/2/pi),nts)+1;
     b = repmat(r,1,ncol).*reshape(repmat(c,rank3,1),nts,rank3*ncol);     
