@@ -4,15 +4,18 @@ OS = $(shell uname)
 
 .SUFFIXES: .o .a .x  .f90 .F90 .f
 
-ALLOBJ = dfft.o dfftpack.o dirft1d.o next235.o nufft1df90.o 
+ALLOBJ = dfft.o dfftpack.o next235.o 
 ALLOBJ1 = utils.o amos.o chebyshev.o jacobi_asym.o jacobi_taylor.o jacobi_phase.o jacobi_quad.o
 ALLOBJ2 = gspiv.o orthom.o idecomp.o jacobi_exp.o jacobi_transform.o
+ALLOBJ3 = nufft1df90.o nufft2df90.o nufft3df90.o
 
-
-all : ${ALLOBJ} ${ALLOBJ1} ${ALLOBJ2} nufft1dIInyumex.mex jacobiexample.mex chebjacex.mex
+all : ${ALLOBJ} ${ALLOBJ1} ${ALLOBJ2} ${ALLOBJ3} nufft1dIInyumex.mex jacobiexample.mex chebjacex.mex nufft2dIInyumex.mex
 
 nufft1dIInyumex.mex: nufft1dIInyumex.F90
-	${MEX} ${FLAGS} nufft1dIInyumex.F90 $(ALLOBJ)
+	${MEX} ${FLAGS} nufft1dIInyumex.F90 $(ALLOBJ) nufft1df90.o
+
+nufft2dIInyumex.mex: nufft2dIInyumex.F90
+	${MEX} ${FLAGS} nufft2dIInyumex.F90 $(ALLOBJ) nufft2df90.o
 
 jacobiexample.mex: jacobiexample.F90
 	${MEX} ${FLAGS} jacobiexample.F90 $(ALLOBJ1) $(LIBNAME)
@@ -22,7 +25,7 @@ chebjacex.mex: chebjacex.F90
 #libdfftpack.a:
 #	cd dfftpack && $(MAKE) clean && $(MAKE) && cp libdfftpack.a ..
 
-LINK_MACRO = $< nufft1dIInyumex.o jacobiexample.o chebjacex.o -o $@
+LINK_MACRO = $< nufft1dIInyumex.o jacobiexample.o chebjacex.o nufft2dIInyumex.o -o $@
 
 clean : 
 	rm -f *.a

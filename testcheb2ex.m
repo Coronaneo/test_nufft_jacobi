@@ -53,8 +53,8 @@ for m=6:6
     end
     tR=K+2;
     mR=K;
-    [U1,V1]=lowrank(cheb2_our,tol,tR,mR);
-    [U2,V2]=lowrank(cheb2_nyu,tol,tR,mR);
+    [U1,V1]=lowrank(cheb2_nyu,tol,tR,mR);
+    [U2,V2]=lowrank(cheb2_our,tol,tR,mR);
     rank1=size(U1,2);
     rank2=size(U2,2);
     c=rand(nts^2,1);
@@ -68,22 +68,22 @@ for m=6:6
         fft2c = ifft2(d);
         fft2c = reshape(fft2c,nts^2,rank2*ncol);
         fft2c = fft2c(xs,:);
-        result2 = nts*squeeze(sum(reshape(repmat(U2,1,ncol).*fft2c,nts^2,rank2,ncol),2));
+        result2 = nts^2*squeeze(sum(reshape(repmat(U2,1,ncol).*fft2c,nts^2,rank2,ncol),2));
     end
     timeour=toc/num;
 
-%    ex = exp(1i*nts/2*ts);
-%    U1=U1.*repmat(ex,1,rank1);
-%    tic;
-%    for j=1:num
-%        result1=zeros(nts,1);
-%        for i=1:rank1
-%            cj = nufft1dIInyumex(ts,1,tol,conj(V1(:,i)).*c);
-%            result1 = result1 + U1(:,i).*cj;
-%        end
-%    end
-%    timenyu=toc/num;
-%    timeratio=timeour/timenyu;
+    ex = exp(1i*nts/2*(ts(:,1)+ts(:,2)));
+    U1=U1.*repmat(ex,1,rank1);
+    tic;
+    for j=1:num
+        result1=zeros(nts^2,1);
+        for i=1:rank1
+            cj = nufft2dIInyumex(ts,1,tol,conj(V1(:,i)).*c);
+            result1 = result1 + U1(:,i).*cj;
+        end
+    end
+    timenyu=toc/num;
+    timeratio=timeour/timenyu;
             
 
     [k1 k2]=ndgrid(0:nts-1);
