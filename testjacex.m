@@ -1,5 +1,5 @@
 
-num=10;
+num=20;
 da=0.25;
 db=0.30;
 tol=1e-12
@@ -17,24 +17,35 @@ str11='error_cheb';
 fprintf('\n');
 fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
 
-for m=13:13
+for m=9:20
     nts=2^m;
     if nts < 2^12
        it = 27;
     else
        it = 9;
     end
-    it
+    
     nt=zeros(nts,1);
     nn=[nts,0]';
     [ts,jacobi1,jacobi2] = jacobiexample(nt,da,db);
-    %s=round(nts*ts);
-    %gamma=norm(nts*ts-s,inf);
-    %xi=log(log(10/tol)/gamma/7);
-    %lw=xi-log(xi)+log(xi)/xi+0.5*log(xi)^2/xi^2-log(xi)/xi^2;
-    %K=ceil(5*gamma*exp(lw));
-    tR=3*nts/4;
-    mR=3*nts/4;
+    xs=mod(floor(ts*nts/2/pi),nts)+1;
+    s=round(nts*ts);
+    gamma=norm(nts*ts-s,inf);
+    xi=log(log(10/tol)/gamma/7);
+    lw=xi-log(xi)+log(xi)/xi+0.5*log(xi)^2/xi^2-log(xi)/xi^2;
+    if m<14
+       K=ceil(11*gamma*exp(lw));
+    elseif m<16
+       K=ceil(12*gamma*exp(lw));
+    elseif m<18
+       K=ceil(13*gamma*exp(lw));
+    elseif m<21
+       K=ceil(14*gamma*exp(lw));
+    else
+       K=ceil(15*gamma*exp(lw));
+    end
+    tR=K+2;
+    mR=K;
     [U1,V1]=lowrank(jacobi1,tol,tR,mR);
     [U2,V2]=lowrank(jacobi2,tol,tR,mR);
    
@@ -42,15 +53,15 @@ for m=13:13
     jacobi2=[zeros(nts,it) jacobi2];
     rank1=size(U1,2);
     rank2=size(U2,2);
-    size(V1)
+    %size(V1)
     V1=[zeros(it,rank1);V1];
-    size(V1)
+    %size(V1)
     V2=[zeros(it,rank2);V2];
     c=rand(nts,1);
     ncol = size(c,2);
 
     
-    xs=mod(floor(ts*nts/2/pi),nts)+1;
+
     tic;
     for j=1:num
         d = repmat(conj(V2),1,ncol).*reshape(repmat(c,rank2,1),nts,rank2*ncol);
@@ -93,15 +104,15 @@ for m=13:13
     result4 = nts*squeeze(sum(reshape(repmat(expvals,1,ncol).*fftb,nts,rank3,ncol),2));
     errorcheb = norm(result4-result3)/norm(result3);
     %errormatrix = norm(expvals*r.'-jacobi2)/norm(jacobi2)
-    abs(jacobi1(1:10,it+1:it+10))
+    %abs(jacobi1(1:10,it+1:it+10))
   
     errornyu=norm(result1-result3)/norm(result3);
     errorour=norm(result2-result3)/norm(result3);
     fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour,errornyu,timedir);
-    gc=imagesc(real(jacobi1(:,it+1:end)));
-    saveas(gc,'image13.jpg');
-    gf=imagesc(real(jacobi1(:,it+1:end)*1i));
-    saveas(gf,'image13i.jpg');
-    bf=imagesc(abs(jacobi1(:,it+1:end)));
-    saveas(bf,'image13a.jpg');
+%    gc=imagesc(real(jacobi1(:,it+1:end)));
+%    saveas(gc,'image13.jpg');
+%    gf=imagesc(real(jacobi1(:,it+1:end)*1i));
+%    saveas(gf,'image13i.jpg');
+%    bf=imagesc(abs(jacobi1(:,it+1:end)));
+%    saveas(bf,'image13a.jpg');
 end
