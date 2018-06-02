@@ -18,7 +18,7 @@ fprintf('start Chebyshev 2D transform test:');
 fprintf('\n');
 fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str2,str3,str4,str5,str6,str7,str8,str9);
 
-for m=6:12
+for m=6:6
     nts=2^m;
     if nts < 2^12
        it = 27;
@@ -90,16 +90,21 @@ for m=6:12
 
     d=zeros((nts-it)^2,1);
     for p=1:nts-it
-        d((p-1)*(nts-it)+1:p*(nts-it))=c(it*nts+(p-1)*nts+it+1:(p+it)*nts)
+        d((p-1)*(nts-it)+1:p*(nts-it))=c(it*nts+(p-1)*nts+it+1:(p+it)*nts);
     end
     tic;
+    size(d)
+    d(1:5)
     for i=1:num
-    result3=directcheb2(nt,d);
+    [result3,ier]=directcheb2(nt,d);
     end
+    size(result3)
+    result3(1:10)
+    ier
     timedir=toc/num;
     
     
-  
+    error1=norm(result1-result2)/norm(result1)
     errornyu=norm(result1-result3)/norm(result3);
     errorour=norm(result2-result3)/norm(result3);
     fprintf('\n   %-5d %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank2,rank1,timeour,timenyu,timeratio,errorour,errornyu,timedir);

@@ -22,7 +22,7 @@ real*8, allocatable :: psivals(:),avals(:)
 real*8, allocatable :: ts(:),avals0(:),psivals0(:),xs(:)
 real*8, allocatable :: avals1(:),psivals1(:)
 integer, allocatable :: t1(:),k1(:)
-integer it
+integer*4 it,kk,a
 real*8 da,db,flag
 
 da=-0.5d0
@@ -50,8 +50,8 @@ allocate(avals0(n),psivals0(n),avals1(n),psivals1(n))
 call jacobi_quad_mod(n,da,db,ts,twhts)
 xs = int(ts/2/pi*(n+0.0d0))*2*pi/n
 
-k  = 16
-call chebexps(k,chebdata)
+kk  = 16
+call chebexps(kk,chebdata)
 
 dd      = nts*1.0d0
 dd      = min(0.10d0,1/dd)
@@ -62,11 +62,11 @@ allocate(ab(2,nints))
 
 call jacobi_phase_disc(nints,ab)
 
-allocate(psivals(k*nints),avals(k*nints))
+allocate(psivals(kk*nints),avals(kk*nints))
 
 m=0
 do i=1,n2
-dnu = mod(k(i)+it*n,n)
+dnu = mod(k1(i)+it*n,n)
 if (dnu .ge. it) then
     r=0
     j = int(k1(i)/n)+it
@@ -75,7 +75,8 @@ if (dnu .ge. it) then
     call jacobi_phase(chebdata,dnu,da,db,nints,ab,avals,psivals)
     call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,n,ts,avals1,psivals1)
     do a=1,n
-       r((a-1)*n+1:a*n)=avals0(a)*exp(dcmplx(0,1)*(psivals0(a)--j*ts(a)-j*flag*(xs(a)-ts(a))))*avals1*exp(dcmplx(0,1)*(psivals1--dnu*ts-dnu*flag*(xs-ts))+r((a-1)*n+1:a*n)
+       r((a-1)*n+1:a*n)=avals0(a)*exp(dcmplx(0,1)*(psivals0(a)-j*ts(a)-j*flag*(xs(a)-ts(a))))*avals1*exp(dcmplx(0,1)   &
+        *(psivals1-dnu*ts-dnu*flag*(xs-ts)))+r((a-1)*n+1:a*n)
     end do
     m(:,i)=r(t1)
 end if
