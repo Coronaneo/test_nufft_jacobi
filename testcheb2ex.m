@@ -55,9 +55,19 @@ for m=6:6
     end
     tR=K+2;
     mR=K;
-    [U1,V1]=lowrank(cheb2_nyu,tol,tR,mR);
-    [U2,V2]=lowrank(cheb2_our,tol,tR,mR);
+ 
+    function M = funnyu(rs,cs,n)
+       rs=rs*1.000;
+       cs=cs*1.000;
+       ns=zeros(n,1);
+       M=extrcheb2(ns,rs,cs,0);
+    end
+
+
+    [U1,V1]=lowrank(nts,it,funnyu,tol,tR,mR);
+    [U2,V2]=lowrank1(cheb2_our,tol,tR,mR);
     rank1=size(U1,2);
+    V1=[zeros(nts*it,rank1);V1];
     rank2=size(U2,2);
     c=rand(nts^2,1);
     ncol = size(c,2);
@@ -86,6 +96,8 @@ for m=6:6
     end
     timenyu=toc/num;
     timeratio=timeour/timenyu;
+
+    
             
 
     d=zeros((nts-it)^2,1);

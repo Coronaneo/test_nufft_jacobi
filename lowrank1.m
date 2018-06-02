@@ -1,9 +1,8 @@
-function [U,V] = lowrank(n,it,fun,tol,tR,mR)
+function [U,V] = lowrank1(M,tol,tR,mR)
 
-Nx = n^2;
-Ny = n^2-n*it;
-x = [1:n^2]';
-y = [1:n^2-n*it]';
+Nx = size(M,1);
+Ny = size(M,2);
+
 if Nx==0 || Ny==0
     U = zeros(Nx,0);
     V = zeros(Ny,0);
@@ -13,23 +12,21 @@ end
 if(tR<Ny && tR<Nx)
     %get columns
     rs = randsample(Nx,tR);
-    
-    M2 = fun(rs,y,n);
+    M2 = M(rs,:)
     [~,R2,E2] = qr(M2,0);
     Cidx = E2(find(abs(diag(R2))>tol*abs(R2(1)))<=tR);
 
     %get rows
     cs = randsample(Ny,3);
     cs = unique([cs' Cidx]);
-    
-    M1 = fun(x,cs,n);
+    M1 = M(:,cs)
     [~,R1,E1] = qr(M1',0);
     Ridx = E1(find(abs(diag(R1))>tol*abs(R1(1)))<=tR);
 
     %get columns again
     rs = randsample(Nx,3);
     rs = unique([rs' Ridx]);
-    M2 = fun(rs,y,n);
+    M2 = M(rs,:);
     [~,R2,E2] = qr(M2,0);
     Cidx = E2(find(abs(diag(R2))>tol*abs(R2(1)))<=tR);
 
@@ -39,10 +36,10 @@ else
 end
 
 %get rows
-MR = fun(Ridx,y,n);
+MR = M(Ridx,:);
 
 %get columns
-MC = fun(x,Cidx,n);
+MC = M(:,Cidx);
 
 %get middle matrix
 [QC,~,~] = qr(MC,0);
@@ -60,11 +57,10 @@ end
 
 M1 = QC(rs,:);
 M2 = QR(cs,:);
-M3 = fun(rs,cs,n);
+M3 = M(rs,cs);
 MD = pinv(M1) * (M3* pinv(M2'));
 [U,S,V] = svdtrunc(MD,mR,tol);
 U = QC*U*sqrt(S);
 V = QR*V*sqrt(S);
-
 
 end
