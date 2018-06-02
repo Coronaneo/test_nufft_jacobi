@@ -12,14 +12,14 @@ end
 if(tR<Ny && tR<Nx)
     %get columns
     rs = randsample(Nx,tR);
-    M2 = M(rs,:)
+    M2 = M(rs,:);
     [~,R2,E2] = qr(M2,0);
     Cidx = E2(find(abs(diag(R2))>tol*abs(R2(1)))<=tR);
 
     %get rows
     cs = randsample(Ny,3);
     cs = unique([cs' Cidx]);
-    M1 = M(:,cs)
+    M1 = M(:,cs);
     [~,R1,E1] = qr(M1',0);
     Ridx = E1(find(abs(diag(R1))>tol*abs(R1(1)))<=tR);
 

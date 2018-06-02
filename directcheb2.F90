@@ -4,7 +4,7 @@
 subroutine mexfunction(nlhs, plhs, nrhs, prhs)
 use utils
 use chebyshev
-implicit double precision (a-h,o-z)
+implicit double precision (a-j,o-z)
 
 ! number of input arguments, number of output arguments
 integer      :: nlhs, nrhs  
@@ -21,7 +21,8 @@ complex*16, allocatable :: r(:),rr(:),ier(:),rrr(:)
 real*8, allocatable :: psivals(:),avals(:)
 real*8, allocatable :: ts(:),avals0(:),psivals0(:)
 real*8, allocatable :: psival(:,:),aval(:,:),avals1(:),psivals1(:)
-integer*4 it,k
+integer*4 k
+integer*4 it,i,j
 real*8 da,db
 complex*16 a
 

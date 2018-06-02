@@ -1,3 +1,4 @@
+format long
 num=20;
 da=-0.50;
 db=-0.50;
@@ -17,6 +18,7 @@ fprintf('\n');
 fprintf('start Chebyshev 2D transform test:');
 fprintf('\n');
 fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str2,str3,str4,str5,str6,str7,str8,str9);
+funnyu = @(rs,cs,n)funnyu2d(rs,cs,n);
 
 for m=6:6
     nts=2^m;
@@ -43,7 +45,7 @@ for m=6:6
     xi=log(log(10/tol)/gamma/7);
     lw=xi-log(xi)+log(xi)/xi+0.5*log(xi)^2/xi^2-log(xi)/xi^2;
     if m<14
-       K=ceil(11*gamma*exp(lw));
+       K=ceil(15*gamma*exp(lw));
     elseif m<16
        K=ceil(12*gamma*exp(lw));
     elseif m<18
@@ -56,19 +58,18 @@ for m=6:6
     tR=K+2;
     mR=K;
  
-    function M = funnyu(rs,cs,n)
-       rs=rs*1.000;
-       cs=cs*1.000;
-       ns=zeros(n,1);
-       M=extrcheb2(ns,rs,cs,0);
-    end
+    rs=randsample(nts^2,100)*1.00;
+    cs=randsample(nts^2-nts*it,100)*1.00;
+    [M,ier]=extrcheb2(nt,rs,cs,0);  
+    size(M)
+    M(1:5,1:5)
+    ier
 
-
-    [U1,V1]=lowrank(nts,it,funnyu,tol,tR,mR);
+    [U1,V1]=lowrank(nts^2,it*nts,tol,tR,mR);
     [U2,V2]=lowrank1(cheb2_our,tol,tR,mR);
-    rank1=size(U1,2);
+    rank1=size(U1,2)
     V1=[zeros(nts*it,rank1);V1];
-    rank2=size(U2,2);
+    rank2=size(U2,2)
     c=rand(nts^2,1);
     ncol = size(c,2);
 

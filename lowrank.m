@@ -1,9 +1,9 @@
 function [U,V] = lowrank(n,it,fun,tol,tR,mR)
 
-Nx = n^2;
-Ny = n^2-n*it;
-x = [1:n^2]';
-y = [1:n^2-n*it]';
+Nx = n;
+Ny = n-it;
+x = [1:n]';
+y = [1:n-it]';
 if Nx==0 || Ny==0
     U = zeros(Nx,0);
     V = zeros(Ny,0);
