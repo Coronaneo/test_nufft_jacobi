@@ -18,16 +18,17 @@ subroutine mexfunction(nlhs, plhs, nrhs, prhs)
   real*8 eps
   integer iflag,ms
   real*8, allocatable ::  xj(:),yj(:)
-  complex*16, allocatable ::  fk(:)
+  complex*16, allocatable ::  fk(:,:)
 
   ! output variable
   complex*16, allocatable ::  cj(:)
 
   ! aux variable
-  integer ier,iflag1,ms1
+  integer ier,iflag1,ms1,n
 
   nj     = mxGetM(prhs(1))
-
+  n = nj
+  n = int(sqrt(real(n)))
 
   ! copy the right-hand side argument in matlab to dnu and t
   allocate(cj(nj),xj(nj),yj(nj))
@@ -38,8 +39,8 @@ subroutine mexfunction(nlhs, plhs, nrhs, prhs)
   call mxCopyPtrToReal8(mxGetPr(prhs(4)), eps, 1)
   !call mxCopyPtrToInteger4(mxGetPr(prhs(5)),ms,1)
   !ms1=int(ms)
-  allocate(fk(nj,2))
-  call mxCopyPtrToComplex16(mxGetPr(prhs(5)),mxGetPi(prhs(5)), fk, nj*2)
+  allocate(fk(n,n))
+  call mxCopyPtrToComplex16(mxGetPr(prhs(5)),mxGetPi(prhs(5)), fk, n*n)
   !iflag1=int(iflag)
   
   !print *,'iflag=',iflag
@@ -48,7 +49,7 @@ subroutine mexfunction(nlhs, plhs, nrhs, prhs)
   plhs(1) = mxCreateDoubleMatrix(nj, 1, 1)
 
 
-  call nufft2d2f90(nj,xj,yj,cj,1,eps,nj,nj,fk,ier)
+  call nufft2d2f90(nj,xj,yj,cj,1,eps,n,n,fk,ier)
 
 
   ! copy the output to the left-hand side

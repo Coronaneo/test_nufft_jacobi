@@ -14,9 +14,11 @@ str9='dir_time';
 str10='cheb_rank';
 str11='error_cheb';
 fprintf('\n');
-fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
+fprintf('start Chebyshev 2D transform test:');
+fprintf('\n');
+fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str2,str3,str4,str5,str6,str7,str8,str9);
 
-for m=6:6
+for m=6:12
     nts=2^m;
     if nts < 2^12
        it = 27;
@@ -78,7 +80,7 @@ for m=6:6
     for j=1:num
         result1=zeros(nts^2,1);
         for i=1:rank1
-            cj = nufft2dIInyumex(ts,1,tol,conj(V1(:,i)).*c);
+            cj = nufft2dIInyumex(ts(:,1),ts(:,2),1,tol,reshape(conj(V1(:,i)).*c,nts,nts));
             result1 = result1 + U1(:,i).*cj;
         end
     end
@@ -97,9 +99,9 @@ for m=6:6
     
     
   
-%    errornyu=norm(result1-result3)/norm(result3);
-    errorour=norm(result2-result3)/norm(result3)
-%    fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour,errornyu,timedir);
+    errornyu=norm(result1-result3)/norm(result3);
+    errorour=norm(result2-result3)/norm(result3);
+    fprintf('\n   %-5d %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank2,rank1,timeour,timenyu,timeratio,errorour,errornyu,timedir);
 %    gc=imagesc(real(jacobi1(:,it+1:end)));
 %    saveas(gc,'image13.jpg');
 %    gf=imagesc(real(jacobi1(:,it+1:end)*1i));
