@@ -59,22 +59,6 @@ xs = int(ts/2/pi*(nts+0.0d0))*2*pi/nts
 k  = 16
 call chebexps(k,chebdata)
 
-do i=it,nts-1
-if (i.gt.it) then
-    deallocate(psivals,avals,ab)
-end if
-
-
-! this must be integer because we use the 
-!recurrence relations to test accuracy
-nu  = i
-
-dnu = nu
-!da  = 0.25d0
-!db  = 0.25d0
-!p   = dnu + (da+db+1)/2
-!allocate(xx(0:nu))
-
 dd      = nts*1.0d0
 dd      = min(0.10d0,1/dd)
 dd      = log(dd)/log(2.0d0)
@@ -83,10 +67,26 @@ nints   = 2*nints
 allocate(ab(2,nints))
 
 call jacobi_phase_disc(nints,ab)
+
+allocate(psivals(k*nints),avals(k*nints))
+
+do i=it,nts-1
+
+
+! this must be integer because we use the 
+!recurrence relations to test accuracy
+
+dnu = i
+!da  = 0.25d0
+!db  = 0.25d0
+!p   = dnu + (da+db+1)/2
+!allocate(xx(0:nu))
+
+
 !call prini("nints = ",nints)
 !call prin2("before jacobi_phase, ab = ",ab)
 
-allocate(psivals(k*nints),avals(k*nints))
+
 
 call jacobi_phase(chebdata,dnu,da,db,nints,ab,avals,psivals)
 !call prin2("time to construct phase = ",(t2-t1))

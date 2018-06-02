@@ -1,4 +1,4 @@
-function [U,V] = lowrank1(M,tol,tR,mR)
+function [U,V] = lowrank(M,tol,tR,mR)
 
 Nx = size(M,1);
 Ny = size(M,2);

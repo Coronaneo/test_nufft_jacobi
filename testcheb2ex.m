@@ -88,12 +88,13 @@ for m=6:12
     timeratio=timeour/timenyu;
             
 
-    [k1 k2]=ndgrid(0:nts-1);
-    k = [k1(:) k2(:)];
-    F2=exp(1i*ts*k');
+    d=zeros((nts-it)^2,1);
+    for p=1:nts-it
+        d((p-1)*(nts-it)+1:p*(nts-it))=c(it*nts+(p-1)*nts+it+1:(p+it)*nts)
+    end
     tic;
     for i=1:num
-    result3=(cheb2_nyu.*F2)*c;
+    result3=directcheb2(nt,d);
     end
     timedir=toc/num;
     
