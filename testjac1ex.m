@@ -17,9 +17,9 @@ str11='error_cheb';
 fprintf('\n');
 fprintf('start Chebyshev 2D transform test:');
 fprintf('\n');
-fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str2,str3,str4,str5,str6,str7,str8,str9);
-funnyu = @(rs,cs,n)funnyu2d(rs,cs,n);
-funour = @(rs,cs,n)funour2d(rs,cs,n);
+fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%%-15s-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
+funnyu = @(rs,cs,n)funnyu1d(rs,cs,n);
+funour = @(rs,cs,n)funour1d(rs,cs,n);
 for m=6:20
     nts=2^m;
     if nts < 2^12
@@ -29,33 +29,28 @@ for m=6:20
     end
     
     nt=zeros(nts,1);
-    c = randn(nts^2,1);
+    c = randn(nts,1);
 %    nn=[nts,0]';
 %    [ts,jacobi1,jacobi2] = jacobiexample(nt,da,db);
 %    jacobi1=[zeros(nts,it) jacobi1];
 %    jacobi2=[zeros(nts,it) jacobi2];
 %    cheb2_our=kron(jacobi2,jacobi2);
 %    cheb2_nyu=kron(jacobi1,jacobi1);
-    d=zeros((nts-it)^2,1);
-    for p=1:nts-it
-        d((p-1)*(nts-it)+1:p*(nts-it))=c(it*nts+(p-1)*nts+it+1:(p+it)*nts);
-    end
-    [result3,ier,ts]=directcheb2(nt,d);
+    d = c(it+1:end);
+    [result3,ier,ts]=directjac1(nt,d);
     tic;
 %    size(d)
 %    d(1:5)
-    for i=1:2
-    [result3,ier,~]=directcheb2(nt,d);
+    for i=1:5
+    [result3,ier,~]=directjac1(nt,d);
     end
 %    size(result3)
 %    result3(1:10)
 %    ier
-    timedir=toc/2;
+    timedir=toc/5;
 
-    [ts1,ts2]=ndgrid(ts);
-    ts=[ts1(:) ts2(:)];
+
     xs=mod(floor(ts*nts/2/pi),nts)+1;
-    xs = sub2ind([nts nts],xs(:,1),xs(:,2));
     s=round(nts*ts);
     gamma=norm(nts*ts-s,inf);
     xi=log(log(10/tol)/gamma/7);
@@ -81,8 +76,8 @@ for m=6:20
    % M
 %    ier
 
-    [U1,V1]=lowrank(nts^2,funnyu,da,db,tol,tR,mR);
-    [U2,V2]=lowrank(nts^2,funour,da,db,tol,tR,mR);
+    [U1,V1]=lowrank(nts,funnyu,da,db,tol,tR,mR);
+    [U2,V2]=lowrank(nts,funour,da,db,tol,tR,mR);
     rank1=size(U1,2);
     %V1=[zeros(nts*it,rank1);V1];
     rank2=size(U2,2);
@@ -93,27 +88,35 @@ for m=6:20
 
     tic;
     for j=1:num
-        d = reshape(repmat(conj(V2),1,ncol).*reshape(repmat(c,rank2,1),nts^2,rank2*ncol),nts,nts,rank2*ncol);
-        fft2c = ifft2(d);
-        fft2c = reshape(fft2c,nts^2,rank2*ncol);
-        fft2c = fft2c(xs,:);
-        result2 = nts^2*squeeze(sum(reshape(repmat(U2,1,ncol).*fft2c,nts^2,rank2,ncol),2));
+        d = repmat(conj(V2),1,ncol).*reshape(repmat(c,rank2,1),nts,rank2*ncol);
+        fftc = ifft(d);
+        fftc = fftc(xs,:);
+        result2 = nts*squeeze(sum(reshape(repmat(U2,1,ncol).*fftc,nts,rank2,ncol),2));
     end
     timeour=toc/num;
 
-    ex = exp(1i*nts/2*(ts(:,1)+ts(:,2)));
+    ex = exp(1i*nts/2*ts);
     U1=U1.*repmat(ex,1,rank1);
     tic;
     for j=1:num
-        result1=zeros(nts^2,1);
+        result1=zeros(nts,1);
         for i=1:rank1
-            cj = nufft2dIInyumex(ts(:,1),ts(:,2),1,tol,reshape(conj(V1(:,i)).*c,nts,nts));
+            cj = nufft1dIInyumex(ts,1,tol,conj(V1(:,i)).*c);
             result1 = result1 + U1(:,i).*cj;
         end
     end
     timenyu=toc/num;
     timeratio=timeour/timenyu;
 
+    [r,expvals,tss] = chebjacex(nt,da,db,tol);
+    r(1:it,:)=0;
+    rank3 = size(r,2);
+    xs=mod(floor(tss*nts/2/pi),nts)+1;
+    b = repmat(r,1,ncol).*reshape(repmat(c,rank3,1),nts,rank3*ncol);     
+    fftb = ifft(b);
+    fftb = fftb(xs,:);
+    result4 = nts*squeeze(sum(reshape(repmat(expvals,1,ncol).*fftb,nts,rank3,ncol),2));
+    errorcheb = norm(result4-result3)/norm(result3);
     
           
     
@@ -121,7 +124,7 @@ for m=6:20
 %    error1=norm(result1-result2)/norm(result2)
     errornyu=norm(result1-result3)/norm(result3);
     errorour=norm(result2-result3)/norm(result3);
-    fprintf('\n   %-5d %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank2,rank1,timeour,timenyu,timeratio,errorour,errornyu,timedir);
+    fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour,errornyu,timedir);
 %    gc=imagesc(real(jacobi1(:,it+1:end)));
 %    saveas(gc,'image13.jpg');
 %    gf=imagesc(real(jacobi1(:,it+1:end)*1i));

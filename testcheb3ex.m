@@ -2,7 +2,7 @@ format long
 num=20;
 da=-0.50;
 db=-0.50;
-tol=1e-6
+tol=1e-12
 str1='size';
 str2='our_rank';
 str3='nyu_rank';
@@ -15,12 +15,12 @@ str9='dir_time';
 str10='cheb_rank';
 str11='error_cheb';
 fprintf('\n');
-fprintf('start Chebyshev 2D transform test:');
+fprintf('start Chebyshev 3D transform test:');
 fprintf('\n');
 fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str2,str3,str4,str5,str6,str7,str8,str9);
-funnyu = @(rs,cs,n)funnyu2d(rs,cs,n);
-funour = @(rs,cs,n)funour2d(rs,cs,n);
-for m=6:20
+funnyu = @(rs,cs,n)funnyu3d(rs,cs,n);
+funour = @(rs,cs,n)funour3d(rs,cs,n);
+for m=5:5
     nts=2^m;
     if nts < 2^12
        it = 9;
@@ -29,33 +29,35 @@ for m=6:20
     end
     
     nt=zeros(nts,1);
-    c = randn(nts^2,1);
+    c = randn(nts^3,1);
 %    nn=[nts,0]';
 %    [ts,jacobi1,jacobi2] = jacobiexample(nt,da,db);
 %    jacobi1=[zeros(nts,it) jacobi1];
 %    jacobi2=[zeros(nts,it) jacobi2];
 %    cheb2_our=kron(jacobi2,jacobi2);
 %    cheb2_nyu=kron(jacobi1,jacobi1);
-    d=zeros((nts-it)^2,1);
+    d=zeros((nts-it)^3,1);
     for p=1:nts-it
-        d((p-1)*(nts-it)+1:p*(nts-it))=c(it*nts+(p-1)*nts+it+1:(p+it)*nts);
+        for q=1:nts-it
+            d((p-1)*(nts-it)^2+(q-1)*(nts-it)+1:(p-1)*(nts-it)^2+q*(nts-it))=c(it*nts^2+(p-1)*nts^2+it*nts+(q-1)*n+it+1:it*nts^2+(p-1)*nts^2+it*nts+q*n);
+        end
     end
-    [result3,ier,ts]=directcheb2(nt,d);
+    [result3,ier,ts]=directcheb3(nt,d);
     tic;
 %    size(d)
 %    d(1:5)
     for i=1:2
-    [result3,ier,~]=directcheb2(nt,d);
+    [result3,ier,~]=directcheb3(nt,d);
     end
 %    size(result3)
 %    result3(1:10)
 %    ier
     timedir=toc/2;
 
-    [ts1,ts2]=ndgrid(ts);
-    ts=[ts1(:) ts2(:)];
+    [ts1,ts2,ts3]=ndgrid(ts,ts,ts);
+    ts=[ts3(:) ts2(:) ts1(:)];
     xs=mod(floor(ts*nts/2/pi),nts)+1;
-    xs = sub2ind([nts nts],xs(:,1),xs(:,2));
+    xs = sub2ind([nts nts nts],xs(:,1),xs(:,2),xs(:,3));
     s=round(nts*ts);
     gamma=norm(nts*ts-s,inf);
     xi=log(log(10/tol)/gamma/7);
@@ -81,8 +83,8 @@ for m=6:20
    % M
 %    ier
 
-    [U1,V1]=lowrank(nts^2,funnyu,da,db,tol,tR,mR);
-    [U2,V2]=lowrank(nts^2,funour,da,db,tol,tR,mR);
+    [U1,V1]=lowrank(nts^3,funnyu,da,db,tol,tR,mR);
+    [U2,V2]=lowrank(nts^3,funour,da,db,tol,tR,mR);
     rank1=size(U1,2);
     %V1=[zeros(nts*it,rank1);V1];
     rank2=size(U2,2);
@@ -93,21 +95,21 @@ for m=6:20
 
     tic;
     for j=1:num
-        d = reshape(repmat(conj(V2),1,ncol).*reshape(repmat(c,rank2,1),nts^2,rank2*ncol),nts,nts,rank2*ncol);
-        fft2c = ifft2(d);
-        fft2c = reshape(fft2c,nts^2,rank2*ncol);
-        fft2c = fft2c(xs,:);
-        result2 = nts^2*squeeze(sum(reshape(repmat(U2,1,ncol).*fft2c,nts^2,rank2,ncol),2));
+        d = reshape( repmat(conj(V2),1,ncol).*reshape(repmat(c,rank2,1), nts^3, rank2*ncol), nts,nts,nts,rank2*ncol);
+        fft3c = ifft3(d);
+        fft3c = reshape(fft3c,nts^3,rank2*ncol);
+        fft3c = fft3c(xs,:);
+        result2 = nts^3*squeeze(sum(reshape(repmat(U2,1,ncol).*fft3c,nts^3,rank2,ncol),2));
     end
     timeour=toc/num;
 
-    ex = exp(1i*nts/2*(ts(:,1)+ts(:,2)));
+    ex = exp(1i*nts/2*(ts(:,1)+ts(:,2)+ts(:,3)));
     U1=U1.*repmat(ex,1,rank1);
     tic;
     for j=1:num
-        result1=zeros(nts^2,1);
+        result1=zeros(nts^3,1);
         for i=1:rank1
-            cj = nufft2dIInyumex(ts(:,1),ts(:,2),1,tol,reshape(conj(V1(:,i)).*c,nts,nts));
+            cj = nufft3dIInyumex(ts(:,1),ts(:,2),ts(:,3),1,tol,reshape(conj(V1(:,i)).*c));
             result1 = result1 + U1(:,i).*cj;
         end
     end
