@@ -44,7 +44,7 @@ n1 = mxGetM(prhs(2))
 n2 = mxGetM(prhs(3))
 n1 = n1*m1
 n2 = n2*m2
-allocate(t(n1),k(n2),t1(n1),k1(n2),m(n1,n2),r(n**3),rr(n),tt(n),ee(:))
+allocate(t(n1),k(n2),t1(n1),k1(n2),m(n1,n2),r(n**3),rr(n),tt(n),ee(n))
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),t,n1)
 call mxCopyPtrToReal8(mxGetPr(prhs(3)),k,n2)
 call mxCopyPtrToReal8(mxGetPr(prhs(4)),flag,1)
@@ -90,7 +90,7 @@ if (dnu .gt. it*n) then
   if (abs(dnu1) .le. 0.10d0) then
    dnu1 = n
   end if
-  if (dnu1 .gt. it)
+  if (dnu1 .gt. it) then
     dnu = dnu-1
     r=0
     a = int((k1(i)-0.5)/n**2)
@@ -127,7 +127,7 @@ if (dnu .gt. it*n) then
        m(ii,i) = tt(jj)*rr(kk)*ee(ll)
     end do
     
-  end if
+    end if
 end if
 end if
 end do
