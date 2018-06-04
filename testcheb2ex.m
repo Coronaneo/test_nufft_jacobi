@@ -2,7 +2,7 @@ format long
 num=20;
 da=-0.50;
 db=-0.50;
-tol=1e-12
+tol=1e-6
 str1='size';
 str2='our_rank';
 str3='nyu_rank';
@@ -19,23 +19,39 @@ fprintf('start Chebyshev 2D transform test:');
 fprintf('\n');
 fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str2,str3,str4,str5,str6,str7,str8,str9);
 funnyu = @(rs,cs,n)funnyu2d(rs,cs,n);
-
-for m=6:6
+funour = @(rs,cs,n)funour2d(rs,cs,n);
+for m=6:20
     nts=2^m;
     if nts < 2^12
-       it = 27;
-    else
        it = 9;
+    else
+       it = 27;
     end
     
     nt=zeros(nts,1);
-    nn=[nts,0]';
-    [ts,jacobi1,jacobi2] = jacobiexample(nt,da,db);
-    jacobi1=[zeros(nts,it) jacobi1];
-    jacobi2=[zeros(nts,it) jacobi2];
-    cheb2_our=kron(jacobi2,jacobi2);
-    cheb2_nyu=kron(jacobi1,jacobi1);
-    
+    c = randn(nts^2,1);
+%    nn=[nts,0]';
+%    [ts,jacobi1,jacobi2] = jacobiexample(nt,da,db);
+%    jacobi1=[zeros(nts,it) jacobi1];
+%    jacobi2=[zeros(nts,it) jacobi2];
+%    cheb2_our=kron(jacobi2,jacobi2);
+%    cheb2_nyu=kron(jacobi1,jacobi1);
+    d=zeros((nts-it)^2,1);
+    for p=1:nts-it
+        d((p-1)*(nts-it)+1:p*(nts-it))=c(it*nts+(p-1)*nts+it+1:(p+it)*nts);
+    end
+    [result3,ier,ts]=directcheb2(nt,d);
+    tic;
+%    size(d)
+%    d(1:5)
+    for i=1:2
+    [result3,ier,~]=directcheb2(nt,d);
+    end
+%    size(result3)
+%    result3(1:10)
+%    ier
+    timedir=toc/2;
+
     [ts1,ts2]=ndgrid(ts);
     ts=[ts1(:) ts2(:)];
     xs=mod(floor(ts*nts/2/pi),nts)+1;
@@ -44,34 +60,34 @@ for m=6:6
     gamma=norm(nts*ts-s,inf);
     xi=log(log(10/tol)/gamma/7);
     lw=xi-log(xi)+log(xi)/xi+0.5*log(xi)^2/xi^2-log(xi)/xi^2;
-    if m<14
-       K=ceil(15*gamma*exp(lw));
-    elseif m<16
-       K=ceil(12*gamma*exp(lw));
+    if m<10
+       K=ceil(3*gamma*exp(lw));
+    elseif m<14
+       K=ceil(6*gamma*exp(lw));
     elseif m<18
-       K=ceil(13*gamma*exp(lw));
+       K=ceil(9*gamma*exp(lw));
     elseif m<21
-       K=ceil(14*gamma*exp(lw));
+       K=ceil(12*gamma*exp(lw));
     else
        K=ceil(15*gamma*exp(lw));
     end
     tR=K+2;
     mR=K;
  
-    rs=randsample(nts^2,100)*1.00;
-    cs=randsample(nts^2-nts*it,100)*1.00;
-    [M,ier]=extrcheb2(nt,rs,cs,0);  
-    size(M)
-    M(1:5,1:5)
-    ier
+%    cs=[nts*it+it:nts*it+it+100]*1.00;
+%    rs=[1:5]*1.00;
+%    [M,ier]=extrcheb2(nt,rs,cs,1);  
+%    com=norm(cheb2_our(1:5,nts*it+it:nts*it+it+100)-M)/norm(M)
+   % M
+%    ier
 
-    [U1,V1]=lowrank(nts^2,it*nts,tol,tR,mR);
-    [U2,V2]=lowrank1(cheb2_our,tol,tR,mR);
-    rank1=size(U1,2)
-    V1=[zeros(nts*it,rank1);V1];
-    rank2=size(U2,2)
-    c=rand(nts^2,1);
+    [U1,V1]=lowrank(nts^2,funnyu,tol,tR,mR);
+    [U2,V2]=lowrank(nts^2,funour,tol,tR,mR);
+    rank1=size(U1,2);
+    %V1=[zeros(nts*it,rank1);V1];
+    rank2=size(U2,2);
     ncol = size(c,2);
+%    U1(1:5)
 
     
 
@@ -99,25 +115,10 @@ for m=6:6
     timeratio=timeour/timenyu;
 
     
-            
-
-    d=zeros((nts-it)^2,1);
-    for p=1:nts-it
-        d((p-1)*(nts-it)+1:p*(nts-it))=c(it*nts+(p-1)*nts+it+1:(p+it)*nts);
-    end
-    tic;
-    size(d)
-    d(1:5)
-    for i=1:num
-    [result3,ier]=directcheb2(nt,d);
-    end
-    size(result3)
-    result3(1:10)
-    ier
-    timedir=toc/num;
+          
     
     
-    error1=norm(result1-result2)/norm(result1)
+%    error1=norm(result1-result2)/norm(result2)
     errornyu=norm(result1-result3)/norm(result3);
     errorour=norm(result2-result3)/norm(result3);
     fprintf('\n   %-5d %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank2,rank1,timeour,timenyu,timeratio,errorour,errornyu,timedir);

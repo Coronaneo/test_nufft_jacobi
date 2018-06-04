@@ -96,9 +96,11 @@ end do
 !ier=c(1:5)
 plhs(1) = mxCreateDoubleMatrix(n**2, 1, 1)
 plhs(2) = mxCreateDoubleMatrix(5,1,1)
+plhs(3) = mxCreateDoubleMatrix(n,1,0)
 call mxCopyComplex16ToPtr(r, mxGetPr(plhs(1)),mxGetPi(plhs(1)),n**2)
 !ier(5)=1
 call mxCopyComplex16ToPtr(ier,mxGetPr(plhs(2)),mxGetPi(plhs(2)),5)
+call mxCopyReal8ToPtr(ts,mxGetPr(plhs(3)),n)
 deallocate(c,twhts,ts,ab,r,psivals,avals,psivals0,avals0,psival,aval,avals1,psivals1)
 
 
