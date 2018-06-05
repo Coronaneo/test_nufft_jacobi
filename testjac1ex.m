@@ -1,8 +1,8 @@
 format long
 num=20;
-da=-0.50;
-db=-0.50;
-tol=1e-6
+da=0.20;
+db=0.30;
+tol=1e-12
 str1='size';
 str2='our_rank';
 str3='nyu_rank';
@@ -15,17 +15,17 @@ str9='dir_time';
 str10='cheb_rank';
 str11='error_cheb';
 fprintf('\n');
-fprintf('start Chebyshev 2D transform test:');
+fprintf('start Jacobi 1D transform test:');
 fprintf('\n');
-fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%%-15s-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
-funnyu = @(rs,cs,n)funnyu1d(rs,cs,n);
-funour = @(rs,cs,n)funour1d(rs,cs,n);
-for m=6:20
+fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
+funnyu = @(rs,cs,n,da,db)funnyu1d(rs,cs,n,da,db);
+funour = @(rs,cs,n,da,db)funour1d(rs,cs,n,da,db);
+for m=7:20
     nts=2^m;
     if nts < 2^12
-       it = 9;
-    else
        it = 27;
+    else
+       it = 9;
     end
     
     nt=zeros(nts,1);
@@ -37,12 +37,13 @@ for m=6:20
 %    cheb2_our=kron(jacobi2,jacobi2);
 %    cheb2_nyu=kron(jacobi1,jacobi1);
     d = c(it+1:end);
-    [result3,ier,ts]=directjac1(nt,d);
+    [result3,ier,ts]=directjac1(nt,d,da,db);
     tic;
 %    size(d)
-%    d(1:5)
+%    d(1:5)i
+%    size(result3)
     for i=1:5
-    [result3,ier,~]=directjac1(nt,d);
+    [result3,ier,~]=directjac1(nt,d,da,db);
     end
 %    size(result3)
 %    result3(1:10)
@@ -56,13 +57,13 @@ for m=6:20
     xi=log(log(10/tol)/gamma/7);
     lw=xi-log(xi)+log(xi)/xi+0.5*log(xi)^2/xi^2-log(xi)/xi^2;
     if m<10
-       K=ceil(3*gamma*exp(lw));
+       K=ceil(10*gamma*exp(lw));
     elseif m<14
-       K=ceil(6*gamma*exp(lw));
+       K=ceil(11*gamma*exp(lw));
     elseif m<18
-       K=ceil(9*gamma*exp(lw));
-    elseif m<21
        K=ceil(12*gamma*exp(lw));
+    elseif m<21
+       K=ceil(13*gamma*exp(lw));
     else
        K=ceil(15*gamma*exp(lw));
     end
@@ -109,7 +110,7 @@ for m=6:20
     timeratio=timeour/timenyu;
 
     [r,expvals,tss] = chebjacex(nt,da,db,tol);
-    r(1:it,:)=0;
+    %r(1:it,:)=0;
     rank3 = size(r,2);
     xs=mod(floor(tss*nts/2/pi),nts)+1;
     b = repmat(r,1,ncol).*reshape(repmat(c,rank3,1),nts,rank3*ncol);     

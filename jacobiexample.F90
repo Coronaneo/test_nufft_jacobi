@@ -33,9 +33,9 @@ pi  = acos(-1.0d0)
 !nts = ceiling(nts1(1,1))
 nts = mxGetM(prhs(1))
 if (nts .lt. (2**(12)-1)) then
-it = 9
-else
 it = 27
+else
+it = 9
 end if
 nt = nts
 !nts = 2**9

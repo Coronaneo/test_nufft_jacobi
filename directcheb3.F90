@@ -18,12 +18,12 @@ mwSize       :: n
 
 type(chebexps_data)           :: chebdata
 real*8, allocatable :: c(:),twhts(:),ab(:,:)
-complex*16, allocatable :: r(:),r2(:),ier(:),r3(:),r1(:)
+complex*16, allocatable :: r(:),r2(:),ier(:),r3(:),r1(:),rr(:)
 real*8, allocatable :: psivals(:),avals(:),avals2(:),psivals2(:)
 real*8, allocatable :: ts(:),avals0(:),psivals0(:)
 real*8, allocatable :: psival(:,:),aval(:,:),avals1(:),psivals1(:)
 integer*4 k,ii,jj,kk
-integer*4 it,i,j
+integer it,i,j
 real*8 da,db
 complex*16 a
 
@@ -34,12 +34,12 @@ ier=0
 n = mxGetM(prhs(1))
 
 if (n .lt. (2**12-1)) then
-it = 9
-else 
 it = 27
+else 
+it = 9
 end if
 
-allocate(c((n-it)**3),r(n**3),r1(n),r2(n),r3(n),ts(n),twhts(n))
+allocate(c((n-it)**3),r(n**3),r1(n),r2(n),r3(n),rr(n),ts(n),twhts(n))
 allocate(avals0(n),psivals0(n),avals1(n),psivals1(n))
 
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),c,(n-it)**3)
@@ -84,7 +84,8 @@ r1 = avals0*exp(dcmplx(0,1)*psivals0)
          r3 = avals2*exp(dcmplx(0,1)*psivals2)
          do ii=1,n
             do jj=1,n
-               r((ii-1)*n**2+(jj-1)*n+1:(ii-1)*n**2+(jj-1)*n+n) = r1(ii)*r2(jj)*r3*c((i-it)*n**2+(j-it)*n+k-it+1)
+               rr = r1(ii)*r2(jj)*c((i-it)*(n-it)**2+(j-it)*(n-it)+k-it+1)*r3 
+               r((ii-1)*n**2+(jj-1)*n+1:(ii-1)*n**2+(jj-1)*n+n) = rr  +r((ii-1)*n**2+(jj-1)*n+1:(ii-1)*n**2+(jj-1)*n+n)
             end do
          end do
       end do

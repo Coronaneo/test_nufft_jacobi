@@ -22,7 +22,7 @@ real*8, allocatable :: psivals(:),avals(:),avals2(:),psivals2(:)
 real*8, allocatable :: ts(:),avals0(:),psivals0(:),xs(:)
 real*8, allocatable :: avals1(:),psivals1(:)
 integer*4, allocatable :: t1(:),k1(:)
-integer*4 it,kk,ii,i,jj,ll
+integer*4 it,kk,ii,i,jj,mm,nn
 real*8 da,db,flag,pi
 
 
@@ -33,9 +33,9 @@ db=-0.50d0
 allocate(ier(5))
 n = mxGetM(prhs(1))
 if (n .lt. (2**12-1)) then
-it = 9
-else 
 it = 27
+else 
+it = 9
 end if
 
 m1 = mxGetN(prhs(2))
@@ -48,8 +48,8 @@ allocate(t(n1),k(n2),t1(n1),k1(n2),m(n1,n2),r(n**3),rr(n),tt(n),ee(n))
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),t,n1)
 call mxCopyPtrToReal8(mxGetPr(prhs(3)),k,n2)
 call mxCopyPtrToReal8(mxGetPr(prhs(4)),flag,1)
-t1=int(t+0.5)
-k1=int(k+0.5)
+t1=int(t+0.01)
+k1=int(k+0.01)
 ier(1)=flag
 allocate(ts(n),twhts(n),xs(n))
 allocate(avals0(n),psivals0(n),avals1(n),psivals1(n),avals2(n),psivals2(n))
@@ -91,12 +91,12 @@ if (dnu .gt. it*n) then
    dnu1 = n
   end if
   if (dnu1 .gt. it) then
-    dnu = dnu-1
-    r=0
-    a = int((k1(i)-0.5)/n**2)
+    !dnu1 = dnu1-1
+   
+    a = real(int((k1(i)-0.5)/(n**2)))
     call jacobi_phase(chebdata,a,da,db,nints,ab,avals,psivals)
     call jacobi_phase_eval(chebdata,a,da,db,nints,ab,avals,psivals,n,ts,avals0,psivals0)
-    b = int((dnu-0.5)/n)
+    b = real(int((dnu-0.5)/n))
     call jacobi_phase(chebdata,b,da,db,nints,ab,avals,psivals)
     call jacobi_phase_eval(chebdata,b,da,db,nints,ab,avals,psivals,n,ts,avals1,psivals1)
     dnu1 = dnu1-1
@@ -112,22 +112,27 @@ if (dnu .gt. it*n) then
        ee = avals2*exp(dcmplx(0,1)*(psivals2-dnu1*xs))
     end if
     do ii=1,n1
-       jj = int(t1(ii)/n**2)+1
+       jj = int(t1(ii)/(n**2))+1
        kk = mod(t1(ii),n**2)
-       if (abs(real(kk)) .lt. 0.1d0) then
-          kk = n**2
-          jj = t1(ii)/n**2
+       if (abs(real(kk)) .lt. 0.10d0) then
+          jj = t1(ii)/(n**2)
+          kk = n
+          mm = n
+       else
+          nn = t1(ii)-(jj-1)*(n**2)
+          kk = int(nn/n)+1
+          mm = mod(nn,n)
+          if (abs(real(mm)) .lt. 0.10d0) then
+             kk = nn/n
+             mm = n
+          else
+             mm = nn - (kk-1)*n
+          end if
        end if
-       kk = int(kk/n)+1
-       ll = mod(kk,n)
-       if (abs(real(ll)) .lt. 0.1d0) then
-          ll = n
-          kk = kk/n
-       end if
-       m(ii,i) = tt(jj)*rr(kk)*ee(ll)
+       m(ii,i) = tt(jj)*rr(kk)*ee(mm)
     end do
     
-    end if
+  end if
 end if
 end if
 end do

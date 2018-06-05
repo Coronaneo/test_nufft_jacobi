@@ -33,9 +33,9 @@ ier=0
 n = mxGetM(prhs(1))
 
 if (n .lt. (2**12-1)) then
-it = 9
-else 
 it = 27
+else 
+it = 9
 end if
 
 allocate(c((n-it)**2),r(n**2),rr(n),rrr(n),ts(n),twhts(n))

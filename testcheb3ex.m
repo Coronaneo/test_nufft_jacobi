@@ -18,14 +18,14 @@ fprintf('\n');
 fprintf('start Chebyshev 3D transform test:');
 fprintf('\n');
 fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str2,str3,str4,str5,str6,str7,str8,str9);
-funnyu = @(rs,cs,n)funnyu3d(rs,cs,n);
-funour = @(rs,cs,n)funour3d(rs,cs,n);
-for m=5:5
+funnyu = @(rs,cs,n,da,db)funnyu3d(rs,cs,n,da,db);
+funour = @(rs,cs,n,da,db)funour3d(rs,cs,n,da,db);
+for m=5:12
     nts=2^m;
     if nts < 2^12
-       it = 9;
-    else
        it = 27;
+    else
+       it = 9;
     end
     
     nt=zeros(nts,1);
@@ -33,15 +33,23 @@ for m=5:5
 %    nn=[nts,0]';
 %    [ts,jacobi1,jacobi2] = jacobiexample(nt,da,db);
 %    jacobi1=[zeros(nts,it) jacobi1];
+%    kk=[0:nts-1];
+%    ee=exp(1i*ts*kk);
+    %size(ee)
+%    jacobi1=jacobi1.*ee;
+%    cheb_dir=kron(kron(jacobi1,jacobi1),jacobi1);
+%    result4=cheb_dir*c;
+%    norm(result4)
 %    jacobi2=[zeros(nts,it) jacobi2];
 %    cheb2_our=kron(jacobi2,jacobi2);
 %    cheb2_nyu=kron(jacobi1,jacobi1);
     d=zeros((nts-it)^3,1);
     for p=1:nts-it
         for q=1:nts-it
-            d((p-1)*(nts-it)^2+(q-1)*(nts-it)+1:(p-1)*(nts-it)^2+q*(nts-it))=c(it*nts^2+(p-1)*nts^2+it*nts+(q-1)*n+it+1:it*nts^2+(p-1)*nts^2+it*nts+q*n);
+            d((p-1)*(nts-it)^2+(q-1)*(nts-it)+1:(p-1)*(nts-it)^2+q*(nts-it))=c(it*nts^2+(p-1)*nts^2+it*nts+(q-1)*nts+it+1:it*nts^2+(p-1)*nts^2+it*nts+q*nts);
         end
     end
+%    norm(d)
     [result3,ier,ts]=directcheb3(nt,d);
     tic;
 %    size(d)
@@ -53,25 +61,27 @@ for m=5:5
 %    result3(1:10)
 %    ier
     timedir=toc/2;
+%    norm(result3)
+%    errordir=norm(result4-result3)/norm(result4)
 
     [ts1,ts2,ts3]=ndgrid(ts,ts,ts);
-    ts=[ts3(:) ts2(:) ts1(:)];
+    ts=[ts1(:) ts2(:) ts3(:)];
     xs=mod(floor(ts*nts/2/pi),nts)+1;
     xs = sub2ind([nts nts nts],xs(:,1),xs(:,2),xs(:,3));
     s=round(nts*ts);
     gamma=norm(nts*ts-s,inf);
     xi=log(log(10/tol)/gamma/7);
     lw=xi-log(xi)+log(xi)/xi+0.5*log(xi)^2/xi^2-log(xi)/xi^2;
-    if m<10
-       K=ceil(3*gamma*exp(lw));
-    elseif m<14
-       K=ceil(6*gamma*exp(lw));
-    elseif m<18
+    if m<7
+       K=ceil(5*gamma*exp(lw));
+    elseif m<9
+       K=ceil(7*gamma*exp(lw));
+    elseif m<11
        K=ceil(9*gamma*exp(lw));
-    elseif m<21
-       K=ceil(12*gamma*exp(lw));
+    elseif m<13
+       K=ceil(11*gamma*exp(lw));
     else
-       K=ceil(15*gamma*exp(lw));
+       K=ceil(14*gamma*exp(lw));
     end
     tR=K+2;
     mR=K;
@@ -102,20 +112,20 @@ for m=5:5
         result2 = nts^3*squeeze(sum(reshape(repmat(U2,1,ncol).*fft3c,nts^3,rank2,ncol),2));
     end
     timeour=toc/num;
-
+%norm(result2)
     ex = exp(1i*nts/2*(ts(:,1)+ts(:,2)+ts(:,3)));
     U1=U1.*repmat(ex,1,rank1);
     tic;
     for j=1:num
         result1=zeros(nts^3,1);
         for i=1:rank1
-            cj = nufft3dIInyumex(ts(:,1),ts(:,2),ts(:,3),1,tol,reshape(conj(V1(:,i)).*c));
+            cj = nufft3dIInyumex(ts(:,1),ts(:,2),ts(:,3),1,tol,reshape(conj(V1(:,i)).*c,nts,nts,nts));
             result1 = result1 + U1(:,i).*cj;
         end
     end
     timenyu=toc/num;
     timeratio=timeour/timenyu;
-
+%norm(result1)
     
           
     

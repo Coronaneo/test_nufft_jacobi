@@ -2,7 +2,7 @@ format long
 num=20;
 da=-0.50;
 db=-0.50;
-tol=1e-6
+tol=1e-12
 str1='size';
 str2='our_rank';
 str3='nyu_rank';
@@ -18,14 +18,14 @@ fprintf('\n');
 fprintf('start Chebyshev 2D transform test:');
 fprintf('\n');
 fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str2,str3,str4,str5,str6,str7,str8,str9);
-funnyu = @(rs,cs,n)funnyu2d(rs,cs,n);
-funour = @(rs,cs,n)funour2d(rs,cs,n);
-for m=6:20
+funnyu = @(rs,cs,n,da,db)funnyu2d(rs,cs,n,da,db);
+funour = @(rs,cs,n,da,db)funour2d(rs,cs,n,da,db);
+for m=6:7
     nts=2^m;
     if nts < 2^12
-       it = 9;
-    else
        it = 27;
+    else
+       it = 9;
     end
     
     nt=zeros(nts,1);

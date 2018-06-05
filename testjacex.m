@@ -17,7 +17,7 @@ str11='error_cheb';
 fprintf('\n');
 fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
 
-for m=9:20
+for m=6:7
     nts=2^m;
     if nts < 2^12
        it = 27;
@@ -46,8 +46,8 @@ for m=9:20
     end
     tR=K+2;
     mR=K;
-    [U1,V1]=lowrank(jacobi1,tol,tR,mR);
-    [U2,V2]=lowrank(jacobi2,tol,tR,mR);
+    [U1,V1]=lowrank1(jacobi1,tol,tR,mR);
+    [U2,V2]=lowrank1(jacobi2,tol,tR,mR);
    
     jacobi1=[zeros(nts,it) jacobi1];
     jacobi2=[zeros(nts,it) jacobi2];
@@ -95,7 +95,8 @@ for m=9:20
     
     
     [r,expvals,tss] = chebjacex(nt,da,db,tol);
-    r(1:it,:)=0;
+    
+    %r(1:it,:)=0;
     rank3 = size(r,2);
     xs=mod(floor(tss*nts/2/pi),nts)+1;
     b = repmat(r,1,ncol).*reshape(repmat(c,rank3,1),nts,rank3*ncol);     

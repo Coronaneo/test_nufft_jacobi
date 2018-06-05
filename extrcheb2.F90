@@ -33,9 +33,9 @@ db=-0.50d0
 allocate(ier(5))
 n = mxGetM(prhs(1))
 if (n .lt. (2**12-1)) then
-it = 9
-else 
 it = 27
+else 
+it = 9
 end if
 
 m1 = mxGetN(prhs(2))
@@ -85,7 +85,7 @@ if (abs(dnu) .le. 0.10d0) then
 end if
 if (dnu .gt. it) then
     dnu = dnu-1
-    r=0
+    
     j = int((k1(i)-0.5)/n)
     call jacobi_phase(chebdata,j,da,db,nints,ab,avals,psivals)
     !ier(1)=j
