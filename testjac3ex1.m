@@ -18,7 +18,7 @@ fprintf('\n');
 fprintf('start Chebyshev 3D transform test:');
 fprintf('\n');
 fprintf('da = %1.2f,db = %1.2f\n',da,db);
-fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str2,str3,str4,str5,str6,str7,str8,str9);
+fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s\n',str1,str2,str3,str4,str5,str6,str7);
 funnyu = @(rs,cs,n,da,db)funnyu3d(rs,cs,n,da,db);
 funour = @(rs,cs,n,da,db)funour3d(rs,cs,n,da,db);
 for m=5:6
@@ -44,38 +44,32 @@ for m=5:6
 %    jacobi2=[zeros(nts,it) jacobi2];
 %    cheb2_our=kron(jacobi2,jacobi2);
 %    cheb2_nyu=kron(jacobi1,jacobi1);
-
-%    nn = log(nts)/log(2);
-%    n1 = (randsample(nts-it,nn)+it-1)*1.000;
-%    n2 = (randsample(nts-it,nn)+it-1)*1.000;
-%    n3 = (randsample(nts-it,nn)+it-1)*1.000;
-    
-    n1 = 1.00*[it:nts-1]';
-    n2 = 1.00*[it:nts-1]';
-    n3 = 1.00*[it:nts-1]';
-     
-    d=zeros((nts-it)^3,1);
-    for p=1:nts-it
-        for q=1:nts-it
-            d((p-1)*(nts-it)^2+(q-1)*(nts-it)+1:(p-1)*(nts-it)^2+q*(nts-it))=c(it*nts^2+(p-1)*nts^2+it*nts+(q-1)*nts+it+1:it*nts^2+(p-1)*nts^2+it*nts+q*nts);
-        end
-    end
+%    nn = log(nts)/log(2)
+%    n1 = (randsample(nts-it,nn)+it-1)*1.000
+%    n2 = (randsample(nts-it,nn)+it-1)*1.000
+%    n3 = (randsample(nts-it,nn)+it-1)*1.000
+%    d=zeros((nts-it)^3,1);
+%    for p=1:nts-it
+%        for q=1:nts-it
+%            d((p-1)*(nts-it)^2+(q-1)*(nts-it)+1:(p-1)*(nts-it)^2+q*(nts-it))=c(it*nts^2+(p-1)*nts^2+it*nts+(q-1)*nts+it+1:it*nts^2+(p-1)*nts^2+it*nts+q*nts);
+%        end
+%    end
 %    norm(d)
-    [result3,ts]=directjac3(nt,d,da,db,n1,n2,n3);
+%    [result3,ts]=directjac3(nt,d,da,db,n1,n2,n3);
 %    size(result3)
-    tic;
+%    tic;
 %    size(d)
 %    d(1:5)
-    for i=1:2
-    [result3,~]=directjac3(nt,d,da,db,n1,n2,n3);
-    end
+%    for i=1:2
+%    [result3,~]=directjac3(nt,d,da,db,n1,n2,n3);
+%    end
 %    size(result3)
 %    result3(1:10)
 %    ier
-    timedir=((nts-it)/nn)^3*(toc/2);
+%    timedir=((nts-it)/nn)^3*(toc/2);
 %    norm(result3)
 %    errordir=norm(result4-result3)/norm(result4)
-
+    ts = getts(nt,da,db);
     [ts1,ts2,ts3]=ndgrid(ts,ts,ts);
     ts=[ts1(:) ts2(:) ts3(:)];
     xs=mod(floor(ts*nts/2/pi),nts)+1;
@@ -143,9 +137,9 @@ for m=5:6
     
     
 %    error1=norm(result1-result2)/norm(result2)
-    errornyu=norm(result1-result3)/norm(result3);
-    errorour=norm(result2-result3)/norm(result3);
-    fprintf('\n   %-5d %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank2,rank1,timeour,timenyu,timeratio,errorour,errornyu,timedir);
+%    errornyu=norm(result1-result3)/norm(result3);
+    errorour=norm(result2-result1)/norm(result1);
+    fprintf('\n   %-5d %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E\n',m,rank2,rank1,timeour,timenyu,timeratio,errorour);
 %    gc=imagesc(real(jacobi1(:,it+1:end)));
 %    saveas(gc,'image13.jpg');
 %    gf=imagesc(real(jacobi1(:,it+1:end)*1i));

@@ -10,7 +10,7 @@ ALLOBJ2 = gspiv.o orthom.o idecomp.o jacobi_exp.o jacobi_transform.o
 ALLOBJ3 = nufft1df90.o nufft2df90.o nufft3df90.o
 
 all : ${ALLOBJ} ${ALLOBJ1} ${ALLOBJ2} ${ALLOBJ3} nufft1dIInyumex.mex jacobiexample.mex chebjacex.mex nufft2dIInyumex.mex directjac2.mex extrjac2.mex directjac3.mex \
-	extrjac3.mex nufft3dIInyumex.mex directjac1.mex extrjac1.mex
+	extrjac3.mex nufft3dIInyumex.mex directjac1.mex extrjac1.mex getts.mex
 
 nufft1dIInyumex.mex: nufft1dIInyumex.F90
 	${MEX} ${FLAGS} nufft1dIInyumex.F90 $(ALLOBJ) nufft1df90.o
@@ -20,6 +20,9 @@ nufft2dIInyumex.mex: nufft2dIInyumex.F90
 
 nufft3dIInyumex.mex: nufft3dIInyumex.F90
 	${MEX} ${FLAGS} nufft3dIInyumex.F90 $(ALLOBJ) nufft3df90.o
+
+getts.mex:getts.F90
+	${MEX} ${FLAGS} getts.F90 $(ALLOBJ) 
 
 directjac1.mex:directjac1.F90
 	${MEX} ${FLAGS} directjac1.F90 $(ALLOBJ1) $(LIBNAME)
@@ -47,7 +50,7 @@ chebjacex.mex: chebjacex.F90
 #libdfftpack.a:
 #	cd dfftpack && $(MAKE) clean && $(MAKE) && cp libdfftpack.a ..
 
-LINK_MACRO = $< nufft1dIInyumex.o jacobiexample.o chebjacex.o nufft2dIInyumex.o directjac2.o extrjac2.o directjac3.o extrjac3.o nufft3dIInyumex.o directjac1.o extrjac1.o -o $@
+LINK_MACRO = $< nufft1dIInyumex.o jacobiexample.o chebjacex.o nufft2dIInyumex.o directjac2.o extrjac2.o directjac3.o extrjac3.o nufft3dIInyumex.o directjac1.o extrjac1.o getts.o -o $@
 
 clean : 
 	rm -f *.a

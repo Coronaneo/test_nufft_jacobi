@@ -18,7 +18,7 @@ fprintf('\n');
 fprintf('start Jacobi 1D transform test:');
 fprintf('\n');
 fprintf('da = %1.2f,db = %1.2f\n',da,db);
-fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
+fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7);
 funnyu = @(rs,cs,n,da,db)funnyu1d(rs,cs,n,da,db);
 funour = @(rs,cs,n,da,db)funour1d(rs,cs,n,da,db);
 for m=7:8
@@ -37,28 +37,25 @@ for m=7:8
 %    jacobi2=[zeros(nts,it) jacobi2];
 %    cheb2_our=kron(jacobi2,jacobi2);
 %    cheb2_nyu=kron(jacobi1,jacobi1);
-
 %    nn = 4*log(nts)/log(2);
 %    n1 = (randsample(nts-it,nn)+it-1)*1.000;
     
-    n1 = 1.00*[it:nts-1]';
+%    d = c(it+1:end);
+%    [result3,ts]=directjac1(nt,d,da,db,n1);
 
-    d = c(it+1:end);
-    [result3,ts]=directjac1(nt,d,da,db,n1);
-
-    tic;
+%    tic;
 %    size(d)
 %    d(1:5)i
 %    size(result3)
-    for i=1:5
-    [result3,~]=directjac1(nt,d,da,db,n1);
-    end
+%    for i=1:5
+%    [result3,~]=directjac1(nt,d,da,db,n1);
+%    end
 %    size(result3)
 %    result3(1:10)
 %    ier
-    timedir=(nts-it)/nn*toc/5;
+%    timedir=(nts-it)/nn*toc/5;
 
-
+    ts = getts(nt,da,db);
     xs=mod(floor(ts*nts/2/pi),nts)+1;
     s=round(nts*ts);
     gamma=norm(nts*ts-s,inf);
@@ -125,15 +122,15 @@ for m=7:8
     fftb = ifft(b);
     fftb = fftb(xs,:);
     result4 = nts*squeeze(sum(reshape(repmat(expvals,1,ncol).*fftb,nts,rank3,ncol),2));
-    errorcheb = norm(result4-result3)/norm(result3);
+    errorcheb = norm(result4-result1)/norm(result1);
     
           
     
     
 %    error1=norm(result1-result2)/norm(result2)
-    errornyu=norm(result1-result3)/norm(result3);
-    errorour=norm(result2-result3)/norm(result3);
-    fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour,errornyu,timedir);
+%    errornyu=norm(result1-result3)/norm(result3);
+    errorour=norm(result2-result1)/norm(result1);
+    fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour,errornyu);
 %    gc=imagesc(real(jacobi1(:,it+1:end)));
 %    saveas(gc,'image13.jpg');
 %    gf=imagesc(real(jacobi1(:,it+1:end)*1i));
