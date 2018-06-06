@@ -27,16 +27,16 @@ directjac1.mex:directjac1.F90
 directjac2.mex:directjac2.F90
 	${MEX} ${FLAGS} directjac2.F90 $(ALLOBJ1) $(LIBNAME)
 
-directjac3.mex:directcheb3.F90
+directjac3.mex:directjac3.F90
 	${MEX} ${FLAGS} directjac3.F90 $(ALLOBJ1) $(LIBNAME)
 
 extrjac1.mex:extrjac1.F90
 	${MEX} ${FLAGS} extrjac1.F90 $(ALLOBJ1) $(LIBNAME)
 
-extrjac2.mex:extrcheb2.F90
+extrjac2.mex:extrjac2.F90
 	${MEX} ${FLAGS} extrjac2.F90 $(ALLOBJ1) $(LIBNAME)
 
-extrjac3.mex:extrcheb3.F90
+extrjac3.mex:extrjac3.F90
 	${MEX} ${FLAGS} extrjac3.F90 $(ALLOBJ1) $(LIBNAME)
 	
 jacobiexample.mex: jacobiexample.F90
