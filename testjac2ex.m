@@ -38,24 +38,26 @@ for m=6:7
 %    jacobi2=[zeros(nts,it) jacobi2];
 %    cheb2_our=kron(jacobi2,jacobi2);
 %    cheb2_nyu=kron(jacobi1,jacobi1);
-    nn = log(nts)/log(2);
+    nn = 4*m;
     n1 = (randsample(nts-it,nn)+it-1)*1.000;
     n2 = (randsample(nts-it,nn)+it-1)*1.000;
+%    n1 = [it:nts-1]';
+%    n2 = [it:nts-1]';
     d=zeros((nts-it)^2,1);
     for p=1:nts-it
         d((p-1)*(nts-it)+1:p*(nts-it))=c(it*nts+(p-1)*nts+it+1:(p+it)*nts);
     end
-    [result3,ier,ts]=directjac2(nt,d,da,db,n1,n2);
+    [result3,ts]=directjac2(nt,d,da,db,n1,n2);
     tic;
-%    size(d)
+   
 %    d(1:5)
     for i=1:2
-    [result3,ier,~]=directjac2(nt,d,da,db,n1,n2);
+    [result3,~]=directjac2(nt,d,da,db,n1,n2);
     end
-    size(result3)
+  
 %    result3(1:10)
 %    ier
-    timedir=toc/2;
+    timedir=((nts-it)/nn)^2*toc/2;
 
     [ts1,ts2]=ndgrid(ts);
     ts=[ts1(:) ts2(:)];
@@ -65,16 +67,16 @@ for m=6:7
     gamma=norm(nts*ts-s,inf);
     xi=log(log(10/tol)/gamma/7);
     lw=xi-log(xi)+log(xi)/xi+0.5*log(xi)^2/xi^2-log(xi)/xi^2;
-    if m<10
+    if m<7
        K=ceil(12*gamma*exp(lw));
-    elseif m<14
-       K=ceil(6*gamma*exp(lw));
-    elseif m<18
-       K=ceil(9*gamma*exp(lw));
-    elseif m<21
-       K=ceil(12*gamma*exp(lw));
-    else
+    elseif m<9
        K=ceil(15*gamma*exp(lw));
+    elseif m<11
+       K=ceil(16*gamma*exp(lw));
+    elseif m<13
+       K=ceil(18*gamma*exp(lw));
+    else
+       K=ceil(20*gamma*exp(lw));
     end
     tR=K+2;
     mR=K;

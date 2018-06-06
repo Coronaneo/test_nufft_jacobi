@@ -13,25 +13,25 @@ mwPointer    :: plhs(*), prhs(*)
 ! get some of the matlab mex functions
 mwPointer    :: mxGetPr, mxGetPi, mxCreateDoubleMatrix 
 ! define a size integer so that we can get its type
-mwSize       :: n
+mwSize       :: n,nn
 
 type(chebexps_data)           :: chebdata
 real*8, allocatable :: c(:),twhts(:),ab(:,:)
 complex*16, allocatable :: r(:),rr(:),ier(:),rrr(:)
-real*8, allocatable :: psivals(:),avals(:),rd(:),rd1(:),rd2(:)
+real*8, allocatable :: psivals(:),avals(:),rd(:)
 real*8, allocatable :: ts(:),avals0(:),psivals0(:)
 real*8, allocatable :: psival(:,:),aval(:,:),avals1(:),psivals1(:)
-integer*4 k,nn
+integer*4, allocatable :: rd1(:),rd2(:)
+integer*4 k
 integer*4 it,i,j
 real*8 da,db
 complex*16 a
 
 !da=-0.50d0
 !db=-0.50d0
-allocate(ier(5))
-ier=0
+
 n = mxGetM(prhs(1))
-nn = int(log(real(nn))/log(2.0d0)+0.01)
+nn = mxGetM(prhs(5))
 
 if (n .lt. (2**12-1)) then
 it = 27
@@ -93,12 +93,12 @@ end do
 !ier(4)=1
 !ier=c(1:5)
 plhs(1) = mxCreateDoubleMatrix(n**2, 1, 1)
-plhs(2) = mxCreateDoubleMatrix(5,1,1)
-plhs(3) = mxCreateDoubleMatrix(n,1,0)
+!plhs(2) = mxCreateDoubleMatrix(5,1,1)
+plhs(2) = mxCreateDoubleMatrix(n,1,0)
 call mxCopyComplex16ToPtr(r, mxGetPr(plhs(1)),mxGetPi(plhs(1)),n**2)
 !ier(5)=1
-call mxCopyComplex16ToPtr(ier,mxGetPr(plhs(2)),mxGetPi(plhs(2)),5)
-call mxCopyReal8ToPtr(ts,mxGetPr(plhs(3)),n)
+!call mxCopyComplex16ToPtr(ier,mxGetPr(plhs(2)),mxGetPi(plhs(2)),5)
+call mxCopyReal8ToPtr(ts,mxGetPr(plhs(2)),n)
 deallocate(c,twhts,ts,ab,r,psivals,avals,psivals0,avals0,psival,aval,avals1,psivals1)
 
 
