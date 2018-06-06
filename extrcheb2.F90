@@ -28,8 +28,8 @@ real*8 da,db,flag,pi
 
 pi=acos(-1.0d0)
 
-da=-0.50d0
-db=-0.50d0
+!da=-0.50d0
+!db=-0.50d0
 allocate(ier(5))
 n = mxGetM(prhs(1))
 if (n .lt. (2**12-1)) then
@@ -48,6 +48,8 @@ allocate(t(n1),k(n2),t1(n1),k1(n2),m(n1,n2),r(n**2),rr(n),tt(n))
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),t,n1)
 call mxCopyPtrToReal8(mxGetPr(prhs(3)),k,n2)
 call mxCopyPtrToReal8(mxGetPr(prhs(4)),flag,1)
+call mxCopyPtrToReal8(mxGetPr(prhs(5)),da,1)
+call mxCopyPtrToReal8(mxGetPr(prhs(6)),db,1)
 t1=int(t+0.5)
 k1=int(k+0.5)
 ier(1)=flag

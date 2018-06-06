@@ -26,8 +26,8 @@ integer*4 it,i,j
 real*8 da,db
 complex*16 a
 
-da=-0.50d0
-db=-0.50d0
+!da=-0.50d0
+!db=-0.50d0
 allocate(ier(5))
 ier=0
 n = mxGetM(prhs(1))
@@ -42,6 +42,8 @@ allocate(c((n-it)**2),r(n**2),rr(n),rrr(n),ts(n),twhts(n))
 allocate(avals0(n),psivals0(n),avals1(n),psivals1(n))
 
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),c,(n-it)**2)
+call mxCopyPtrToReal8(mxGetPr(prhs(3)),da,1)
+call mxCopyPtrToReal8(mxGetPr(prhs(4)),db,1)
 
 call jacobi_quad_mod(n,da,db,ts,twhts)
 !ier(1)=1
