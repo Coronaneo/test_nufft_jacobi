@@ -17,6 +17,7 @@ str11='error_cheb';
 fprintf('\n');
 fprintf('start Jacobi 1D transform test:');
 fprintf('\n');
+fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
 funnyu = @(rs,cs,n,da,db)funnyu1d(rs,cs,n,da,db);
 funour = @(rs,cs,n,da,db)funour1d(rs,cs,n,da,db);

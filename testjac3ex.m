@@ -17,6 +17,7 @@ str11='error_cheb';
 fprintf('\n');
 fprintf('start Chebyshev 3D transform test:');
 fprintf('\n');
+fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str2,str3,str4,str5,str6,str7,str8,str9);
 funnyu = @(rs,cs,n,da,db)funnyu3d(rs,cs,n,da,db);
 funour = @(rs,cs,n,da,db)funour3d(rs,cs,n,da,db);
@@ -50,12 +51,12 @@ for m=5:12
         end
     end
 %    norm(d)
-    [result3,ier,ts]=directcheb3(nt,d);
+    [result3,ier,ts]=directjac3(nt,d,da,db);
     tic;
 %    size(d)
 %    d(1:5)
     for i=1:2
-    [result3,ier,~]=directcheb3(nt,d);
+    [result3,ier,~]=directjac3(nt,d,da,db);
     end
 %    size(result3)
 %    result3(1:10)

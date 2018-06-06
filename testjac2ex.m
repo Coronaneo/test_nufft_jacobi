@@ -42,12 +42,12 @@ for m=6:7
     for p=1:nts-it
         d((p-1)*(nts-it)+1:p*(nts-it))=c(it*nts+(p-1)*nts+it+1:(p+it)*nts);
     end
-    [result3,ier,ts]=directcheb2(nt,d,da,db);
+    [result3,ier,ts]=directjac2(nt,d,da,db);
     tic;
 %    size(d)
 %    d(1:5)
     for i=1:2
-    [result3,ier,~]=directcheb2(nt,d,da,db);
+    [result3,ier,~]=directjac2(nt,d,da,db);
     end
     size(result3)
 %    result3(1:10)
