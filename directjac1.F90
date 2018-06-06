@@ -21,8 +21,8 @@ real*8, allocatable :: c(:),twhts(:),ab(:,:)
 complex*16, allocatable :: r(:),ier(:)
 real*8, allocatable :: psivals(:),avals(:)
 real*8, allocatable :: ts(:),avals0(:),psivals0(:)
-real*8, allocatable :: psival(:,:),aval(:,:)
-integer*4 k,ii,jj,kk
+real*8, allocatable :: psival(:,:),aval(:,:),rd(:),rd1(:)
+integer*4 k,ii,jj,kk,nn
 integer*4 it,i,j
 real*8 da,db
 complex*16 a
@@ -31,6 +31,7 @@ complex*16 a
 allocate(ier(5))
 ier=0
 n = mxGetM(prhs(1))
+nn = int(log(real(n))/log(2.0d0)+0.01)
 
 if (n .lt. (2**12-1)) then
 it = 27
@@ -38,12 +39,14 @@ else
 it = 9
 end if
 
-allocate(c(n-it),r(n),ts(n),twhts(n))
+allocate(c(n-it),r(n),ts(n),twhts(n),rd(nn),rd1(nn))
 allocate(avals0(n),psivals0(n))
 
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),c,n-it)
 call mxCopyPtrToReal8(mxGetPr(prhs(3)),da,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(4)),db,1)
+call mxCopyPtrToReal8(mxGetPr(prhs(5)),rd,nn)
+rd1 = int(rd+0.01)
 
 call jacobi_quad_mod(n,da,db,ts,twhts)
 !ier(1)=1
@@ -70,13 +73,12 @@ aval(:,i-it+1) = avals
 end do
 
 r=0
-do i=it,n-1
-dnu = i
-call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i-it+1),psival(:,i-it+1),n,ts,avals0,psivals0)
-r = avals0*exp(dcmplx(0,1)*psivals0)*c(i-it+1)+r
+do i=1,nn
+dnu = rd1(i)
+call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,rd1(i)-it+1),psival(:,rd1(i)-it+1),n,ts,avals0,psivals0)
+r = avals0*exp(dcmplx(0,1)*psivals0)*c(rd1(i)-it+1)+r
 end do
-!ier(4)=1
-!ier=c(1:5)
+
 plhs(1) = mxCreateDoubleMatrix(n, 1, 1)
 plhs(2) = mxCreateDoubleMatrix(5,1,1)
 plhs(3) = mxCreateDoubleMatrix(n,1,0)

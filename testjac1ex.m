@@ -37,14 +37,16 @@ for m=7:20
 %    jacobi2=[zeros(nts,it) jacobi2];
 %    cheb2_our=kron(jacobi2,jacobi2);
 %    cheb2_nyu=kron(jacobi1,jacobi1);
+    nn = log(nts)/log(2);
+    n1 = (randsample(nts-it,nn)+it-1)*1.000;
     d = c(it+1:end);
-    [result3,ier,ts]=directjac1(nt,d,da,db);
+    [result3,ier,ts]=directjac1(nt,d,da,db,n1);
     tic;
 %    size(d)
 %    d(1:5)i
 %    size(result3)
     for i=1:5
-    [result3,ier,~]=directjac1(nt,d,da,db);
+    [result3,ier,~]=directjac1(nt,d,da,db,n1);
     end
 %    size(result3)
 %    result3(1:10)

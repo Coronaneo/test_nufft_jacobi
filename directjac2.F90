@@ -18,10 +18,10 @@ mwSize       :: n
 type(chebexps_data)           :: chebdata
 real*8, allocatable :: c(:),twhts(:),ab(:,:)
 complex*16, allocatable :: r(:),rr(:),ier(:),rrr(:)
-real*8, allocatable :: psivals(:),avals(:)
+real*8, allocatable :: psivals(:),avals(:),rd(:),rd1(:),rd2(:)
 real*8, allocatable :: ts(:),avals0(:),psivals0(:)
 real*8, allocatable :: psival(:,:),aval(:,:),avals1(:),psivals1(:)
-integer*4 k
+integer*4 k,nn
 integer*4 it,i,j
 real*8 da,db
 complex*16 a
@@ -31,6 +31,7 @@ complex*16 a
 allocate(ier(5))
 ier=0
 n = mxGetM(prhs(1))
+nn = int(log(real(nn))/log(2.0d0)+0.01)
 
 if (n .lt. (2**12-1)) then
 it = 27
@@ -39,11 +40,15 @@ it = 9
 end if
 
 allocate(c((n-it)**2),r(n**2),rr(n),rrr(n),ts(n),twhts(n))
-allocate(avals0(n),psivals0(n),avals1(n),psivals1(n))
+allocate(avals0(n),psivals0(n),avals1(n),psivals1(n),rd(nn),rd1(nn),rd2(nn))
 
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),c,(n-it)**2)
 call mxCopyPtrToReal8(mxGetPr(prhs(3)),da,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(4)),db,1)
+call mxCopyPtrToReal8(mxGetPr(prhs(5)),rd,nn)
+rd1 = int(rd+0.01)
+call mxCopyPtrToReal8(mxGetPr(prhs(6)),rd,nn)
+rd2 = int(rd+0.01)
 
 call jacobi_quad_mod(n,da,db,ts,twhts)
 !ier(1)=1
@@ -71,26 +76,17 @@ end do
 !ier(1)=aval(1,2)
 !ier(2)=psival(1,2)
 r=0
-do i=it,n-1
-dnu = i
-call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i-it+1),psival(:,i-it+1),n,ts,avals0,psivals0)
+do i=1,nn
+dnu = rd1(i)
+call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,rd1(i)-it+1),psival(:,rd1(i)-it+1),n,ts,avals0,psivals0)
 rrr = avals0*exp(dcmplx(0,1)*psivals0)
-   do j=it,n-1
-      dnu1 = j
-      call jacobi_phase_eval(chebdata,dnu1,da,db,nints,ab,aval(:,j-it+1),psival(:,j-it+1),n,ts,avals1,psivals1)
-!      ier(3)=avals0(1)
-!      ier(4)=psivals0(1)
-!      ier(5)=psivals1(1)
+   do j=1,nn
+      dnu1 = rd2(j)
+      call jacobi_phase_eval(chebdata,dnu1,da,db,nints,ab,aval(:,rd2(j)-it+1),psival(:,rd2(j)-it+1),n,ts,avals1,psivals1)
+
       rr=avals1*exp(dcmplx(0,1)*psivals1)
       do k=1,n
-         !a=avals0(k)*exp(dcmplx(0,1)*psivals0(k))*c(j-it+1+(i-it)*(n-it))
-    
-         !rr=avals1*exp(dcmplx(0,1)*psivals1)
-         if (k*i*j .eq. 2*(it+1)*n/2) then
-            !ier(1)=a
-            ier(2:5)=r(1:4)
-         endif
-         r((k-1)*n+1:k*n)=c(j-it+1+(i-it)*(n-it))*rrr(k)*rr+r((k-1)*n+1:k*n)
+         r((k-1)*n+1:k*n)=c(rd2(j)-it+1+(rd1(i)-it)*(n-it))*rrr(k)*rr+r((k-1)*n+1:k*n)
       end do
    end do
 end do
