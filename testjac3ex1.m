@@ -1,7 +1,7 @@
 format long
 num=20;
-da=0.25;
-db=0.25;
+da=0;
+db=0;
 tol=1e-12
 str1='size';
 str2='our_rank';
@@ -21,7 +21,7 @@ fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s\n',str1,str2,str3,str4,str5,str6,str7);
 funnyu = @(rs,cs,n,da,db)funnyu3d(rs,cs,n,da,db);
 funour = @(rs,cs,n,da,db)funour3d(rs,cs,n,da,db);
-for m=5:6
+for m=5:11
     nts=2^m;
     if nts < 2^12
        it = 27;
@@ -79,15 +79,15 @@ for m=5:6
     xi=log(log(10/tol)/gamma/7);
     lw=xi-log(xi)+log(xi)/xi+0.5*log(xi)^2/xi^2-log(xi)/xi^2;
     if m<7
-       K=ceil(18*gamma*exp(lw));
+       K=ceil(32*gamma*exp(lw));
     elseif m<9
-       K=ceil(7*gamma*exp(lw));
+       K=ceil(38*gamma*exp(lw));
     elseif m<11
-       K=ceil(9*gamma*exp(lw));
+       K=ceil(44*gamma*exp(lw));
     elseif m<13
-       K=ceil(11*gamma*exp(lw));
+       K=ceil(50*gamma*exp(lw));
     else
-       K=ceil(14*gamma*exp(lw));
+       K=ceil(58*gamma*exp(lw));
     end
     tR=K+2;
     mR=K;

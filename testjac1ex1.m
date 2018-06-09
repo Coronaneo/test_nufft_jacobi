@@ -1,7 +1,7 @@
 format long
 num=20;
-da=0.20;
-db=0.30;
+da=0;
+db=0;
 tol=1e-12
 str1='size';
 str2='our_rank';
@@ -21,7 +21,7 @@ fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7);
 funnyu = @(rs,cs,n,da,db)funnyu1d(rs,cs,n,da,db);
 funour = @(rs,cs,n,da,db)funour1d(rs,cs,n,da,db);
-for m=7:8
+for m=7:30
     nts=2^m;
     if nts < 2^12
        it = 27;
@@ -61,16 +61,20 @@ for m=7:8
     gamma=norm(nts*ts-s,inf);
     xi=log(log(10/tol)/gamma/7);
     lw=xi-log(xi)+log(xi)/xi+0.5*log(xi)^2/xi^2-log(xi)/xi^2;
-    if m<10
+    if m<9
        K=ceil(10*gamma*exp(lw));
-    elseif m<14
-       K=ceil(11*gamma*exp(lw));
-    elseif m<18
+    elseif m<13
        K=ceil(12*gamma*exp(lw));
-    elseif m<21
-       K=ceil(13*gamma*exp(lw));
-    else
+    elseif m<17
        K=ceil(15*gamma*exp(lw));
+    elseif m<21
+       K=ceil(18*gamma*exp(lw));
+    elseif m<25
+       K=ceil(23*gamma*exp(lw));
+    elseif m<28
+       K=ceil(28*gamma*exp(lw));
+    else
+       K=ceil(35*gamma*exp(lw));
     end
     tR=K+2;
     mR=K;
@@ -130,7 +134,7 @@ for m=7:8
 %    error1=norm(result1-result2)/norm(result2)
 %    errornyu=norm(result1-result3)/norm(result3);
     errorour=norm(result2-result1)/norm(result1);
-    fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour,errornyu);
+    fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour);
 %    gc=imagesc(real(jacobi1(:,it+1:end)));
 %    saveas(gc,'image13.jpg');
 %    gf=imagesc(real(jacobi1(:,it+1:end)*1i));

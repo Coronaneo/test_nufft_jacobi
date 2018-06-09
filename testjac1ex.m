@@ -1,7 +1,7 @@
 format long
 num=20;
-da=0.20;
-db=0.30;
+da=0;
+db=0;
 tol=1e-12
 str1='size';
 str2='our_rank';
@@ -21,7 +21,7 @@ fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
 funnyu = @(rs,cs,n,da,db)funnyu1d(rs,cs,n,da,db);
 funour = @(rs,cs,n,da,db)funour1d(rs,cs,n,da,db);
-for m=7:8
+for m=7:30
     nts=2^m;
     if nts < 2^12
        it = 27;
@@ -38,25 +38,27 @@ for m=7:8
 %    cheb2_our=kron(jacobi2,jacobi2);
 %    cheb2_nyu=kron(jacobi1,jacobi1);
 
-%    nn = 4*log(nts)/log(2);
+%    nn = floor(nts^(1/2));
 %    n1 = (randsample(nts-it,nn)+it-1)*1.000;
     
     n1 = 1.00*[it:nts-1]';
 
     d = c(it+1:end);
-    [result3,ts]=directjac1(nt,d,da,db,n1);
-
     tic;
+    [result3,ts]=directjac1(nt,d,da,db,n1);
+    timedir = toc;
+
+%    tic;
 %    size(d)
 %    d(1:5)i
 %    size(result3)
-    for i=1:5
-    [result3,~]=directjac1(nt,d,da,db,n1);
-    end
+%    for i=1:5
+%    [result3,~]=directjac1(nt,d,da,db,n1);
+%    end
 %    size(result3)
 %    result3(1:10)
 %    ier
-    timedir=(nts-it)/nn*toc/5;
+%    timedir=(nts-it)/nn*toc/5;
 
 
     xs=mod(floor(ts*nts/2/pi),nts)+1;
@@ -72,8 +74,12 @@ for m=7:8
        K=ceil(12*gamma*exp(lw));
     elseif m<21
        K=ceil(13*gamma*exp(lw));
-    else
+    elseif m<24
+       K=ceil(14*gamma*exp(lw));
+    elseif m<27
        K=ceil(15*gamma*exp(lw));
+    else
+       K=ceil(17*gamma*exp(lw));
     end
     tR=K+2;
     mR=K;

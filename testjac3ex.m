@@ -1,7 +1,7 @@
 format long
 num=20;
-da=0.25;
-db=0.25;
+da=0;
+db=0;
 tol=1e-12
 str1='size';
 str2='our_rank';
@@ -21,7 +21,7 @@ fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str2,str3,str4,str5,str6,str7,str8,str9);
 funnyu = @(rs,cs,n,da,db)funnyu3d(rs,cs,n,da,db);
 funour = @(rs,cs,n,da,db)funour3d(rs,cs,n,da,db);
-for m=5:6
+for m=5:10
     nts=2^m;
     if nts < 2^12
        it = 27;
@@ -61,18 +61,20 @@ for m=5:6
         end
     end
 %    norm(d)
-    [result3,ts]=directjac3(nt,d,da,db,n1,n2,n3);
-%    size(result3)
     tic;
+    [result3,ts]=directjac3(nt,d,da,db,n1,n2,n3);
+    timedir = toc;
+%    size(result3)
+%    tic;
 %    size(d)
 %    d(1:5)
-    for i=1:2
-    [result3,~]=directjac3(nt,d,da,db,n1,n2,n3);
-    end
+%    for i=1:2
+%    [result3,~]=directjac3(nt,d,da,db,n1,n2,n3);
+%    end
 %    size(result3)
 %    result3(1:10)
 %    ier
-    timedir=((nts-it)/nn)^3*(toc/2);
+%    timedir=((nts-it)/nn)^3*(toc/2);
 %    norm(result3)
 %    errordir=norm(result4-result3)/norm(result4)
 
@@ -85,15 +87,15 @@ for m=5:6
     xi=log(log(10/tol)/gamma/7);
     lw=xi-log(xi)+log(xi)/xi+0.5*log(xi)^2/xi^2-log(xi)/xi^2;
     if m<7
-       K=ceil(18*gamma*exp(lw));
+       K=ceil(30*gamma*exp(lw));
+    elseif m<8
+       K=ceil(40*gamma*exp(lw));
     elseif m<9
-       K=ceil(7*gamma*exp(lw));
-    elseif m<11
-       K=ceil(9*gamma*exp(lw));
-    elseif m<13
-       K=ceil(11*gamma*exp(lw));
+       K=ceil(50*gamma*exp(lw));
+    elseif m<10
+       K=ceil(60*gamma*exp(lw));
     else
-       K=ceil(14*gamma*exp(lw));
+       K=ceil(70*gamma*exp(lw));
     end
     tR=K+2;
     mR=K;
@@ -106,7 +108,7 @@ for m=5:6
 %    ier
 
     [U1,V1]=lowrank(nts^3,funnyu,da,db,tol,tR,mR);
-    [U2,V2]=lowrank(nts^3,funour,da,db,tol,tR,mR);
+    [U2,V2]=lowrank(nts^3,funour,da,db,tol,3*tR,3*mR);
     rank1=size(U1,2);
     %V1=[zeros(nts*it,rank1);V1];
     rank2=size(U2,2);

@@ -22,7 +22,7 @@ nufft3dIInyumex.mex: nufft3dIInyumex.F90
 	${MEX} ${FLAGS} nufft3dIInyumex.F90 $(ALLOBJ) nufft3df90.o
 
 getts.mex:getts.F90
-	${MEX} ${FLAGS} getts.F90 $(ALLOBJ) 
+	${MEX} ${FLAGS} getts.F90 $(ALLOBJ1) $(LIBNAME) 
 
 directjac1.mex:directjac1.F90
 	${MEX} ${FLAGS} directjac1.F90 $(ALLOBJ1) $(LIBNAME)

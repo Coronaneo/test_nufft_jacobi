@@ -35,7 +35,7 @@ call jacobi_quad_mod(n,da,db,ts,twhts)
 
 plhs(1) = mxCreateDoubleMatrix(n, 1, 0)
 
-call mxCopyReal8ToPtr(r, mxGetPr(plhs(1)),n)
+call mxCopyReal8ToPtr(ts, mxGetPr(plhs(1)),n)
 
 deallocate(twhts,ts)
 
