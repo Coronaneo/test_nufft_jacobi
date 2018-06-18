@@ -145,7 +145,7 @@ for m=5:10
     
    
     n1=repmat((n1'-1)*nts^2,m^2,1);
-    n2=remat(repmat((n2'-1)*nts,m,1),1,m);
+    n2=repmat(repmat((n2'-1)*nts,m,1),1,m);
     n3=repmat(n3,m^2,1);
     n=n1(:)+n2(:)+n3(:);       
     
