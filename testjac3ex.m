@@ -1,5 +1,5 @@
 format long
-num=20;
+num=10;
 da=0;
 db=0;
 tol=1e-12
@@ -62,10 +62,10 @@ for m=5:10
     end
 %    norm(d)
     tic;
-    for i=1:5
+   
     [result3,ts,t]=directjac3(nt,d,da,db,n1,n2,n3);
-    end
-    timedir = nts^3/m^3*(toc-t)/5;
+    
+    timedir = nts^3/m^3*(toc-t);
 %    size(result3)
 %    tic;
 %    size(d)

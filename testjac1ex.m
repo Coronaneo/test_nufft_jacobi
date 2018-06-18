@@ -1,7 +1,7 @@
 format long
-num=20;
-da=0;
-db=0;
+num=10;
+da=0.25;
+db=0.25;
 tol=1e-12
 str1='size';
 str2='our_rank';
@@ -45,10 +45,10 @@ for m=7:30
 
     d = c(it+1:end);
     tic;
-    for i=1:5
+    
     [result3,ts,t]=directjac1(nt,d,da,db,n1);
-    end
-    timedir = nts/m*(toc-t)/5;
+    
+    timedir = nts/m*(toc-t);
 
 %    tic;
 %    size(d)

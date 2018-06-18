@@ -1,7 +1,7 @@
 format long
-num=20;
-da=0;
-db=0;
+num=10;
+da=0.25;
+db=0.25;
 tol=1e-12
 str1='size';
 str2='our_rank';
@@ -53,10 +53,10 @@ for m=6:15
         d((p-1)*(nts-it)+1:p*(nts-it))=c(it*nts+(p-1)*nts+it+1:(p+it)*nts);
     end
     tic;
-    for i=1:5
+    
     [result3,ts,t]=directjac2(nt,d,da,db,n1,n2);
-    end
-    timedir = nts^2/m/m*(toc-t)/5;
+    
+    timedir = nts^2/m/m*(toc-t);
 %    tic;
    
 %    d(1:5)
