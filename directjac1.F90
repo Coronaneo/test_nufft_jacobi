@@ -88,8 +88,8 @@ time1=sum((values2(5:8)-values1(5:8))*arr)
 r=0
 do i=it,n-1
 dnu = i
-call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i-it+1),psival(:,i-it+1),n,ts,avals0,psivals0)
-r = avals0(rd1)*exp(dcmplx(0,1)*psivals0(rd1))*c(i-it+1)+r
+call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i-it+1),psival(:,i-it+1),n,ts(rd1),avals0,psivals0)
+r = avals0*exp(dcmplx(0,1)*psivals0)*c(i-it+1)+r
 end do
 
 plhs(1) = mxCreateDoubleMatrix(nn, 1, 1)

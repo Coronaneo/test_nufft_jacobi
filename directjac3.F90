@@ -100,16 +100,16 @@ time1=sum((values2(5:8)-values1(5:8))*arr)
 r=0
 do i=it,n-1
 dnu = i
-call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i-it+1),psival(:,i-it+1),n,ts,avals0,psivals0)
-r1 = avals0(rd1)*exp(dcmplx(0,1)*psivals0(rd1))
+call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i-it+1),psival(:,i-it+1),n,ts(rd1),avals0,psivals0)
+r1 = avals0*exp(dcmplx(0,1)*psivals0)
    do j=it,n-1
       dnu1 = j
-      call jacobi_phase_eval(chebdata,dnu1,da,db,nints,ab,aval(:,j-it+1),psival(:,j-it+1),n,ts,avals1,psivals1)
-      r2 = avals1(rd2)*exp(dcmplx(0,1)*psivals1(rd2))
+      call jacobi_phase_eval(chebdata,dnu1,da,db,nints,ab,aval(:,j-it+1),psival(:,j-it+1),n,ts(rd2),avals1,psivals1)
+      r2 = avals1*exp(dcmplx(0,1)*psivals1)
       do k=it,n-1
          dnu2 = k
-         call jacobi_phase_eval(chebdata,dnu2,da,db,nints,ab,aval(:,k-it+1),psival(:,k-it+1),n,ts,avals2,psivals2)
-         r3 = avals2(rd3)*exp(dcmplx(0,1)*psivals2(rd3))
+         call jacobi_phase_eval(chebdata,dnu2,da,db,nints,ab,aval(:,k-it+1),psival(:,k-it+1),n,ts(rd3),avals2,psivals2)
+         r3 = avals2*exp(dcmplx(0,1)*psivals2)
          do ii=1,nn1
             do jj=1,nn2
                rr = r1(ii)*r2(jj)*c((i-it)*(n-it)**2+(j-it)*(n-it)+k-it+1)*r3 

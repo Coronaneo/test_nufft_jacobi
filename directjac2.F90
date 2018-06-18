@@ -93,13 +93,13 @@ time1=sum((values2(5:8)-values1(5:8))*arr)
 r=0
 do i=it,n-1
 dnu = i
-call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i-it+1),psival(:,i-it+1),n,ts,avals0,psivals0)
-rrr = avals0(rd1)*exp(dcmplx(0,1)*psivals0(rd1))
+call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i-it+1),psival(:,i-it+1),n,ts(rd1),avals0,psivals0)
+rrr = avals0*exp(dcmplx(0,1)*psivals0)
    do j=it,n-1
       dnu1 = j
-      call jacobi_phase_eval(chebdata,dnu1,da,db,nints,ab,aval(:,j-it+1),psival(:,j-it+1),n,ts,avals1,psivals1)
+      call jacobi_phase_eval(chebdata,dnu1,da,db,nints,ab,aval(:,j-it+1),psival(:,j-it+1),n,ts(rd2),avals1,psivals1)
 
-      rr=avals1(rd2)*exp(dcmplx(0,1)*psivals1(rd2))
+      rr=avals1*exp(dcmplx(0,1)*psivals1)
       do k=1,nn1
          !r((k-1)*n+1:k*n)=c(rd2(j)-it+1+(rd1(i)-it)*(n-it))*rrr(k)*rr+r((k-1)*n+1:k*n)
          r((k-1)*nn2+1:k*nn2)=c(j-it+1+(i-it)*(n-it))*rrr(k)*rr+r((k-1)*nn2+1:k*nn2)
