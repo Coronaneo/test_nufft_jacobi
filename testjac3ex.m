@@ -65,7 +65,7 @@ for m=5:10
     for i=1:5
     [result3,ts]=directjac3(nt,d,da,db,n1,n2,n3);
     end
-    timedir = nts^3/m^3*toc/5;
+    timedir = nts^3/m^3*(toc-t)/5;
 %    size(result3)
 %    tic;
 %    size(d)

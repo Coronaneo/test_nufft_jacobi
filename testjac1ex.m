@@ -46,9 +46,9 @@ for m=7:30
     d = c(it+1:end);
     tic;
     for i=1:5
-    [result3,ts]=directjac1(nt,d,da,db,n1);
+    [result3,ts,t]=directjac1(nt,d,da,db,n1);
     end
-    timedir = nts/m*toc/5;
+    timedir = nts/m*(toc-t)/5;
 
 %    tic;
 %    size(d)

@@ -27,6 +27,18 @@ integer*4 k,ii,jj,kk
 integer*4 it,i,j
 real*8 da,db
 complex*16 a
+
+ real*8 arr(4),time
+ character*8 date
+ character*10 time
+ character*5 zone
+ integer*4 values1(8),values2(8)
+ 
+ arr(1)=3600
+ arr(2)=60
+ arr(3)=1
+ arr(4)=0.001
+ 
 n = mxGetM(prhs(1))
 nn = mxGetM(prhs(5))
 
@@ -45,6 +57,7 @@ call mxCopyPtrToReal8(mxGetPr(prhs(4)),db,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(5)),rd,nn)
 rd1 = int(rd+0.01)
 
+call date_and_time(date,time,zone,values1)
 call jacobi_quad_mod(n,da,db,ts,twhts)
 !ier(1)=1
 k  = 16
@@ -57,6 +70,7 @@ nints   = ceiling(-dd)+1
 nints   = 2*nints
 allocate(ab(2,nints))
 
+
 call jacobi_phase_disc(nints,ab)
 !ier(2)=1
 allocate(psivals(k*nints),avals(k*nints))
@@ -68,6 +82,8 @@ call jacobi_phase(chebdata,dnu,da,db,nints,ab,avals,psivals)
 psival(:,i-it+1) = psivals
 aval(:,i-it+1) = avals
 end do
+call date_and_time(date,time,zone,values2)
+time=sum((values2(5:8)-values1(5:8))*arr)
 
 r=0
 do i=it,n-1
@@ -79,10 +95,12 @@ end do
 plhs(1) = mxCreateDoubleMatrix(nn, 1, 1)
 !plhs(2) = mxCreateDoubleMatrix(5,1,1)
 plhs(2) = mxCreateDoubleMatrix(n,1,0)
+plhs(3) = mxCreateDoubleMatrix(1,1,0)
 call mxCopyComplex16ToPtr(r, mxGetPr(plhs(1)),mxGetPi(plhs(1)),nn)
 !ier(5)=1
 !call mxCopyComplex16ToPtr(ier,mxGetPr(plhs(2)),mxGetPi(plhs(2)),5)
 call mxCopyReal8ToPtr(ts,mxGetPr(plhs(2)),n)
+call mxCopyReal8ToPtr(time,mxGetPr(plhs(3)),1)
 deallocate(c,twhts,ts,ab,r,psivals,avals,psivals0,avals0,psival,aval)
 
 

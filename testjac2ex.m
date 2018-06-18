@@ -56,7 +56,7 @@ for m=6:15
     for i=1:5
     [result3,ts]=directjac2(nt,d,da,db,n1,n2);
     end
-    timedir = nts^2/m/m*toc/5;
+    timedir = nts^2/m/m*(toc-t)/5;
 %    tic;
    
 %    d(1:5)
