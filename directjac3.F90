@@ -28,7 +28,7 @@ integer it,i,j
 real*8 da,db
 complex*16 a
 
- real*8 arr(4),time
+ real*8 arr(4),time1
  character*8 date
  character*10 time
  character*5 zone
@@ -94,7 +94,7 @@ psival(:,i-it+1) = psivals
 aval(:,i-it+1) = avals
 end do
 call date_and_time(date,time,zone,values2)
-time=sum((values2(5:8)-values1(5:8))*arr)
+time1=sum((values2(5:8)-values1(5:8))*arr)
 
 
 r=0
@@ -129,7 +129,7 @@ call mxCopyComplex16ToPtr(r, mxGetPr(plhs(1)),mxGetPi(plhs(1)),nn1*nn2*nn3)
 !ier(5)=1
 !call mxCopyComplex16ToPtr(ier,mxGetPr(plhs(2)),mxGetPi(plhs(2)),5)
 call mxCopyReal8ToPtr(ts,mxGetPr(plhs(2)),n)
-call mxCopyReal8ToPtr(time,mxGetPr(plhs(3)),1)
+call mxCopyReal8ToPtr(time1,mxGetPr(plhs(3)),1)
 deallocate(c,twhts,ts,ab,r,psivals,avals,psivals0,avals0,psival,aval,avals1,psivals1,r1,r2,r3,avals2,psivals2)
 
 
