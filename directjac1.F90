@@ -36,7 +36,7 @@ else
 it = 9
 end if
 
-allocate(c(n-it),r(n),ts(n),twhts(n),rd(nn),rd1(nn))
+allocate(c(n-it),r(nn),ts(n),twhts(n),rd(nn),rd1(nn))
 allocate(avals0(n),psivals0(n))
 
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),c,n-it)
@@ -70,16 +70,16 @@ aval(:,i-it+1) = avals
 end do
 
 r=0
-do i=1,nn
-dnu = rd1(i)
-call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,rd1(i)-it+1),psival(:,rd1(i)-it+1),n,ts,avals0,psivals0)
-r = avals0*exp(dcmplx(0,1)*psivals0)*c(rd1(i)-it+1)+r
+do i=it,n-1
+dnu = i
+call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i-it+1),psival(:,i-it+1),n,ts,avals0,psivals0)
+r = avals0(rd1)*exp(dcmplx(0,1)*psivals0(rd1))*c(i-it+1)+r
 end do
 
-plhs(1) = mxCreateDoubleMatrix(n, 1, 1)
+plhs(1) = mxCreateDoubleMatrix(nn, 1, 1)
 !plhs(2) = mxCreateDoubleMatrix(5,1,1)
 plhs(2) = mxCreateDoubleMatrix(n,1,0)
-call mxCopyComplex16ToPtr(r, mxGetPr(plhs(1)),mxGetPi(plhs(1)),n)
+call mxCopyComplex16ToPtr(r, mxGetPr(plhs(1)),mxGetPi(plhs(1)),nn)
 !ier(5)=1
 !call mxCopyComplex16ToPtr(ier,mxGetPr(plhs(2)),mxGetPi(plhs(2)),5)
 call mxCopyReal8ToPtr(ts,mxGetPr(plhs(2)),n)

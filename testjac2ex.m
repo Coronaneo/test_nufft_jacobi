@@ -43,8 +43,8 @@ for m=6:15
 %    n1 = (randsample(nts-it,nn)+it-1)*1.000;
 %    n2 = (randsample(nts-it,nn)+it-1)*1.000;
 
-    n1 = 1.00*[it:nts-1]';
-    n2 = 1.00*[it:nts-1]';
+    n1 = randsample(nts,m);
+    n2 = randsample(nts,m);
     
 %    n1 = [it:nts-1]';
 %    n2 = [it:nts-1]';
@@ -53,8 +53,10 @@ for m=6:15
         d((p-1)*(nts-it)+1:p*(nts-it))=c(it*nts+(p-1)*nts+it+1:(p+it)*nts);
     end
     tic;
+    for i=1:5
     [result3,ts]=directjac2(nt,d,da,db,n1,n2);
-    timedir = toc;
+    end
+    timedir = nts^2/m/m*toc/5;
 %    tic;
    
 %    d(1:5)
@@ -130,11 +132,13 @@ for m=6:15
 
     
           
-    
+    n1=repmat((n1'-1)*nts,m,1);
+    n2=repmat(n2,1,m);
+    n=n1(:)+n2(:);
     
 %    error1=norm(result1-result2)/norm(result2)
-    errornyu=norm(result1-result3)/norm(result3);
-    errorour=norm(result2-result3)/norm(result3);
+    errornyu=norm(result1(n)-result3)/norm(result3);
+    errorour=norm(result2(n)-result3)/norm(result3);
     fprintf('\n   %-5d %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank2,rank1,timeour,timenyu,timeratio,errorour,errornyu,timedir);
 %    gc=imagesc(real(jacobi1(:,it+1:end)));
 %    saveas(gc,'image13.jpg');

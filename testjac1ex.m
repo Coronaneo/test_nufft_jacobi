@@ -41,12 +41,14 @@ for m=7:30
 %    nn = floor(nts^(1/2));
 %    n1 = (randsample(nts-it,nn)+it-1)*1.000;
     
-    n1 = 1.00*[it:nts-1]';
+    n1 = randsample(nts,m);
 
     d = c(it+1:end);
     tic;
+    for i=1:5
     [result3,ts]=directjac1(nt,d,da,db,n1);
-    timedir = toc;
+    end
+    timedir = nts/m*toc/5;
 
 %    tic;
 %    size(d)
@@ -131,14 +133,14 @@ for m=7:30
     fftb = ifft(b);
     fftb = fftb(xs,:);
     result4 = nts*squeeze(sum(reshape(repmat(expvals,1,ncol).*fftb,nts,rank3,ncol),2));
-    errorcheb = norm(result4-result3)/norm(result3);
+    errorcheb = norm(result4(n1)-result3)/norm(result3);
     
           
     
     
 %    error1=norm(result1-result2)/norm(result2)
-    errornyu=norm(result1-result3)/norm(result3);
-    errorour=norm(result2-result3)/norm(result3);
+    errornyu=norm(result1(n1)-result3)/norm(result3);
+    errorour=norm(result2(n1)-result3)/norm(result3);
     fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour,errornyu,timedir);
 %    gc=imagesc(real(jacobi1(:,it+1:end)));
 %    saveas(gc,'image13.jpg');
