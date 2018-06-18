@@ -113,7 +113,8 @@ r1 = avals0(rd1)*exp(dcmplx(0,1)*psivals0(rd1))
          do ii=1,nn1
             do jj=1,nn2
                rr = r1(ii)*r2(jj)*c((i-it)*(n-it)**2+(j-it)*(n-it)+k-it+1)*r3 
-               r((ii-1)*nn1*nn2+(jj-1)*nn2+1:(ii-1)*nn1*nn2+(jj-1)*nn2+nn3) = rr  +r((ii-1)*nn1*nn2+(jj-1)*nn2+1:(ii-1)*nn1*nn2+(jj-1)*nn2+nn3)
+               r((ii-1)*nn1*nn2+(jj-1)*nn2+1:(ii-1)*nn1*nn2+(jj-1)*nn2+nn3) = rr  &
+ +r((ii-1)*nn1*nn2+(jj-1)*nn2+1:(ii-1)*nn1*nn2+(jj-1)*nn2+nn3)
             end do
          end do
       end do
