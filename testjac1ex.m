@@ -19,8 +19,8 @@ fprintf('start Jacobi 1D transform test:');
 fprintf('\n');
 fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
-funnyu = @(rs,cs,n,da,db)funnyu1d(rs,cs,n,da,db);
-funour = @(rs,cs,n,da,db)funour1d(rs,cs,n,da,db);
+funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
+funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
 for m=7:30
     nts=2^m;
     if nts < 2^12
@@ -31,36 +31,19 @@ for m=7:30
     
     nt=zeros(nts,1);
     c = randn(nts,1);
-%    nn=[nts,0]';
-%    [ts,jacobi1,jacobi2] = jacobiexample(nt,da,db);
-%    jacobi1=[zeros(nts,it) jacobi1];
-%    jacobi2=[zeros(nts,it) jacobi2];
-%    cheb2_our=kron(jacobi2,jacobi2);
-%    cheb2_nyu=kron(jacobi1,jacobi1);
 
-%    nn = floor(nts^(1/2));
-%    n1 = (randsample(nts-it,nn)+it-1)*1.000;
-    
+    ts = getts(nt,da,db);
+    nu = rand(nts-it,1)*(nts-it-1)+it;
     n1 = randsample(nts,m);
 
     d = c(it+1:end);
     tic;
     
-    [result3,ts,t]=directjac1(nt,d,da,db,n1);
+    [result3,t]=directjac1(nt,d,da,db,n1,ts,nu);
     
     timedir = nts/m*(toc-t);
 
-%    tic;
-%    size(d)
-%    d(1:5)i
-%    size(result3)
-%    for i=1:5
-%    [result3,~]=directjac1(nt,d,da,db,n1);
-%    end
-%    size(result3)
-%    result3(1:10)
-%    ier
-%    timedir=(nts-it)/nn*toc/5;
+
 
 
     xs=mod(floor(ts*nts/2/pi),nts)+1;
@@ -86,20 +69,14 @@ for m=7:30
     tR=K+2;
     mR=K;
  
-%    cs=[nts*it+it:nts*it+it+100]*1.00;
-%    rs=[1:5]*1.00;
-%    [M,ier]=extrcheb2(nt,rs,cs,1);  
-%    com=norm(cheb2_our(1:5,nts*it+it:nts*it+it+100)-M)/norm(M)
-   % M
-%    ier
 
-    [U1,V1]=lowrank(nts,funnyu,da,db,tol,tR,mR);
-    [U2,V2]=lowrank(nts,funour,da,db,tol,tR,mR);
+
+    [U1,V1]=lowrank(nts,funnyu,da,db,tol,tR,mR,ts,nu);
+    [U2,V2]=lowrank(nts,funour,da,db,tol,tR,mR,ts,nu);
     rank1=size(U1,2);
-    %V1=[zeros(nts*it,rank1);V1];
     rank2=size(U2,2);
     ncol = size(c,2);
-%    U1(1:5)
+
 
     
 
@@ -126,7 +103,6 @@ for m=7:30
     timeratio=timeour/timenyu;
 
     [r,expvals,tss] = chebjacex(nt,da,db,tol);
-    %r(1:it,:)=0;
     rank3 = size(r,2);
     xs=mod(floor(tss*nts/2/pi),nts)+1;
     b = repmat(r,1,ncol).*reshape(repmat(c,rank3,1),nts,rank3*ncol);     

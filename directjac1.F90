@@ -14,12 +14,12 @@ mwPointer    :: plhs(*), prhs(*)
 ! get some of the matlab mex functions
 mwPointer    :: mxGetPr, mxGetPi, mxCreateDoubleMatrix 
 ! define a size integer so that we can get its type
-mwSize       :: n,nn
+mwSize       :: n,nn,nts,nnu
 
 type(chebexps_data)           :: chebdata
 real*8, allocatable :: c(:),twhts(:),ab(:,:)
 complex*16, allocatable :: r(:),ier(:)
-real*8, allocatable :: psivals(:),avals(:)
+real*8, allocatable :: psivals(:),avals(:),nu(:)
 real*8, allocatable :: ts(:),avals0(:),psivals0(:)
 real*8, allocatable :: psival(:,:),aval(:,:),rd(:)
 integer*4, allocatable :: rd1(:)
@@ -41,6 +41,8 @@ complex*16 a
  
 n = mxGetM(prhs(1))
 nn = mxGetM(prhs(5))
+nts = mxGetM(prhs(6))
+nnu = mxGetM(prhs(7))
 
 if (n .lt. (2**12-1)) then
 it = 27
@@ -48,17 +50,19 @@ else
 it = 9
 end if
 
-allocate(c(n-it),r(nn),ts(n),twhts(n),rd(nn),rd1(nn))
+allocate(c(nnu),r(nn),ts(nts),nu(nnu),twhts(n),rd(nn),rd1(nn))
 allocate(avals0(n),psivals0(n))
 
-call mxCopyPtrToReal8(mxGetPr(prhs(2)),c,n-it)
+call mxCopyPtrToReal8(mxGetPr(prhs(2)),c,nnu)
 call mxCopyPtrToReal8(mxGetPr(prhs(3)),da,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(4)),db,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(5)),rd,nn)
 rd1 = int(rd+0.01)
+call mxCopyPtrToReal8(mxGetPr(prhs(6)),ts,nts)
+call mxCopyPtrToReal8(mxGetPr(prhs(7)),nu,nnu)
 
 call date_and_time(date,time,zone,values1)
-call jacobi_quad_mod(n,da,db,ts,twhts)
+!call jacobi_quad_mod(n,da,db,ts,twhts)
 !ier(1)=1
 k  = 16
 call chebexps(k,chebdata)
@@ -74,33 +78,33 @@ allocate(ab(2,nints))
 call jacobi_phase_disc(nints,ab)
 !ier(2)=1
 allocate(psivals(k*nints),avals(k*nints))
-allocate(psival(k*nints,n-it),aval(k*nints,n-it))
+allocate(psival(k*nints,nnu),aval(k*nints,nnu))
 
-do i=it,n-1
-dnu = i
+do i=1,nnu
+dnu = nu(i)
 call jacobi_phase(chebdata,dnu,da,db,nints,ab,avals,psivals)
-psival(:,i-it+1) = psivals
-aval(:,i-it+1) = avals
+psival(:,i) = psivals
+aval(:,i) = avals
 end do
 call date_and_time(date,time,zone,values2)
 time1=sum((values2(5:8)-values1(5:8))*arr)
 
 r=0
-do i=it,n-1
-dnu = i
-call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i-it+1),psival(:,i-it+1),n,ts(rd1),avals0,psivals0)
-r = avals0*exp(dcmplx(0,1)*psivals0)*c(i-it+1)+r
+do i=1,nnu
+dnu = nu(i)
+call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i),psival(:,i),n,ts(rd1),avals0,psivals0)
+r = avals0*exp(dcmplx(0,1)*psivals0)*c(i)+r
 end do
 
 plhs(1) = mxCreateDoubleMatrix(nn, 1, 1)
 !plhs(2) = mxCreateDoubleMatrix(5,1,1)
-plhs(2) = mxCreateDoubleMatrix(n,1,0)
-plhs(3) = mxCreateDoubleMatrix(1,1,0)
+!plhs(2) = mxCreateDoubleMatrix(n,1,0)
+plhs(2) = mxCreateDoubleMatrix(1,1,0)
 call mxCopyComplex16ToPtr(r, mxGetPr(plhs(1)),mxGetPi(plhs(1)),nn)
 !ier(5)=1
 !call mxCopyComplex16ToPtr(ier,mxGetPr(plhs(2)),mxGetPi(plhs(2)),5)
-call mxCopyReal8ToPtr(ts,mxGetPr(plhs(2)),n)
-call mxCopyReal8ToPtr(time1,mxGetPr(plhs(3)),1)
+!call mxCopyReal8ToPtr(ts,mxGetPr(plhs(2)),n)
+call mxCopyReal8ToPtr(time1,mxGetPr(plhs(2)),1)
 deallocate(c,twhts,ts,ab,r,psivals,avals,psivals0,avals0,psival,aval)
 
 
