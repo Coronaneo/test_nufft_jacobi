@@ -15,13 +15,13 @@ str9='dir_time';
 str10='cheb_rank';
 str11='error_cheb';
 fprintf('\n');
-fprintf('start Jacobi 1D transform test:');
+fprintf('start nonuniform (location) Jacobi 1D transform test:');
 fprintf('\n');
 fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
 funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
 funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
-for m=7:30
+for m=7:20
     nts=2^m;
     if nts < 2^12
        it = 27;
@@ -32,15 +32,17 @@ for m=7:30
     nt=zeros(nts,1);
     c = randn(nts,1);
 
-    ts = getts(nt,da,db);
-    nu = rand(nts-it,1)*(nts-it-1)+it;
+    %ts = getts(nt,da,db);
+    %nu = rand(nts-it,1)*(nts-it-1)+it;
+    ts = unique(rand(nts,1)*(pi-2/nts)+1/nts);
+    nu = [it:nts-1]';
     n1 = randsample(nts,m);
 
     d = c(it+1:end);
     tic;
     
     [result3,t]=directjac1(nt,d,da,db,n1,ts,nu);
-    
+%    norm(result3)    
     timedir = nts/m*(toc-t);
 
 
@@ -88,7 +90,7 @@ for m=7:30
         result2 = nts*squeeze(sum(reshape(repmat(U2,1,ncol).*fftc,nts,rank2,ncol),2));
     end
     timeour=toc/num;
-
+%    norm(result2)
     ex = exp(1i*nts/2*ts);
     U1=U1.*repmat(ex,1,rank1);
     tic;
@@ -101,7 +103,7 @@ for m=7:30
     end
     timenyu=toc/num;
     timeratio=timeour/timenyu;
-
+%    norm(result1)
     [r,expvals,tss] = chebjacex(nt,da,db,tol);
     rank3 = size(r,2);
     xs=mod(floor(tss*nts/2/pi),nts)+1;
@@ -110,7 +112,7 @@ for m=7:30
     fftb = fftb(xs,:);
     result4 = nts*squeeze(sum(reshape(repmat(expvals,1,ncol).*fftb,nts,rank3,ncol),2));
     errorcheb = norm(result4(n1)-result3)/norm(result3);
-    
+   
           
     
     

@@ -51,7 +51,7 @@ it = 9
 end if
 
 allocate(c(nnu),r(nn),ts(nts),nu(nnu),twhts(n),rd(nn),rd1(nn))
-allocate(avals0(n),psivals0(n))
+allocate(avals0(nts),psivals0(nts))
 
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),c,nnu)
 call mxCopyPtrToReal8(mxGetPr(prhs(3)),da,1)
@@ -92,8 +92,8 @@ time1=sum((values2(5:8)-values1(5:8))*arr)
 r=0
 do i=1,nnu
 dnu = nu(i)
-call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i),psival(:,i),n,ts(rd1),avals0,psivals0)
-r = avals0*exp(dcmplx(0,1)*psivals0)*c(i)+r
+call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i),psival(:,i),nts,ts,avals0,psivals0)
+r = avals0(rd1)*exp(dcmplx(0,1)*psivals0(rd1))*c(i)+r
 end do
 
 plhs(1) = mxCreateDoubleMatrix(nn, 1, 1)

@@ -18,7 +18,7 @@ mwSize       :: n,n1,n2,m1,m2,nts,nnu
 type(chebexps_data)           :: chebdata
 real*8, allocatable :: twhts(:),ab(:,:),t(:),k(:)
 complex*16, allocatable :: r(:),m(:,:),ier(:)
-real*8, allocatable :: psivals(:),avals(:),ts(:),nu(:)
+real*8, allocatable :: psivals(:),avals(:),nu(:)
 real*8, allocatable :: ts(:),avals0(:),psivals0(:),xs(:)
 integer*4, allocatable :: t1(:),k1(:)
 integer*4 it,kk,ii,i,jj
@@ -45,7 +45,7 @@ n2 = n2*m2
 nts = mxGetM(prhs(7))
 nnu = mxGetM(prhs(8))
 
-allocate(t(n1),k(n2),t1(n1),k1(n2),m(n1,n2),r(n1),ts(nts),nu(nnu))
+allocate(t(n1),k(n2),t1(n1),k1(n2),m(n1,n2),r(nts),ts(nts),nu(nnu))
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),t,n1)
 call mxCopyPtrToReal8(mxGetPr(prhs(3)),k,n2)
 call mxCopyPtrToReal8(mxGetPr(prhs(4)),flag,1)
@@ -57,7 +57,7 @@ t1=int(t+0.5)
 k1=int(k+0.5)
 ier(1)=flag
 allocate(xs(nts))
-allocate(avals0(n1),psivals0(n1))
+allocate(avals0(nts),psivals0(nts))
 ier(1:5)=k1(1:5)
 !ier(3:5)=k1(1:3)
 !call jacobi_quad_mod(n,da,db,ts,twhts)
@@ -83,15 +83,15 @@ do i=1,n2
 if (k1(i) .gt. it) then
     dnu = nu(k1(i)-it)
     call jacobi_phase(chebdata,dnu,da,db,nints,ab,avals,psivals)
-    call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,n,ts(t1),avals0,psivals0)
+    call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,nts,ts,avals0,psivals0)
 
     if (flag .lt. 0) then
-       r = avals0*exp(dcmplx(0,1)*(psivals0-dnu*ts(t1)))
+       r = avals0*exp(dcmplx(0,1)*(psivals0-dnu*ts))
     else
-       r = avals0*exp(dcmplx(0,1)*(psivals0-dnu*xs(t1)))
+       r = avals0*exp(dcmplx(0,1)*(psivals0-dnu*xs))
     end if
     
-    m(:,i) = r
+    m(:,i) = r(t1)
 end if
 end do
 
