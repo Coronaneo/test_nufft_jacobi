@@ -4,7 +4,7 @@
 #include "utils.h"
 #include "finufft.h"
 #include "cnufftspread.h"
-#include <fftw3.h>
+#include "fftw3.h"
 
 // constants needed within common
 #define MAX_NQUAD 100              // max number of positive quadr nodes

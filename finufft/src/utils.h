@@ -8,7 +8,7 @@
 #include <stdint.h>
 
 #include <complex>          // C++ type complex
-#include <fftw3.h>          // needed so can typedef FFTW_CPX
+#include "fftw3.h"          // needed so can typedef FFTW_CPX
 
 // fraction growth cut-off in arraywidcen(), to decide if translate in type-3
 #define ARRAYWIDCEN_GROWFRAC 0.1

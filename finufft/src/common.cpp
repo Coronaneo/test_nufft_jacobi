@@ -1,5 +1,5 @@
 #include "common.h"
-#include <fftw3.h>
+#include "fftw3.h"
 #include <math.h>
 #include <stdio.h>
 #include <vector>
