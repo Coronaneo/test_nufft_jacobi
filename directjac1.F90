@@ -20,7 +20,7 @@ type(chebexps_data)           :: chebdata
 real*8, allocatable :: c(:),twhts(:),ab(:,:)
 complex*16, allocatable :: r(:),ier(:)
 real*8, allocatable :: psivals(:),avals(:),nu(:)
-real*8, allocatable :: ts(:),avals0(:),psivals0(:)
+real*8, allocatable :: ts(:),avals0(:),psivals0(:),wghts(:)
 real*8, allocatable :: psival(:,:),aval(:,:),rd(:)
 integer*4, allocatable :: rd1(:)
 integer*4 k,ii,jj,kk
@@ -50,7 +50,7 @@ else
 it = 9
 end if
 
-allocate(c(nnu),r(nn),ts(nts),nu(nnu),twhts(n),rd(nn),rd1(nn))
+allocate(c(nnu),r(nn),ts(nts),nu(nnu),twhts(n),rd(nn),rd1(nn),wghts(nts))
 allocate(avals0(nts),psivals0(nts))
 
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),c,nnu)
@@ -60,6 +60,7 @@ call mxCopyPtrToReal8(mxGetPr(prhs(5)),rd,nn)
 rd1 = int(rd+0.01)
 call mxCopyPtrToReal8(mxGetPr(prhs(6)),ts,nts)
 call mxCopyPtrToReal8(mxGetPr(prhs(7)),nu,nnu)
+call mxCopyPtrToReal8(mxGetPr(prhs(8)),wghts,nts)
 
 call date_and_time(date,time,zone,values1)
 !call jacobi_quad_mod(n,da,db,ts,twhts)
@@ -73,7 +74,7 @@ dd      = log(dd)/log(2.0d0)
 nints   = ceiling(-dd)+1
 nints   = 2*nints
 allocate(ab(2,nints))
-
+wghts = sqrt(wghts)
 
 call jacobi_phase_disc(nints,ab)
 !ier(2)=1
@@ -93,7 +94,7 @@ r=0
 do i=1,nnu
 dnu = nu(i)
 call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i),psival(:,i),nts,ts,avals0,psivals0)
-r = avals0(rd1)*exp(dcmplx(0,1)*psivals0(rd1))*c(i)+r
+r = avals0(rd1)*exp(dcmplx(0,1)*psivals0(rd1))*c(i)*wghts(rd1)+r
 end do
 
 plhs(1) = mxCreateDoubleMatrix(nn, 1, 1)

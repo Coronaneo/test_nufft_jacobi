@@ -7,8 +7,9 @@ function [fun,rank] = NJPT1D(nts,ts,da,db,tR,mR,tol)
     end
 nu = [it:nts-1]';
 xs = mod(floor(ts*nts/2/pi),nts)+1;
-JTM = @(rs,cs,n,da,db,ts,nu)JTM1D(rs,cs,n,da,db,ts,nu);
-[U,V] = lowrank(nts,JTM,da,db,tol,tR,mR,ts,nu);
+wghts = ones(nts,1);
+JTM = @(rs,cs,n,da,db,ts,nu,wghts)JTM1d(rs,cs,n,da,db,ts,nu,wghts);
+[U,V] = lowrank(nts,JTM,da,db,tol,tR,mR,ts,nu,wghts);
 rank = size(U,2);
 
 fun = @(c)NJacPT1d(c);

@@ -21,7 +21,7 @@ fprintf('da = %1.2f,db = %1.2f\n',da,db);
 %fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
 fprintf('%-6s%-11s%-15s%-15s%-15s\n',str1,str2,str7,str4,str9);
 %funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
-funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
+%funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
 for m=7:13
     nts=2^m;
     if nts < 2^12
@@ -41,7 +41,7 @@ for m=7:13
     d = c(it+1:end);
     tic;
     
-    [result3,t]=directjac1(nt,d,da,db,n1,ts,nu);
+    [result3,t]=directjac1(nt,d,da,db,n1,ts,nu,wghts);
     result3 = real(result3)./sqrt(wghts(n1));
 %    norm(result3)    
     timedir = nts/m*(toc-t);
