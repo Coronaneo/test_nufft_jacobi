@@ -55,9 +55,10 @@ for m=7:30
 %    ier
 %    timedir=(nts-it)/nn*toc/5;
 
-    ts = getts(nt,da,db);
+    ts = rand(nts,1)*(pi-2/nts)+1/nts;
     xs=mod(floor(ts*nts/2/pi),nts)+1;
     s=round(nts*ts);
+    nu = [it:nts-1]';
     gamma=norm(nts*ts-s,inf);
     xi=log(log(10/tol)/gamma/7);
     lw=xi-log(xi)+log(xi)/xi+0.5*log(xi)^2/xi^2-log(xi)/xi^2;

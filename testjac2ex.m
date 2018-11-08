@@ -15,7 +15,7 @@ str9='dir_time';
 str10='cheb_rank';
 str11='error_cheb';
 fprintf('\n');
-fprintf('start Jacobi 2D transform test:');
+fprintf('start 2D Jacobi polynomial transform test:');
 fprintf('\n');
 fprintf('da = %1.2f,db = %1.2f',da,db);
 fprintf('\n')

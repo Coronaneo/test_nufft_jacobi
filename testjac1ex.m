@@ -5,21 +5,22 @@ db=0.25;
 tol=1e-12
 str1='size';
 str2='our_rank';
-str3='nyu_rank';
+%str3='nyu_rank';
 str4='our_time';
-str5='nyu_time';
-str6='ratio_our/nyu';
+%str5='nyu_time';
+%str6='ratio_our/nyu';
 str7='error_our';
-str8='error_nyu';
+%str8='error_nyu';
 str9='dir_time';
-str10='cheb_rank';
-str11='error_cheb';
+%str10='cheb_rank';
+%str11='error_cheb';
 fprintf('\n');
-fprintf('start nonuniform (location) Jacobi 1D transform test:');
+fprintf('start nonuniform (location) 1D Jacobi polynomial transform test:');
 fprintf('\n');
 fprintf('da = %1.2f,db = %1.2f\n',da,db);
-fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
-funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
+%fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
+fprintf('%-6s%-11s%-15s%-15s%-15s\n',str1,str2,str7,str4,str9);
+%funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
 funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
 for m=7:20
     nts=2^m;
@@ -91,35 +92,36 @@ for m=7:20
     end
     timeour=toc/num;
 %    norm(result2)
-    ex = exp(1i*nts/2*ts);
-    U1=U1.*repmat(ex,1,rank1);
-    tic;
-    for j=1:num
-        result1=zeros(nts,1);
-        for i=1:rank1
-            cj = nufft1dIInyumex(ts,1,tol,conj(V1(:,i)).*c);
-            result1 = result1 + U1(:,i).*cj;
-        end
-    end
-    timenyu=toc/num;
-    timeratio=timeour/timenyu;
-%    norm(result1)
-    [r,expvals,tss] = chebjacex(nt,da,db,tol);
-    rank3 = size(r,2);
-    xs=mod(floor(tss*nts/2/pi),nts)+1;
-    b = repmat(r,1,ncol).*reshape(repmat(c,rank3,1),nts,rank3*ncol);     
-    fftb = ifft(b);
-    fftb = fftb(xs,:);
-    result4 = nts*squeeze(sum(reshape(repmat(expvals,1,ncol).*fftb,nts,rank3,ncol),2));
-    errorcheb = norm(result4(n1)-result3)/norm(result3);
+%%%%%%%%%%%%%%%%%%%%%%%Greengard%%%%%%%%%%%%%%%%%
+%    ex = exp(1i*nts/2*ts);
+%    U1=U1.*repmat(ex,1,rank1);
+%    tic;
+%    for j=1:num
+%        result1=zeros(nts,1);
+%        for i=1:rank1
+%            cj = nufft1dIInyumex(ts,1,tol,conj(V1(:,i)).*c);
+%            result1 = result1 + U1(:,i).*cj;
+%        end
+%    end
+%    timenyu=toc/num;
+%    timeratio=timeour/timenyu;
+%%    norm(result1)
+%    [r,expvals,tss] = chebjacex(nt,da,db,tol);
+%    rank3 = size(r,2);
+%    xs=mod(floor(tss*nts/2/pi),nts)+1;
+%    b = repmat(r,1,ncol).*reshape(repmat(c,rank3,1),nts,rank3*ncol);     
+%    fftb = ifft(b);
+%    fftb = fftb(xs,:);
+%    result4 = nts*squeeze(sum(reshape(repmat(expvals,1,ncol).*fftb,nts,rank3,ncol),2));
+%    errorcheb = norm(result4(n1)-result3)/norm(result3);
    
-          
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%         
     
     
 %    error1=norm(result1-result2)/norm(result2)
-    errornyu=norm(result1(n1)-result3)/norm(result3);
+%    errornyu=norm(result1(n1)-result3)/norm(result3);
     errorour=norm(result2(n1)-result3)/norm(result3);
-    fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour,errornyu,timedir);
+%    fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour,errornyu,timedir);
 %    gc=imagesc(real(jacobi1(:,it+1:end)));
 %    saveas(gc,'image13.jpg');
 %    gf=imagesc(real(jacobi1(:,it+1:end)*1i));
