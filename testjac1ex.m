@@ -74,9 +74,9 @@ for m=7:20
  
 
 
-    [U1,V1]=lowrank(nts,funnyu,da,db,tol,tR,mR,ts,nu);
+%    [U1,V1]=lowrank(nts,funnyu,da,db,tol,tR,mR,ts,nu);
     [U2,V2]=lowrank(nts,funour,da,db,tol,tR,mR,ts,nu);
-    rank1=size(U1,2);
+%    rank1=size(U1,2);
     rank2=size(U2,2);
     ncol = size(c,2);
 
@@ -121,6 +121,7 @@ for m=7:20
 %    error1=norm(result1-result2)/norm(result2)
 %    errornyu=norm(result1(n1)-result3)/norm(result3);
     errorour=norm(result2(n1)-result3)/norm(result3);
+    fprintf('\n  %-5d %-9d  %-1.6E   %-1.6E   %-1.6E\n',m,rank2,errorour,timeour,timedir);
 %    fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour,errornyu,timedir);
 %    gc=imagesc(real(jacobi1(:,it+1:end)));
 %    saveas(gc,'image13.jpg');
