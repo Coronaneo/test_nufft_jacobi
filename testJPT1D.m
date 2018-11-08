@@ -15,7 +15,7 @@ str9='dir_time';
 %str10='cheb_rank';
 %str11='error_cheb';
 fprintf('\n');
-fprintf('start nonuniform (location) 1D Jacobi polynomial transform test:');
+fprintf('start uniform (location) 1D uniform Jacobi polynomial transform test:');
 fprintf('\n');
 fprintf('da = %1.2f,db = %1.2f\n',da,db);
 %fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
@@ -33,9 +33,8 @@ for m=7:20
     nt=zeros(nts,1);
     c = randn(nts,1);
 
-    %ts = getts(nt,da,db);
-    %nu = rand(nts-it,1)*(nts-it-1)+it;
-    ts = unique(rand(nts,1)*(pi-2/nts)+1/nts);
+    [ts,wghts] = getts(nt,da,db);
+    %ts = unique(rand(nts,1)*(pi-2/nts)+1/nts);
     nu = [it:nts-1]';
     n1 = randsample(nts,m);
 
@@ -43,13 +42,14 @@ for m=7:20
     tic;
     
     [result3,t]=directjac1(nt,d,da,db,n1,ts,nu);
+    result3 = real(result3)./wghts;
 %    norm(result3)    
     timedir = nts/m*(toc-t);
 
 
 
 
-    xs=mod(floor(ts*nts/2/pi),nts)+1;
+    %xs=mod(floor(ts*nts/2/pi),nts)+1;
     s=round(nts*ts);
     gamma=norm(nts*ts-s,inf);
     xi=log(log(10/tol)/gamma/7);
@@ -75,20 +75,17 @@ for m=7:20
 
 
 %    [U1,V1]=lowrank(nts,funnyu,da,db,tol,tR,mR,ts,nu);
-    [U2,V2]=lowrank(nts,funour,da,db,tol,tR,mR,ts,nu);
+%    [U2,V2]=lowrank(nts,funour,da,db,tol,tR,mR,ts,nu);
 %    rank1=size(U1,2);
-    rank2=size(U2,2);
-    ncol = size(c,2);
+%    rank2=size(U2,2);
+%    ncol = size(c,2);
 
 
-    
+    fun = JPT1D(nts,da,db,tR,mR,tol);
 
     tic;
     for j=1:num
-        d = repmat(conj(V2),1,ncol).*reshape(repmat(c,rank2,1),nts,rank2*ncol);
-        fftc = ifft(d);
-        fftc = fftc(xs,:);
-        result2 = nts*squeeze(sum(reshape(repmat(U2,1,ncol).*fftc,nts,rank2,ncol),2));
+        result2 = fun(c);
     end
     timeour=toc/num;
 %    norm(result2)
