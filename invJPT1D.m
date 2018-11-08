@@ -20,8 +20,8 @@ fun = @(c)JacPT1d(c);
         c = c./repmat(sqrt(wghts),1,ncol);
         d = repmat(conj(U),1,ncol).*reshape(repmat(c,rank,1),nts,rank*ncol);
         d = d(xs,:);
-        fftc = fft(d);
-        y = nts*squeeze(sum(reshape(repmat(V,1,ncol).*fftc,nts,rank,ncol),2));
+        fftc = conj(fft(d));
+        y = squeeze(sum(reshape(repmat(V,1,ncol).*fftc,nts,rank,ncol),2));
         y = real(y);
     end
 

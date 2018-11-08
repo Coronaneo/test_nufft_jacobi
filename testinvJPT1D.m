@@ -28,7 +28,7 @@ for m=7:13
     %ts = unique(rand(nts,1)*(pi-2/nts)+1/nts);
     nu = [it:nts-1]';
     n1 = randsample(nts-it,m);
-    d = c./wghts;
+    d = c./sqrt(wghts);
     
     tic;
     

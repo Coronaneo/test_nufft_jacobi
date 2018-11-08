@@ -52,7 +52,7 @@ end if
 allocate(c(nnu),r(nn),ts(nts),nu(nnu),twhts(n),rd(nn),rd1(nn),wghts(nts))
 allocate(avals0(nts),psivals0(nts))
 
-call mxCopyPtrToReal8(mxGetPr(prhs(2)),c,nnu)
+call mxCopyPtrToReal8(mxGetPr(prhs(2)),c,nts)
 call mxCopyPtrToReal8(mxGetPr(prhs(3)),da,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(4)),db,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(5)),rd,nn)
@@ -81,19 +81,21 @@ allocate(psivals(k*nints),avals(k*nints))
 allocate(psival(k*nints,nn),aval(k*nints,nn))
 
 do i=1,nn
-dnu = rd(i)+it
+dnu = rd1(i)+it-1
 call jacobi_phase(chebdata,dnu,da,db,nints,ab,avals,psivals)
 psival(:,i) = psivals
 aval(:,i) = avals
 end do
-call date_and_time(date,time,zone,values2)
+
 
 !r=0
 do i=1,nn
+dnu = rd1(i)+it-1
 call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i),psival(:,i),nts,ts,avals0,psivals0)
-r(i) = sum(avals0*exp(dcmplx(0,1)*psivals0)*c*wghts,1,1)
+r(i) = sum(avals0*exp(dcmplx(0,1)*psivals0)*c*wghts)
 end do
 
+call date_and_time(date,time,zone,values2)
 time1=sum((values2(5:8)-values1(5:8))*arr)
 
 
