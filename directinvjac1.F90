@@ -1,4 +1,3 @@
-
 #include "fintrf.h"
 
 ! standard header for mex functions
@@ -79,26 +78,23 @@ wghts = sqrt(wghts)
 call jacobi_phase_disc(nints,ab)
 !ier(2)=1
 allocate(psivals(k*nints),avals(k*nints))
-allocate(psival(k*nints,nnu),aval(k*nints,nnu))
+allocate(psival(k*nints,nn),aval(k*nints,nn))
 
-do i=1,nnu
-dnu = nu(i)
+do i=1,nn
+dnu = rd(i)+it
 call jacobi_phase(chebdata,dnu,da,db,nints,ab,avals,psivals)
 psival(:,i) = psivals
 aval(:,i) = avals
 end do
 call date_and_time(date,time,zone,values2)
 
-
-r=0
-do i=1,nnu
-dnu = nu(i)
+!r=0
+do i=1,nn
 call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i),psival(:,i),nts,ts,avals0,psivals0)
-r = avals0(rd1)*exp(dcmplx(0,1)*psivals0(rd1))*c(i)*wghts(rd1)+r
+r(i) = sum(avals0*exp(dcmplx(0,1)*psivals0)*c*wghts,1,1)
 end do
 
 time1=sum((values2(5:8)-values1(5:8))*arr)
-
 
 
 plhs(1) = mxCreateDoubleMatrix(nn, 1, 1)
