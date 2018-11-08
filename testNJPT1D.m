@@ -59,7 +59,7 @@ for m=7:13
     tR=K+2;
     mR=K;
  
-    fun = NJPT1D(nts,ts,da,db,tR,mR,tol);
+    [fun,rank] = NJPT1D(nts,ts,da,db,tR,mR,tol);
     
     tic;
     for j=1:num
@@ -69,6 +69,6 @@ for m=7:13
        
     
     errorour=norm(result2(n1)-result3)/norm(result3);
-    fprintf('\n  %-5d %-9d  %-1.6E   %-1.6E   %-1.6E\n',m,rank2,errorour,timeour,timedir);
+    fprintf('\n  %-5d %-9d  %-1.6E   %-1.6E   %-1.6E\n',m,rank,errorour,timeour,timedir);
 
 end

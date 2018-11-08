@@ -1,4 +1,4 @@
-function [fun,ts,wghts] = JPT1D(nts,da,db,tR,mR,tol)
+function [fun,rank,ts,wghts] = JPT1D(nts,da,db,tR,mR,tol)
 
     if nts < 2^12
        it = 27;
@@ -9,7 +9,8 @@ nt = zeros(nts,1);
 [ts,wghts] = getts(nt,da,db);
 nu = [it:nts-1]';
 xs = mod(floor(ts*nts/2/pi),nts)+1;
-[U,V] = lowrank(nts,JTM1d,da,db,tol,tR,mR,ts,nu);
+JTM = @(rs,cs,n,da,db,ts,nu)JTM1d(rs,cs,n,da,db,ts,nu);
+[U,V] = lowrank(nts,JTM,da,db,tol,tR,mR,ts,nu);
 rank = size(U,2);
 
 fun = @(c)JacPT1d(c);
@@ -20,7 +21,7 @@ fun = @(c)JacPT1d(c);
         fftc = ifft(d);
         fftc = fftc(xs,:);
         y = nts*squeeze(sum(reshape(repmat(U,1,ncol).*fftc,nts,rank,ncol),2));
-        y = real(y)./wghts;
+        y = real(y)./sqrt(wghts);
     end
 
 end

@@ -22,7 +22,7 @@ fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-15s%-15s%-15s\n',str1,str2,str7,str4,str9);
 %funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
 funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
-for m=7:20
+for m=7:13
     nts=2^m;
     if nts < 2^12
        it = 27;
@@ -42,7 +42,7 @@ for m=7:20
     tic;
     
     [result3,t]=directjac1(nt,d,da,db,n1,ts,nu);
-    result3 = real(result3)./wghts;
+    result3 = real(result3)./sqrt(wghts(n1));
 %    norm(result3)    
     timedir = nts/m*(toc-t);
 
@@ -81,7 +81,7 @@ for m=7:20
 %    ncol = size(c,2);
 
 
-    fun = JPT1D(nts,da,db,tR,mR,tol);
+    [fun,rank] = JPT1D(nts,da,db,tR,mR,tol);
 
     tic;
     for j=1:num
@@ -118,7 +118,7 @@ for m=7:20
 %    error1=norm(result1-result2)/norm(result2)
 %    errornyu=norm(result1(n1)-result3)/norm(result3);
     errorour=norm(result2(n1)-result3)/norm(result3);
-    fprintf('\n  %-5d %-9d  %-1.6E   %-1.6E   %-1.6E\n',m,rank2,errorour,timeour,timedir);
+    fprintf('\n  %-5d %-9d  %-1.6E   %-1.6E   %-1.6E\n',m,rank,errorour,timeour,timedir);
 %    fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour,errornyu,timedir);
 %    gc=imagesc(real(jacobi1(:,it+1:end)));
 %    saveas(gc,'image13.jpg');
