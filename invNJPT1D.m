@@ -30,7 +30,10 @@ for i = 1:nts
     PRE(:,i) = (WS^(i-1))*v;
 end
 fun_pre = @(y)invNJPT1Dpre(nts,ts,nu,da,db,u,v,y,tol,N,M,PRE);
-restart = 5;
-maxit =  5;
-yfun = @(b)gmres(fun,b,restart,tol,maxit,fun_pre);
+restart = 10;
+maxit =  10;
+yfun = @(b)invNJacPT1D(b);
+    function [x,flag,relres,iter] = invNJacPT1D(b)
+             [x,flag,relres,iter] = gmres(fun,b,restart,tol,maxit,fun_pre);
+    end
 end
