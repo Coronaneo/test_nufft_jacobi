@@ -17,7 +17,7 @@ fun = @(c)JacPT1d(c);
 
     function y = JacPT1d(c)
         ncol = size(c,2);
-        c = c./repmat(sqrt(wghts),1,ncol);
+        c = c.*repmat(sqrt(wghts),1,ncol);
         d = repmat(conj(U),1,ncol).*reshape(repmat(c,rank,1),nts,rank*ncol);
         d = d(xs,:);
         fftc = conj(fft(d));
