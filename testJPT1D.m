@@ -15,7 +15,7 @@ str9='dir_time';
 %str10='cheb_rank';
 %str11='error_cheb';
 fprintf('\n');
-fprintf('start uniform (location) 1D uniform Jacobi polynomial transform test:');
+fprintf('start 1D uniform Jacobi polynomial transform test:');
 fprintf('\n');
 fprintf('da = %1.2f,db = %1.2f\n',da,db);
 %fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);

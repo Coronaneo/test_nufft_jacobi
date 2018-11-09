@@ -13,15 +13,15 @@ JTM = @(rs,cs,n,da,db,ts,nu,wghts)JTM1d(rs,cs,n,da,db,ts,nu,wghts);
 [U,V] = lowrank(nts,JTM,da,db,tol,tR,mR,ts,nu,wghts);
 rank = size(U,2);
 
-fun = @(c)JacPT1d(c);
+fun = @(c)invJacPT1d(c);
 
-    function y = JacPT1d(c)
+    function y = invJacPT1d(c)
         ncol = size(c,2);
         c = c.*repmat(sqrt(wghts),1,ncol);
-        d = repmat(conj(U),1,ncol).*reshape(repmat(c,rank,1),nts,rank*ncol);
-        d = d(xs,:);
-        fftc = conj(fft(d));
-        y = squeeze(sum(reshape(repmat(V,1,ncol).*fftc,nts,rank,ncol),2));
+        c = c(xs,:);
+        d = repmat(U,1,ncol).*reshape(repmat(c,rank,1),nts,rank*ncol);
+        fftc = conj(fft(conj(d)));
+        y = squeeze(sum(reshape(repmat(conj(V),1,ncol).*fftc,nts,rank,ncol),2));
         y = real(y);
     end
 

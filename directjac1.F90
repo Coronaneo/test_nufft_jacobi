@@ -88,6 +88,9 @@ psival(:,i) = psivals
 aval(:,i) = avals
 end do
 
+call date_and_time(date,time,zone,values2)
+time1=sum((values2(5:8)-values1(5:8))*arr)
+
 
 
 r=0
@@ -97,8 +100,6 @@ call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i),psival(:,i),nts,ts,
 r = avals0(rd1)*exp(dcmplx(0,1)*psivals0(rd1))*c(i)*wghts(rd1)+r
 end do
 
-call date_and_time(date,time,zone,values2)
-time1=sum((values2(5:8)-values1(5:8))*arr)
 
 
 

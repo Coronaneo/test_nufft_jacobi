@@ -87,6 +87,10 @@ psival(:,i) = psivals
 aval(:,i) = avals
 end do
 
+call date_and_time(date,time,zone,values2)
+time1=sum((values2(5:8)-values1(5:8))*arr)
+
+
 
 !r=0
 do i=1,nn
@@ -95,8 +99,7 @@ call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i),psival(:,i),nts,ts,
 r(i) = sum(avals0*exp(dcmplx(0,1)*psivals0)*c*wghts)
 end do
 
-call date_and_time(date,time,zone,values2)
-time1=sum((values2(5:8)-values1(5:8))*arr)
+
 
 
 plhs(1) = mxCreateDoubleMatrix(nn, 1, 1)
