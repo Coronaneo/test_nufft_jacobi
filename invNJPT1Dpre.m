@@ -1,4 +1,4 @@
-function [x] = invNJPT1Dpre(nts,ts,nu,da,db,u,v,y,tol,N,M)
+function [x] = invNJPT1Dpre(nts,ts,nu,da,db,u,v,y,tol,N,M,PRE)
 %nt = zeros(nts,1);
 %rs = [1:nts]';
 %cs = [1:nts]';
@@ -10,6 +10,6 @@ function [x] = invNJPT1Dpre(nts,ts,nu,da,db,u,v,y,tol,N,M)
 %v = sqrt(S(1,1))*conj(V(:,1));
 y1 = y./u;
 y2 = (N')*y1;
-[x1,flag,relres,iter] = cgs(M,y2,tol);
+[x1,flag,relres,iter] = pcg(M,y2,tol,100,PRE);
 x = x1./v;
 end
