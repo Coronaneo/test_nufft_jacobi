@@ -17,7 +17,7 @@ for m=7:13
     nts=2^m;
     ts = unique(rand(nts,1)*(pi-2/nts)+1/nts);
     b = randn(nts,1);
-    [yfun,fun_pre] = invNJPT1D(nts,ts,da,db,b,tol);
+    [yfun,fun_pre] = invNJPT1D(nts,ts,da,db,tol);
     tic
     for i = 1:num
         [y,flag,relres,iter] = yfun(b);
