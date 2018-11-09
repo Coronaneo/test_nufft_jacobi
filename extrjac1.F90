@@ -22,7 +22,7 @@ real*8, allocatable :: psivals(:),avals(:),nu(:)
 real*8, allocatable :: ts(:),avals0(:),psivals0(:),xs(:),wghts(:)
 integer*4, allocatable :: t1(:),k1(:)
 integer*4 it,kk,ii,i,jj
-real*8 da,db,flag,pi
+real*8 da,db,flag,pi,dd
 
 
 pi=acos(-1.0d0)
@@ -31,9 +31,9 @@ pi=acos(-1.0d0)
 allocate(ier(5))
 n = mxGetM(prhs(1))
 if (n .lt. (2**12-1)) then
-it = 27
+it = 0
 else 
-it = 9
+it = 0
 end if
 
 m1 = mxGetN(prhs(2))
@@ -54,8 +54,8 @@ call mxCopyPtrToReal8(mxGetPr(prhs(6)),db,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(7)),ts,nts)
 call mxCopyPtrToReal8(mxGetPr(prhs(8)),nu,nnu)
 call mxCopyPtrToReal8(mxGetPr(prhs(9)),wghts,nts)
-t1=int(t+0.5)
-k1=int(k+0.5)
+t1=int(t+0.4)
+k1=int(k+0.4)
 ier(1)=flag
 allocate(xs(nts))
 allocate(avals0(nts),psivals0(nts))
@@ -82,7 +82,7 @@ wghts = sqrt(wghts)
 
 m=0
 do i=1,n2
-if (k1(i) .gt. it) then
+if (k1(i) .gt. it-1) then
     dnu = nu(k1(i)-it)
     call jacobi_phase(chebdata,dnu,da,db,nints,ab,avals,psivals)
     call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,nts,ts,avals0,psivals0)
@@ -91,6 +91,11 @@ if (k1(i) .gt. it) then
        r = avals0*exp(dcmplx(0,1)*(psivals0-dnu*ts))*wghts
     else
        r = avals0*exp(dcmplx(0,1)*(psivals0-dnu*xs))*wghts
+    end if
+    
+    if (i .ge. 1) then
+       dd  = sqrt( (1+da+db) * gamma(1+da+db)* 1/gamma(1+da) * 1/gamma(1+db) )
+       r = dd*cos(ts/2)**(db+0.5d0)*sin(ts/2)**(da+0.5d0)
     end if
     
     m(:,i) = r(t1)
