@@ -28,7 +28,6 @@ integer*4, allocatable :: rd1(:)
 integer  ::  it1,nn1
 integer*4 k,ii,jj,kk
 integer*4 it,i,j
-integer it1,nn1
 real*8 da,db
 complex*16 a
 
@@ -97,8 +96,8 @@ time1=sum((values2(5:8)-values1(5:8))*arr)
 
 allocate(vals0(nn,it))
 nn1 = nn
-it1 = it
-call jacobi_recurrence2(nn1,ts(rd1),it1-1,da,db,vals0)
+it1 = int4(it-1)
+call jacobi_recurrence2(nn1,ts(rd1),it1,da,db,vals0)
 r = matmul(vals0,c(1:it))*wghts(rd1)
 
 do i=it+1,nnu
