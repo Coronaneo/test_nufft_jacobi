@@ -4,6 +4,7 @@
 subroutine mexfunction(nlhs, plhs, nrhs, prhs)
 use utils
 use chebyshev
+use jacobi_transform
 implicit double precision (a-j,o-z)
 
 ! number of input arguments, number of output arguments
@@ -16,8 +17,7 @@ mwPointer    :: mxGetPr, mxGetPi, mxCreateDoubleMatrix
 mwSize       :: n,nn,nts,nnu
 
 real*8, allocatable :: ts(:),vals0(:,:)
-integer(kind = 4)  ::  it1,nn1
-integer*4 it
+integer(kind = 4)  ::  it,nn1
 real*8 da,db,it1
 
  real*8 arr(4),time1
@@ -39,12 +39,12 @@ call mxCopyPtrToReal8(mxGetPr(prhs(1)),ts,n)
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),da,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(3)),db,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(4)),it1,1)
-it = int(it1)
+it = it1
 
 nn1 = n
-it1 = int4(it-1)
+it = it-1
 allocate(vals0(n,it))
-call jacobi_recurrence2(nn1,ts,it1,da,db,vals0)
+call jacobi_recurrence2(nn1,ts,it,da,db,vals0)
 
 
 plhs(1) = mxCreateDoubleMatrix(n, it, 0)

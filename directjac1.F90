@@ -25,7 +25,7 @@ real*8, allocatable :: psivals(:),avals(:),nu(:),vals0(:,:)
 real*8, allocatable :: ts(:),avals0(:),psivals0(:),wghts(:)
 real*8, allocatable :: psival(:,:),aval(:,:),rd(:)
 integer*4, allocatable :: rd1(:)
-integer  ::  it1,nn1
+integer(kind = 4)  ::  it1,nn1
 integer*4 k,ii,jj,kk
 integer*4 it,i,j
 real*8 da,db
@@ -96,7 +96,7 @@ time1=sum((values2(5:8)-values1(5:8))*arr)
 
 allocate(vals0(nn,it))
 nn1 = nn
-it1 = int4(it-1)
+it1 = it-1
 call jacobi_recurrence2(nn1,ts(rd1),it1,da,db,vals0)
 r = matmul(vals0,c(1:it))*wghts(rd1)
 
@@ -118,7 +118,7 @@ call mxCopyReal8ToPtr(r, mxGetPr(plhs(1)),nn)
 !call mxCopyComplex16ToPtr(ier,mxGetPr(plhs(2)),mxGetPi(plhs(2)),5)
 !call mxCopyReal8ToPtr(ts,mxGetPr(plhs(2)),n)
 call mxCopyReal8ToPtr(time1,mxGetPr(plhs(2)),1)
-deallocate(c,twhts,ts,ab,r,psivals,avals,psivals0,avals0,psival,aval)
+deallocate(c,twhts,ts,ab,r,psivals,avals,psivals0,avals0,psival,aval,vals0)
 
 
 end subroutine

@@ -7,6 +7,7 @@ function [fun,rank,ts,wghts] = JPT1D(nts,da,db,tR,mR,tol)
     end
 nt = zeros(nts,1);
 [ts,wghts] = getts(nt,da,db);
+size(ts)
 vals0 = jacobi_recurrence(ts,da,db,it);
 nu = [it:nts-1]';
 xs = mod(floor(ts*nts/2/pi),nts)+1;
