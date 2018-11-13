@@ -45,7 +45,7 @@ nn = mxGetM(prhs(5))
 nts = mxGetM(prhs(6))
 nnu = mxGetM(prhs(7))
 
-if (n .lt. (2**12-1)) then
+if (n .lt. (2**12)) then
 it = 9
 else 
 it = 27
@@ -93,11 +93,11 @@ call date_and_time(date,time,zone,values2)
 time1=sum((values2(5:8)-values1(5:8))*arr)
 
 allocate(vals0(nn,it))
-nn1 = nn
-it1 = it
-call jacobi_recurrence2(nn1,ts,it1,da,db,vals0)
-r = matmul(vals0,c(1:it))*wghts(rd1)
-
+!nn1 = nn
+!it1 = it
+!call jacobi_recurrence2(nn1,ts(rd1),it1,da,db,vals0)
+!r = matmul(vals0,c(1:it))*wghts(rd1)
+r=0
 do i=it+1,nnu
 dnu = nu(i)
 call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,aval(:,i),psival(:,i),nts,ts,avals0,psivals0)
@@ -111,13 +111,13 @@ plhs(1) = mxCreateDoubleMatrix(nn, 1, 0)
 !plhs(2) = mxCreateDoubleMatrix(5,1,1)
 !plhs(2) = mxCreateDoubleMatrix(n,1,0)
 plhs(2) = mxCreateDoubleMatrix(1,1,0)
-plhs(3) = mxCreateDoubleMatrix(nn,it,0)
+!plhs(3) = mxCreateDoubleMatrix(nn,it,0)
 call mxCopyReal8ToPtr(r, mxGetPr(plhs(1)),nn)
 !ier(5)=1
 !call mxCopyComplex16ToPtr(ier,mxGetPr(plhs(2)),mxGetPi(plhs(2)),5)
 !call mxCopyReal8ToPtr(ts,mxGetPr(plhs(2)),n)
 call mxCopyReal8ToPtr(time1,mxGetPr(plhs(2)),1)
-call mxCopyReal8ToPtr(vals0,mxGetPr(plhs(3)),nn*it)
+!call mxCopyReal8ToPtr(vals0,mxGetPr(plhs(3)),nn*it)
 deallocate(c,twhts,ts,ab,r,psivals,avals,psivals0,avals0,psival,aval,vals0)
 
 

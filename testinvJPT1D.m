@@ -13,7 +13,13 @@ fprintf('start 1D inverse uniform Jacobi polynomial transform test:');
 fprintf('\n');
 fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-15s%-15s%-15s\n',str1,str2,str7,str4,str9);
-for m=7:13
+vd = [7:13];
+es = length(vd);
+rank = zeros(es,1);
+errorour = zeros(es,1);
+timeour = zeros(es,1);
+for ii=1:es
+    m = vd(ii);
     nts=2^m;
     if nts < 2^12
        it = 27;
@@ -64,15 +70,28 @@ for m=7:13
     mR=K;
 
 
-    [fun,rank] = invJPT1D(nts,da,db,tR,mR,tol);
+    [fun,rank(ii)] = invJPT1D(nts,da,db,tR,mR,tol);
 
     tic;
     for j=1:num
         result2 = fun(c);
     end
-    timeour=toc/num;
+    timeour(ii)=toc/num;
 
-    errorour=norm(result2(n1+it)-result3)/norm(result3);
-    fprintf('\n  %-5d %-9d  %-1.6E   %-1.6E   %-1.6E\n',m,rank,errorour,timeour,timedir);
+    errorour(ii)=norm(result2(n1+it)-result3)/norm(result3);
+    fprintf('\n  %-5d %-9d  %-1.6E   %-1.6E   %-1.6E\n',m,rank(ii),errorour(ii),timeour(ii),timedir);
     
 end
+    figure('visible','off');
+    pic = figure;
+    hold on;
+    h(1) = plot(vd,vd-vd(1)+timeour(1),'--k','LineWidth',2);
+    h(2) = plot(vd,2*vd-vd(1)*2-timeour(1),'--b','LineWidth',2);
+    h(3) = plot(vd,log2(timeour),'-^r','LineWidth',2);
+    legend('N log(N)','N^2','timeapp','Location','NorthWest');
+    axis square;
+    xlabel('log_2(N)'); ylabel('log_{2}(time)');
+    set(gca, 'FontSize', 16);
+    b=get(gca);
+    set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
+    saveas(pic,['testinvJPT1D.eps'],'epsc');

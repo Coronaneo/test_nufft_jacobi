@@ -22,7 +22,13 @@ fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-15s%-15s%-15s\n',str1,str2,str7,str4,str9);
 %funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
 %funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
-for m=7:13
+vd = [7:13];
+es = length(vd);
+rank = zeros(es,1);
+errorour = zeros(es,1);
+timeour = zeros(es,1);
+for ii=1:es
+    m = vd(ii);
     nts=2^m;
     if nts < 2^12
        it = 9;
@@ -41,9 +47,9 @@ for m=7:13
     d = c;
     tic;
     
-    [result3,t,v]=directjac1(nt,d,da,db,n1,ts,nu,wghts);
+    [result3,t]=directjac1(nt,d,da,db,n1,ts,nu,wghts);
     result3 = result3./sqrt(wghts(n1));
-    size(v)
+    %size(v)
 %    norm(result3)    
     timedir = nts/m*(toc-t);
 
@@ -82,13 +88,13 @@ for m=7:13
 %    ncol = size(c,2);
 
 
-    [fun,rank] = JPT1D(nts,da,db,tR,mR,tol);
+    [fun,rank(ii)] = JPT1D(nts,da,db,tR,mR,tol);
 
     tic;
     for j=1:num
         result2 = fun(c);
     end
-    timeour=toc/num;
+    timeour(ii)=toc/num;
 %    norm(result2)
 %%%%%%%%%%%%%%%%%%%%%%%Greengard%%%%%%%%%%%%%%%%%
 %    ex = exp(1i*nts/2*ts);
@@ -118,8 +124,9 @@ for m=7:13
     
 %    error1=norm(result1-result2)/norm(result2)
 %    errornyu=norm(result1(n1)-result3)/norm(result3);
-    errorour=norm(result2(n1)-result3)/norm(result3);
-    fprintf('\n  %-5d %-9d  %-1.6E   %-1.6E   %-1.6E\n',m,rank,errorour,timeour,timedir);
+    errorour(ii)=norm(result2(n1)-result3)/norm(result3);
+    fprintf('\n  %-5d %-9d  %-1.6E   %-1.6E   %-1.6E\n',m,rank(ii),errorour(ii),timeour(ii),timedir);
+  
 %    fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour,errornyu,timedir);
 %    gc=imagesc(real(jacobi1(:,it+1:end)));
 %    saveas(gc,'image13.jpg');
@@ -128,3 +135,16 @@ for m=7:13
 %    bf=imagesc(abs(jacobi1(:,it+1:end)));
 %    saveas(bf,'image13a.jpg');
 end
+    figure('visible','off');
+    pic = figure;
+    hold on;
+    h(1) = plot(vd,vd-vd(1)+timeour(1),'--k','LineWidth',2);
+    h(2) = plot(vd,2*vd-vd(1)*2-timeour(1),'--b','LineWidth',2);
+    h(3) = plot(vd,log2(timeour),'-^r','LineWidth',2);
+    legend('N log(N)','N^2','timeapp','Location','NorthWest');
+    axis square;
+    xlabel('log_2(N)'); ylabel('log_{2}(time)');
+    set(gca, 'FontSize', 16);
+    b=get(gca);
+    set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
+    saveas(pic,['testJPT1D.eps'],'epsc');

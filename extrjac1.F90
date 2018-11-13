@@ -83,7 +83,7 @@ wghts = sqrt(wghts)
 m=0
 do i=1,n2
 if (k1(i) .gt. it) then
-    dnu = nu(k1(i))
+    dnu = k1(i)-1
     call jacobi_phase(chebdata,dnu,da,db,nints,ab,avals,psivals)
     call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,nts,ts,avals0,psivals0)
 

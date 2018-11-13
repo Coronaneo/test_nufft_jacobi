@@ -7,14 +7,16 @@ function [fun,rank,ts,wghts] = JPT1D(nts,da,db,tR,mR,tol)
     end
 nt = zeros(nts,1);
 [ts,wghts] = getts(nt,da,db);
-size(ts)
-vals0 = jacobi_recurrence(ts,da,db,it);
-size(vals0)
+%size(ts)
+%vals0 = jacobi_recurrence(ts,da,db,it);
+%size(vals0)
 nu = [it:nts-1]';
 xs = mod(floor(ts*nts/2/pi),nts)+1;
+
 JTM = @(rs,cs,n,da,db,ts,nu,wghts)JTM1d(rs,cs,n,da,db,ts,nu,wghts);
+
 [U,V] = lowrank(nts,JTM,da,db,tol,tR,mR,ts,nu,wghts);
-rank = size(U,2)
+rank = size(U,2);
 
 fun = @(c)JacPT1d(c);
 
@@ -25,7 +27,7 @@ fun = @(c)JacPT1d(c);
         fftc = fftc(xs,:);
         y = nts*squeeze(sum(reshape(repmat(U,1,ncol).*fftc,nts,rank,ncol),2));
         y = real(y)./sqrt(wghts);
-        y = y + vals0*c(1:it,:);
+ %       y = y + vals0*c(1:it,:);
     end
 
 end
