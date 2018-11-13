@@ -2,8 +2,7 @@
 
 ! standard header for mex functions
 subroutine mexfunction(nlhs, plhs, nrhs, prhs)
-use utils
-use chebyshev
+use jacobi_transform
 implicit double precision (a-j,o-z)
 
 ! number of input arguments, number of output arguments
