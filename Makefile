@@ -25,13 +25,13 @@ getts.mex:getts.F90
 	${MEX} ${FLAGS} getts.F90 $(ALLOBJ1) $(LIBNAME) 
 
 directjac1.mex:directjac1.F90
-	${MEX} ${FLAGS} directjac1.F90 $(ALLOBJ1) $(LIBNAME)
+	${MEX} ${FLAGS} directjac1.F90 $(ALLOBJ1) $(ALLOBJ2) $(LIBNAME)
 
 directjac2.mex:directjac2.F90
-	${MEX} ${FLAGS} directjac2.F90 $(ALLOBJ1) $(LIBNAME)
+	${MEX} ${FLAGS} directjac2.F90 $(ALLOBJ1) $(ALLOBJ2) $(LIBNAME)
 
 directjac3.mex:directjac3.F90
-	${MEX} ${FLAGS} directjac3.F90 $(ALLOBJ1) $(LIBNAME)
+	${MEX} ${FLAGS} directjac3.F90 $(ALLOBJ1) $(ALLOBJ2) $(LIBNAME)
 
 extrjac1.mex:extrjac1.F90
 	${MEX} ${FLAGS} extrjac1.F90 $(ALLOBJ1) $(LIBNAME)
