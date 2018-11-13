@@ -10,7 +10,7 @@ ALLOBJ2 = gspiv.o orthom.o idecomp.o jacobi_exp.o jacobi_transform.o
 ALLOBJ3 = nufft1df90.o nufft2df90.o nufft3df90.o
 
 all : ${ALLOBJ} ${ALLOBJ1} ${ALLOBJ2} ${ALLOBJ3} nufft1dIInyumex.mex jacobiexample.mex chebjacex.mex nufft2dIInyumex.mex directjac2.mex extrjac2.mex directjac3.mex \
-	extrjac3.mex nufft3dIInyumex.mex directjac1.mex extrjac1.mex getts.mex directinvjac1.mex
+	extrjac3.mex nufft3dIInyumex.mex directjac1.mex extrjac1.mex getts.mex directinvjac1.mex jacobi_recurrence.mex
 
 nufft1dIInyumex.mex: nufft1dIInyumex.F90
 	${MEX} ${FLAGS} nufft1dIInyumex.F90 $(ALLOBJ) nufft1df90.o
@@ -50,10 +50,13 @@ chebjacex.mex: chebjacex.F90
 
 directinvjac1.mex:directinvjac1.F90
 	${MEX} ${FLAGS} directinvjac1.F90 $(ALLOBJ1) $(LIBNAME)
+
+jacobi_recurrence.mex:jacobi_recurrence.F90
+	${MEX} ${FLAGS} jacobi_recurrence.F90 $(ALLOBJ2) $(LIBNAME)
 #libdfftpack.a:
 #	cd dfftpack && $(MAKE) clean && $(MAKE) && cp libdfftpack.a ..
 
-LINK_MACRO = $< nufft1dIInyumex.o jacobiexample.o chebjacex.o nufft2dIInyumex.o directjac2.o extrjac2.o directjac3.o extrjac3.o nufft3dIInyumex.o directjac1.o extrjac1.o getts.o directinvjac1.o -o $@
+LINK_MACRO = $< nufft1dIInyumex.o jacobiexample.o chebjacex.o nufft2dIInyumex.o directjac2.o extrjac2.o directjac3.o extrjac3.o nufft3dIInyumex.o directjac1.o extrjac1.o getts.o directinvjac1.o jacobi_recurrence.o -o $@
 
 clean : 
 	rm -f *.a

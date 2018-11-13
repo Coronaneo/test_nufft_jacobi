@@ -82,8 +82,8 @@ wghts = sqrt(wghts)
 
 m=0
 do i=1,n2
-if (k1(i) .gt. it-1) then
-    dnu = nu(k1(i)-it)
+if (k1(i) .gt. it) then
+    dnu = nu(k1(i))
     call jacobi_phase(chebdata,dnu,da,db,nints,ab,avals,psivals)
     call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,nts,ts,avals0,psivals0)
 
@@ -91,11 +91,6 @@ if (k1(i) .gt. it-1) then
        r = avals0*exp(dcmplx(0,1)*(psivals0-dnu*ts))*wghts
     else
        r = avals0*exp(dcmplx(0,1)*(psivals0-dnu*xs))*wghts
-    end if
-    
-    if (i .ge. 1) then
-       dd  = sqrt( (1+da+db) * gamma(1+da+db)* 1/gamma(1+da) * 1/gamma(1+db) )
-       r = dd*cos(ts/2)**(db+0.5d0)*sin(ts/2)**(da+0.5d0)
     end if
     
     m(:,i) = r(t1)

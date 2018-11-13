@@ -25,9 +25,9 @@ fprintf('%-6s%-11s%-15s%-15s%-15s\n',str1,str2,str7,str4,str9);
 for m=7:13
     nts=2^m;
     if nts < 2^12
-       it = 27;
-    else
        it = 9;
+    else
+       it = 27;
     end
     
     nt=zeros(nts,1);
@@ -35,14 +35,14 @@ for m=7:13
 
     [ts,wghts] = getts(nt,da,db);
     %ts = unique(rand(nts,1)*(pi-2/nts)+1/nts);
-    nu = [it:nts-1]';
+    nu = [0:nts-1]';
     n1 = randsample(nts,m);
 
-    d = c(it+1:end);
+    d = c;
     tic;
     
     [result3,t]=directjac1(nt,d,da,db,n1,ts,nu,wghts);
-    result3 = real(result3)./sqrt(wghts(n1));
+    result3 = result3./sqrt(wghts(n1));
 %    norm(result3)    
     timedir = nts/m*(toc-t);
 
