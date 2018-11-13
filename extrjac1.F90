@@ -30,10 +30,10 @@ pi=acos(-1.0d0)
 
 allocate(ier(5))
 n = mxGetM(prhs(1))
-if (n .lt. (2**12-1)) then
-it = 0
+if (n .lt. (2**12)) then
+it = 9
 else 
-it = 0
+it = 27
 end if
 
 m1 = mxGetN(prhs(2))
