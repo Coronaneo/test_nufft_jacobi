@@ -113,13 +113,13 @@ plhs(1) = mxCreateDoubleMatrix(nn, 1, 0)
 !plhs(2) = mxCreateDoubleMatrix(5,1,1)
 !plhs(2) = mxCreateDoubleMatrix(n,1,0)
 plhs(2) = mxCreateDoubleMatrix(1,1,0)
-plhs(3) = mxCreateDoubleMatrix(nn,it,0)
+plhs(3) = mxCreateDoubleMatrix(nts,it,0)
 call mxCopyReal8ToPtr(r, mxGetPr(plhs(1)),nn)
 !ier(5)=1
 !call mxCopyComplex16ToPtr(ier,mxGetPr(plhs(2)),mxGetPi(plhs(2)),5)
 !call mxCopyReal8ToPtr(ts,mxGetPr(plhs(2)),n)
 call mxCopyReal8ToPtr(time1,mxGetPr(plhs(2)),1)
-call mxCopyReal8ToPtr(vals0,mxGetPr(plhs(3)),nn*it)
+call mxCopyReal8ToPtr(vals0,mxGetPr(plhs(3)),nts*it)
 deallocate(c,twhts,ts,ab,r,psivals,avals,psivals0,avals0,psival,aval,vals0)
 
 
