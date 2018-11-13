@@ -52,7 +52,7 @@ directinvjac1.mex:directinvjac1.F90
 	${MEX} ${FLAGS} directinvjac1.F90 $(ALLOBJ1) $(LIBNAME)
 
 jacobi_recurrence.mex:jacobi_recurrence.F90
-	${MEX} ${FLAGS} jacobi_recurrence.F90 $(ALLOBJ2) $(LIBNAME)
+	${MEX} ${FLAGS} jacobi_recurrence.F90 $(ALLOBJ1) $(ALLOBJ2) $(LIBNAME)
 #libdfftpack.a:
 #	cd dfftpack && $(MAKE) clean && $(MAKE) && cp libdfftpack.a ..
 

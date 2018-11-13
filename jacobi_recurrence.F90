@@ -16,7 +16,7 @@ mwPointer    :: mxGetPr, mxGetPi, mxCreateDoubleMatrix
 ! define a size integer so that we can get its type
 mwSize       :: n,nn,nts,nnu
 
-real*8, allocatable :: ts(:),vals0(:,:)
+real*8, allocatable :: tts(:),vvals0(:,:)
 integer(kind = 4)  ::  it,nn1
 real*8 da,db,it1
 
@@ -33,24 +33,24 @@ real*8 da,db,it1
  
 n = mxGetM(prhs(1))
 
-allocate(ts(n))
+allocate(tts(n))
 
-call mxCopyPtrToReal8(mxGetPr(prhs(1)),ts,n)
+call mxCopyPtrToReal8(mxGetPr(prhs(1)),tts,n)
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),da,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(3)),db,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(4)),it1,1)
 it = it1
 
 nn1 = n
-it = it-1
-allocate(vals0(n,it))
-call jacobi_recurrence2(nn1,ts,it,da,db,vals0)
+it = it
+allocate(vvals0(n,it))
+call jacobi_recurrence2(nn1,tts,it,da,db,vvals0)
 
 
 plhs(1) = mxCreateDoubleMatrix(n, it, 0)
-call mxCopyReal8ToPtr(vals0, mxGetPr(plhs(1)),n,it)
+call mxCopyReal8ToPtr(vvals0, mxGetPr(plhs(1)),n*it)
 
-deallocate(ts,vals0)
+deallocate(tts,vvals0)
 
 
 end subroutine
