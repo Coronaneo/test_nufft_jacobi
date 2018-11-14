@@ -206,7 +206,11 @@ end
     h(5) = plot(vd,log2(timefac1)-log2(timefac1(1))+ag,'-^k','LineWidth',2);
     h(6) = plot(vd,log2(timefac2)-log2(timefac2(1))+ag,'-^g','LineWidth',2);
     legend('N log(N)','N^2','timeRSapp','timeCHapp','timeRSfac','timeCHfac','Location','NorthWest');
-    title('RS SVD vs CHEB ID');
+    if flag > 0
+       title('RS SVD vs CHEB ID uni_JPT');
+    else
+        title('RS SVD vs CHEB ID non_JPT');
+    end
     axis square;
     xlabel('log_2(N)'); ylabel('log_{2}(time)');
     set(gca, 'FontSize', 16);
