@@ -1,4 +1,5 @@
 format long
+flag = 1;
 num=10;
 da=0.25;
 db=0.25;
@@ -42,8 +43,13 @@ for ii=1:es
     
     nt=zeros(nts,1);
     c = randn(nts,1);
-
-    [ts,wghts] = getts(nt,da,db);
+    
+    if flag > 0
+       [ts,wghts] = getts(nt,da,db);
+    else
+        ts = unique(rand(nts,1)*(pi-2/nts)+1/nts);
+        wghts = ones(nts,1);
+    end
     %ts = unique(rand(nts,1)*(pi-2/nts)+1/nts);
     nu = [0:nts-1]';
     n1 = randsample(nts,m);
@@ -90,34 +96,65 @@ for ii=1:es
 %    rank1=size(U1,2);
 %    rank2=size(U2,2);
 %    ncol = size(c,2);
+    if  flag > 0
+        tic
+        for i = 1:num
+            [fun,rank1(ii)] = JPT1D(nts,da,db,tR,mR,tol,1);
+        end
+        timefac1(ii)=toc/num;
 
-    tic
-    for i = 1:num
-    [fun,rank1(ii)] = JPT1D(nts,da,db,tR,mR,tol,1);
-    end
-    timefac1(ii)=toc/num;
+        tic;
+        for j=1:num
+            result2 = fun(c);
+        end
+        timeour1(ii)=toc/num;
+    
+        errorour1(ii)=norm(result2(n1)-result3)/norm(result3);
+    
+        tic
+        for i = 1:num
+            [fun,rank2(ii)] = JPT1D(nts,da,db,tR,mR,tol,-1);
+        end
+        timefac2(ii)=toc/num;
 
-    tic;
-    for j=1:num
-        result2 = fun(c);
-    end
-    timeour1(ii)=toc/num;
+        tic;
+        for j=1:num
+            result2 = fun(c);
+        end
+        timeour2(ii)=toc/num;
     
-    errorour1(ii)=norm(result2(n1)-result3)/norm(result3);
-    
-    tic
-    for i = 1:num
-    [fun,rank2(ii)] = JPT1D(nts,da,db,tR,mR,tol,1);
-    end
-    timefac2(ii)=toc/num;
+        errorour2(ii)=norm(result2(n1)-result3)/norm(result3);
+    else
+        tic
+        for i = 1:num
+            [fun,rank1(ii)] = NJPT1D(nts,da,db,tR,mR,tol,1);
+        end
+        timefac1(ii)=toc/num;
 
-    tic;
-    for j=1:num
-        result2 = fun(c);
-    end
-    timeour2(ii)=toc/num;
+        tic;
+        for j=1:num
+            result2 = fun(c);
+        end
+        timeour1(ii)=toc/num;
     
-    errorour2(ii)=norm(result2(n1)-result3)/norm(result3);
+        errorour1(ii)=norm(result2(n1)-result3)/norm(result3);
+    
+        tic
+        for i = 1:num
+            [fun,rank2(ii)] = NJPT1D(nts,da,db,tR,mR,tol,-1);
+        end
+        timefac2(ii)=toc/num;
+
+        tic;
+        for j=1:num
+            result2 = fun(c);
+        end
+        timeour2(ii)=toc/num;
+    
+        errorour2(ii)=norm(result2(n1)-result3)/norm(result3);
+    end
+        
+        
 %    norm(result2)
 %%%%%%%%%%%%%%%%%%%%%%%Greengard%%%%%%%%%%%%%%%%%
 %    ex = exp(1i*nts/2*ts);
