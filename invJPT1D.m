@@ -18,8 +18,10 @@ for i = 1:nts
 end
 P = sparse(X,Y,S,nts,nts,nts);
 JTM = @(rs,cs,n,da,db,ts,nu,wghts)JTM1d(rs,cs,n,da,db,ts,nu,wghts);
+V = conj(V);
 [U,V] = lowrank(nts,JTM,da,db,tol,tR,mR,ts,nu,wghts);
 rank = size(U,2);
+V = [zeros(it,rank);V];
 
 fun = @(c)invJacPT1d(c);
 
@@ -29,7 +31,7 @@ fun = @(c)invJacPT1d(c);
         d = repmat(U,1,ncol).*reshape(repmat(c,rank,1),nts,rank*ncol);
         d = P*d;
         fftc = conj(fft(conj(d)));
-        y = squeeze(sum(reshape(repmat(conj(V),1,ncol).*fftc,nts,rank,ncol),2));
+        y = squeeze(sum(reshape(repmat(V,1,ncol).*fftc,nts,rank,ncol),2));
         y = real(y);
     end
 

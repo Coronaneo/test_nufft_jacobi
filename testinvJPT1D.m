@@ -24,9 +24,9 @@ for ii=1:es
     m = vd(ii);
     nts=2^m;
     if nts < 2^12
-       it = 27;
-    else
        it = 9;
+    else
+       it = 27;
     end
     
     nt=zeros(nts,1);

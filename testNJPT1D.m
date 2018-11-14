@@ -70,7 +70,7 @@ for ii=1:es
  
     tic
     for i = 1:num
-    [fun,rank(ii)] = NJPT1D(nts,ts,da,db,tR,mR,tol);
+    [fun,rank(ii)] = NJPT1D(nts,ts,da,db,tR,mR,tol,1);
     end
     timefac(ii)=toc/num;
     
