@@ -1,6 +1,6 @@
-function [T,idx,sk,rd] = ID_Cheby(fun,x,k,grid,rank,tol,r_or_c,opt)
-% Compute ID approximation A(:,rd) ~ A(:,sk)*T. 
-% A =fun(x,k)
+function [U,V] = ID_Cheby(fun,x,k,grid,rank,tol,r_or_c,opt)
+% Compute decomposition A = U*V via ID approximation A(:,rd) ~ A(:,sk)*T. 
+% A =fun(rs,cs,x,k)
 % The precision is specified by tol and the rank is given by 'rank'; 
 % r_or_c specify row ID or column ID
 % opt - whether use adaptive rank or fix rank
@@ -9,7 +9,7 @@ function [T,idx,sk,rd] = ID_Cheby(fun,x,k,grid,rank,tol,r_or_c,opt)
 %        accuracy as good as tol; may not be able to achieve tol if rk is
 %        too small
 %
-% Copyright 2018 Haizhao Yang
+% Copyright 2018 Haizhao Yang, Qiyuan Pang
 
 if nargin < 8, opt = 1; end
 if nargin < 7, r_or_c = 'c'; end % sk is column index
@@ -33,9 +33,9 @@ switch r_or_c
         else
             idxx = 1:xlen;
         end
-        px = x(idxx(1:min(xlen,rr)),:);
-        
-        Asub = fun(px,k);
+        px = idxx(1:min(xlen,rr));
+        pk = [1:klen]';
+        Asub = fun(px,pk,x,k);
         
         [~,R,E] = qr(Asub,0);
         if opt > 0
@@ -64,9 +64,9 @@ switch r_or_c
         else
             idxk = 1:klen;
         end
-        pk = k(idxk(1:min(klen,rr)),:);
-        
-        Asub = fun(x,pk);
+        pk = idxk(1:min(klen,rr));
+        px = [1:xlen]';
+        Asub = fun(px,pk,x,k);
         
         [~,R,E] = qr(Asub',0);
         if opt > 0
@@ -83,7 +83,28 @@ switch r_or_c
         T = R(1:rr,1:rr)\R(1:rr,rr+1:end);
 end
 if  r_or_c = 'c'
-    U = fun(x,sk)
+    U = fun([1:xlen]',idx,x,k);
+    V = zeros(min(xlen,rr),klen);
+    for i = 1:klen
+        flag = find(idx == i);
+        if ~isempty(flag)
+            V(flag,i) = 1;
+        else
+            flag1 = find(rd == i);
+            V(:,i) = T(:,flag1);
+        end
+    end
 else
+    V = fun(idx,[1:klen]',x,k);
+    U = zeros(xlen,min(klen,rr));
+    for i = 1:xlen
+        flag = find(idx == i);
+        if ~isempty(flag)
+            U(i,flag) = 1;
+        else
+            flag1 = find(rd == i);
+            U(i,:) = T(flag1,:);
+        end
+    end
 end
 end

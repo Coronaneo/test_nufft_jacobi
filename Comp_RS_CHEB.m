@@ -4,30 +4,33 @@ da=0.25;
 db=0.25;
 tol=1e-12
 str1='size';
-str2='our_rank';
-%str3='nyu_rank';
-str4='our_time';
-%str5='nyu_time';
+str2='RS_rank';
+str3='Ch_rank';
+str4='RSapp_time';
+str5='Chapp_time';
 %str6='ratio_our/nyu';
-str7='error_our';
-%str8='error_nyu';
+str7='error_RS';
+str8='error_Ch';
 str9='dir_time';
-str10='fac_time';
-%str11='error_cheb';
+str10='RSfac_time';
+str11='Chfac_time';
 fprintf('\n');
-fprintf('start 1D uniform Jacobi polynomial transform test:');
+fprintf('start RS SVD vs CHEB ID comparison:');
 fprintf('\n');
 fprintf('da = %1.2f,db = %1.2f\n',da,db);
 %fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
-fprintf('%-6s%-11s%-15s%-15s%-15s%-15s\n',str1,str2,str7,str4,str9,str10);
+fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-15s%-15s\n',str1,str2,str3,str4,str5,str7,str8,str9,str10,str11);
 %funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
 %funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
 vd = [7:16];
 es = length(vd);
-rank = zeros(es,1);
-errorour = zeros(es,1);
-timeour = zeros(es,1);
-timefac = zeros(es,1);
+rank1 = zeros(es,1);
+errorour1 = zeros(es,1);
+timeour1 = zeros(es,1);
+timefac1 = zeros(es,1);
+errorour2 = zeros(es,1);
+timeour2 = zeros(es,1);
+timefac2 = zeros(es,1);
 for ii=1:es
     m = vd(ii);
     nts=2^m;
@@ -90,15 +93,31 @@ for ii=1:es
 
     tic
     for i = 1:num
-    [fun,rank(ii)] = JPT1D(nts,da,db,tR,mR,tol,1);
+    [fun,rank1(ii)] = JPT1D(nts,da,db,tR,mR,tol,1);
     end
-    timefac(ii)=toc/num;
+    timefac1(ii)=toc/num;
 
     tic;
     for j=1:num
         result2 = fun(c);
     end
-    timeour(ii)=toc/num;
+    timeour1(ii)=toc/num;
+    
+    errorour1(ii)=norm(result2(n1)-result3)/norm(result3);
+    
+    tic
+    for i = 1:num
+    [fun,rank2(ii)] = JPT1D(nts,da,db,tR,mR,tol,1);
+    end
+    timefac2(ii)=toc/num;
+
+    tic;
+    for j=1:num
+        result2 = fun(c);
+    end
+    timeour2(ii)=toc/num;
+    
+    errorour2(ii)=norm(result2(n1)-result3)/norm(result3);
 %    norm(result2)
 %%%%%%%%%%%%%%%%%%%%%%%Greengard%%%%%%%%%%%%%%%%%
 %    ex = exp(1i*nts/2*ts);
@@ -128,8 +147,8 @@ for ii=1:es
     
 %    error1=norm(result1-result2)/norm(result2)
 %    errornyu=norm(result1(n1)-result3)/norm(result3);
-    errorour(ii)=norm(result2(n1)-result3)/norm(result3);
-    fprintf('\n  %-5d %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E\n',m,rank(ii),errorour(ii),timeour(ii),timedir,timefac(ii));
+    
+    fprintf('\n  %-5d %-9d %-9d %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E\n',m,rank1(ii),rank2(ii),timeour1(ii),timeour2(ii),errorour1(ii),errorour2(ii),timedir,timefac1(ii),timefac2(ii));
   
 %    fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour,errornyu,timedir);
 %    gc=imagesc(real(jacobi1(:,it+1:end)));
@@ -142,15 +161,18 @@ end
     figure('visible','off');
     pic = figure;
     hold on;
-    h(1) = plot(vd,vd-vd(1)+timeour(1),'--k','LineWidth',2);
-    h(2) = plot(vd,2*vd-vd(1)*2-timeour(1),'--b','LineWidth',2);
-    h(3) = plot(vd,log2(timeour),'-^r','LineWidth',2);
-    h(4) = plot(vd,log2(timefac),'-^g','LineWidth',2);
-    legend('N log(N)','N^2','timeapp','timefac','Location','NorthWest');
-    title('1D uniform JPT');
+    ag = (timeour1(1)+timeour2(1)+timefac1(1)+timefac1(2)+3*vd(1))/6;
+    h(1) = plot(vd,vd-vd(1)+ag,'--k','LineWidth',2);
+    h(2) = plot(vd,2*vd-vd(1)*2+ag,'--b','LineWidth',2);
+    h(3) = plot(vd,log2(timeour1)-log2(timeour1(1))+ag,'-^r','LineWidth',2);
+    h(4) = plot(vd,log2(timeour2)-log2(timeour1(2))+ag,'-^b','LineWidth',2);
+    h(5) = plot(vd,log2(timefac1)-log2(timefac1(1))+ag,'-^k','LineWidth',2);
+    h(6) = plot(vd,log2(timefac2)-log2(timefac2(1))+ag,'-^g','LineWidth',2);
+    legend('N log(N)','N^2','timeRSapp','timeCHapp','timeRSfac','timeCHfac','Location','NorthWest');
+    title('RS SVD vs CHEB ID');
     axis square;
     xlabel('log_2(N)'); ylabel('log_{2}(time)');
     set(gca, 'FontSize', 16);
     b=get(gca);
     set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
-    saveas(pic,['testJPT1D.eps'],'epsc');
+    saveas(pic,['Comp_RS_CHEB.eps'],'epsc');
