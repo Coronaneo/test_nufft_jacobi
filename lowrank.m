@@ -1,7 +1,13 @@
 function [U,V] = lowrank(n,fun,da,db,tol,tR,mR,ts,nu,wghts)
 
-Nx = n;
-Ny = n;
+if nts < 2^12
+   it = 9;
+else
+   it = 27;
+end
+
+Nx = size(ts,1);
+Ny = size(nu,1);
 x = [1:Nx]';
 y = [1:Ny]';
 if Nx==0 || Ny==0

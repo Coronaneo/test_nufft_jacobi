@@ -1,5 +1,5 @@
 function [U,V] = ID_Cheby(fun,x,k,grid,rank,tol,r_or_c,opt)
-% Compute decomposition A = U*V via ID approximation A(:,rd) ~ A(:,sk)*T. 
+% Compute decomposition A = U*V.' via ID approximation A(:,rd) ~ A(:,sk)*T. 
 % A =fun(rs,cs,x,k)
 % The precision is specified by tol and the rank is given by 'rank'; 
 % r_or_c specify row ID or column ID
@@ -82,20 +82,22 @@ switch r_or_c
         sk = x(idx,:);
         T = R(1:rr,1:rr)\R(1:rr,rr+1:end);
 end
-if  r_or_c = 'c'
+if  r_or_c == 'c'
     U = fun([1:xlen]',idx,x,k);
-    V = zeros(min(xlen,rr),klen);
+    V = zeros(klen,min(xlen,rr));
     for i = 1:klen
         flag = find(idx == i);
         if ~isempty(flag)
-            V(flag,i) = 1;
+            V(i,flag) = 1;
         else
             flag1 = find(rd == i);
-            V(:,i) = T(:,flag1);
+            V(i,:) = T(:,flag1).';
         end
     end
 else
+    T = T';
     V = fun(idx,[1:klen]',x,k);
+    V = V.';
     U = zeros(xlen,min(klen,rr));
     for i = 1:xlen
         flag = find(idx == i);

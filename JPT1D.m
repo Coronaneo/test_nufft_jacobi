@@ -19,11 +19,12 @@ if opt > 0
    [U,V] = lowrank(nts,JTM,da,db,tol,tR,mR,ts,nu,wghts);
    V = conj(V);
 else
-    JTM = @(rs,cs,ts,nu)JTM1d(rs,cs,n,da,db,ts,nu,wghts);
+    JTM = @(rs,cs,ts,nu)JTM1d(rs,cs,nts,da,db,ts,nu,wghts);
     grid = cos(((2*[nts:-1:1]'-1)*pi/2/nts)+1)*pi/2;
-    [U,V] = ID_Cheby(JTM,ts,nu,wghts,grid,50,tol,'r',1);
+    [U,V] = ID_Cheby(JTM,ts,nu,grid,50,tol,'r',1);
 end
 rank = size(U,2);
+V = [zeros(it,rank);V];
 
 fun = @(c)JacPT1d(c);
 
