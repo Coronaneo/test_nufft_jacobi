@@ -1,4 +1,4 @@
-function [fun,rank,ts,wghts] = JPT1D(nts,da,db,tR,mR,tol)
+function [fun,rank,ts,wghts] = JPT1D(nts,da,db,tR,mR,tol,opt)
 
     if nts < 2^12
        it = 9;
@@ -13,9 +13,15 @@ nt = zeros(nts,1);
 nu = [it:nts-1]';
 xs = mod(floor(ts*nts/2/pi),nts)+1;
 
-JTM = @(rs,cs,n,da,db,ts,nu,wghts)JTM1d(rs,cs,n,da,db,ts,nu,wghts);
 
-[U,V] = lowrank(nts,JTM,da,db,tol,tR,mR,ts,nu,wghts);
+if opt > 0
+    JTM = @(rs,cs,n,da,db,ts,nu,wghts)JTM1d(rs,cs,n,da,db,ts,nu,wghts);
+   [U,V] = lowrank(nts,JTM,da,db,tol,tR,mR,ts,nu,wghts);
+else
+    JTM = @(rs,cs,ts,nu,wghts)JTM1d(rs,cs,n,da,db,ts,nu,wghts);
+    grid = cos(((2*[nts:-1:1]'-1)*pi/2/nts)+1)*pi/2;
+    [T,idx,sk,rd] = ID_Cheby(JTM,ts,nu,wghts,grid,50,tol,'r',1);
+end
 rank = size(U,2);
 
 fun = @(c)JacPT1d(c);

@@ -17,8 +17,8 @@ mwSize       :: n,n1,n2,m1,m2,nts,nnu
 
 type(chebexps_data)           :: chebdata
 real*8, allocatable :: twhts(:),ab(:,:),t(:),k(:)
-complex*16, allocatable :: r(:),m(:,:),ier(:)
-real*8, allocatable :: psivals(:),avals(:),nu(:)
+complex*16, allocatable :: r(:),m(:,:),ier(:),xs1(:)
+real*8, allocatable :: psivals(:),avals(:),nu(:),ts1(:),wghts1(:)
 real*8, allocatable :: ts(:),avals0(:),psivals0(:),xs(:),wghts(:)
 integer*4, allocatable :: t1(:),k1(:)
 integer*4 it,kk,ii,i,jj
@@ -45,7 +45,8 @@ n2 = n2*m2
 nts = mxGetM(prhs(7))
 nnu = mxGetM(prhs(8))
 
-allocate(t(n1),k(n2),t1(n1),k1(n2),m(n1,n2),r(nts),ts(nts),nu(nnu),wghts(nts))
+allocate(t(n1),k(n2),t1(n1),k1(n2),m(n1,n2),r(n1),ts(nts),nu(nnu),wghts(nts))
+allocate(ts1(n1),wghts1(n1),xs1(n1))
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),t,n1)
 call mxCopyPtrToReal8(mxGetPr(prhs(3)),k,n2)
 call mxCopyPtrToReal8(mxGetPr(prhs(4)),flag,1)
@@ -58,7 +59,7 @@ t1=int(t+0.4)
 k1=int(k+0.4)
 ier(1)=flag
 allocate(xs(nts))
-allocate(avals0(nts),psivals0(nts))
+allocate(avals0(n1),psivals0(n1))
 ier(1:5)=k1(1:5)
 !ier(3:5)=k1(1:3)
 !call jacobi_quad_mod(n,da,db,ts,twhts)
@@ -79,21 +80,24 @@ call jacobi_phase_disc(nints,ab)
 allocate(psivals(kk*nints),avals(kk*nints))
 
 wghts = sqrt(wghts)
+ts1 = ts(t1)
+wghts1 = wghts(t1)
+xs1 = xs(t1)
 
 m=0
 do i=1,n2
 if (k1(i) .gt. it) then
     dnu = k1(i)-1
     call jacobi_phase(chebdata,dnu,da,db,nints,ab,avals,psivals)
-    call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,nts,ts,avals0,psivals0)
+    call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,n1,ts1,avals0,psivals0)
 
     if (flag .lt. 0) then
-       r = avals0*exp(dcmplx(0,1)*(psivals0-dnu*ts))*wghts
+       r = avals0*exp(dcmplx(0,1)*(psivals0-dnu*ts1))*wghts1
     else
-       r = avals0*exp(dcmplx(0,1)*(psivals0-dnu*xs))*wghts
+       r = avals0*exp(dcmplx(0,1)*(psivals0-dnu*xs1))*wghts1
     end if
     
-    m(:,i) = r(t1)
+    m(:,i) = r
 end if
 end do
 
@@ -102,5 +106,5 @@ plhs(2)=mxCreateDoubleMatrix(5,1,1)
 call mxCopyComplex16ToPtr(m, mxGetPr(plhs(1)),mxGetPi(plhs(1)),n1*n2)
 call mxCopyComplex16ToPtr(ier,mxGetPr(plhs(2)),mxGetPi(plhs(2)),5)
 deallocate(ab,t,k,t1,k1,m,r,ts,nu,xs,avals,psivals,avals0,psivals0,wghts)
-
+deallocate(ts1,wghts1,xs1)
 end subroutine
