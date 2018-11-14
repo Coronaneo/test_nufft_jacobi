@@ -16,7 +16,7 @@ if opt > 0
 else
     JTM = @(rs,cs,ts,nu)JTM1d(rs,cs,nts,da,db,ts,nu,wghts);
     grid = cos(((2*[nts:-1:1]'-1)*pi/2/nts)+1)*pi/2;
-    [U,V] = ID_Cheby(JTM,ts,nu,grid,50,tol,'r',1);
+    [U,V] = ID_Cheby(JTM,ts,nu,grid,40,tol,'r',1);
 end
 rank = size(U,2);
 V = [zeros(it,rank);V];

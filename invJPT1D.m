@@ -18,8 +18,8 @@ for i = 1:nts
 end
 P = sparse(X,Y,S,nts,nts,nts);
 JTM = @(rs,cs,n,da,db,ts,nu,wghts)JTM1d(rs,cs,n,da,db,ts,nu,wghts);
-V = conj(V);
 [U,V] = lowrank(nts,JTM,da,db,tol,tR,mR,ts,nu,wghts);
+V = conj(V);
 rank = size(U,2);
 V = [zeros(it,rank);V];
 
