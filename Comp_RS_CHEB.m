@@ -127,7 +127,7 @@ for ii=1:es
     else
         tic
         for i = 1:num
-            [fun,rank1(ii)] = NJPT1D(nts,da,db,tR,mR,tol,1);
+            [fun,rank1(ii)] = NJPT1D(nts,ts,da,db,tR,mR,tol,1);
         end
         timefac1(ii)=toc/num;
 
@@ -141,7 +141,7 @@ for ii=1:es
     
         tic
         for i = 1:num
-            [fun,rank2(ii)] = NJPT1D(nts,da,db,tR,mR,tol,-1);
+            [fun,rank2(ii)] = NJPT1D(nts,ts,da,db,tR,mR,tol,-1);
         end
         timefac2(ii)=toc/num;
 
@@ -212,4 +212,8 @@ end
     set(gca, 'FontSize', 16);
     b=get(gca);
     set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
-    saveas(pic,['Comp_RS_CHEB.eps'],'epsc');
+    if flag > 0
+       saveas(pic,['Comp_RS_CHEB_uni.eps'],'epsc');
+    else 
+       saveas(pic,['Comp_RS_CHEB_non.eps'],'epsc');
+    end
