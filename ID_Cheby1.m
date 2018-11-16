@@ -17,8 +17,8 @@ dd      = min(0.10,1/dd);
 dd      = log2(dd);
 nints   = ceil(-dd)+1;
 nints   = 2*nints;
-chebygrid = cos((2*[kk:-1:1]'-1)*pi/2/kk);
-
+%chebygrid = cos((2*[kk:-1:1]'-1)*pi/2/kk);
+chebygrid = cos((kk-[1:kk]')*pi/(kk-1))
 
 nints0  = nints/2;
 dd      = 2.0;
@@ -56,8 +56,9 @@ T = R(1:rr,1:rr)\R(1:rr,rr+1:end);
 T = T';
 V1 = A(sk,:);
 V1 = V1.';
-U1 = zeros(kk*nints,rr);
-    for i = 1:kk*nints
+nn = kk*nints;
+U1 = zeros(nn,rr);
+    for i = 1:nn
         flag = find(sk == i);
         if ~isempty(flag)
             U1(i,flag) = 1;
@@ -70,37 +71,51 @@ U1 = zeros(kk*nints,rr);
 binranges = [ab(1,:) ab(2,end)]';
 bincounts = histc(x,binranges);
 
+
 U = zeros(size(x,1),rr);
+SS=zeros(size(x,1),kk*nints);
 totalM = 0;
+totalN = 0;
 for i = 1:nints
     w = ts((i-1)*kk+1:i*kk);
-    ll = zeros(kk,1);
+    ll = zeros(kk-1,kk);
     for j = 1:kk
         if j == 1
             w1 = w(2:end);
-        elseif j == kk
+	end
+    	if j == kk
             w1 = w(1:end-1);
-        else
+        end
+	if 1<j && j<kk
             w1 = [w(1:j-1); w(j+1:end)];
         end
-
-        ll(j) = prod(ones(kk-1,1)*w(j)-w1);
+        
+        ll(:,j) = 1./ones(kk-1,1)*w(j)-w1;
     end
+    
     S = zeros(bincounts(i),kk);
     for j = 1:bincounts(i)
         omega = ones(kk,1)*x(totalM+j)-w;
-        flag = find(omega == 0);
+        flag = find(abs(omega) <= eps);
         if  isempty(flag)
+            
             omega1 = prod(omega);
-            ww = (omega1*ones(kk,1)./omega)./ll;
+            ww = (omega1*ones(kk,1)./omega);
+	    for jj = 1:kk
+		for ii = 1:kk-1 
+		ww(jj) = ww(jj)*ll(ii,jj);
+	        end
+	    end
         else
             ww = zeros(kk,1);
-            ww(1,flag) = 1;
+            ww(flag,1) = 1;
         end
         S(j,:) = ww.';
     end
+    SS(totalM+1:totalM+bincounts(i),totalN+1:totalN+kk) = S;
     U(totalM+1:totalM+bincounts(i),:) = S*U1((i-1)*kk+1:i*kk,:);
     totalM = totalM + bincounts(i);
+    totalN = totalN + kk;
 end
 sqrtW = diag(sqrt(wghts));
 U = sqrtW*U;
@@ -109,4 +124,9 @@ if  opt > 0
     V = V1;
 else
 end
+[B,ier] = interpjac1(nt,x,nu,da,db,1);
+norm(B-U*V.')
+norm(B-SS*A)
+C = A.'\B.';
+C(:,1:bincounts(1)).'
 end

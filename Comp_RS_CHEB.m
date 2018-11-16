@@ -1,6 +1,6 @@
 format long
 flag = 1;
-num=10;
+num=1;
 da=0.25;
 db=0.25;
 tol=1e-12

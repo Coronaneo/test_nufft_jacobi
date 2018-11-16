@@ -61,18 +61,19 @@ allocate(ab(2,nints))
 call jacobi_phase_disc(nints,ab)
 
 allocate(psivals(kk*nints),avals(kk*nints))
-allocate(r(kk*nints),m(kk*nints,nnu))
-allocate(avals0(nts),psivals(nts))
+!allocate(r(kk*nints),m(kk*nints,nnu))
+allocate(r(nts),m(nts,nnu))
+allocate(avals0(nts),psivals0(nts))
 
 do i=1,nnu
     dnu = nu(i)
     call jacobi_phase(chebdata,dnu,da,db,nints,ab,avals,psivals)
-    !call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,nts,ts,avals0,psivals0)
+    call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,nts,ts,avals0,psivals0)
 
     if (flag .lt. 0) then
-       r = avals*exp(dcmplx(0,1)*(psivals-dnu*ts))
+       r = avals0*exp(dcmplx(0,1)*(psivals0-dnu*ts))
     else
-       r = avals*exp(dcmplx(0,1)*(psivals-dnu*xs))
+       r = avals0*exp(dcmplx(0,1)*(psivals0-dnu*xs))
     end if
     
     m(:,i) = r
@@ -80,12 +81,12 @@ end do
 
 call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,nts,ts,avals0,psivals0)
 allocate(ier(2))
-ier(1) = sqrt((avals0-avals)*(avals0-avals))
-ier(2) = sqrt((psivals0-psivals)*(psivals0-psivals))
-
-plhs(1)=mxCreateDoubleMatrix(kk*nints, nnu, 1)
+ier(1) = sqrt(sum((avals0-avals)*(avals0-avals)))
+!ier(2) = sqrt(sum((psivals0-psivals)*(psivals0-psivals)))
+ier(2) = size(avals,1)-nts
+plhs(1)=mxCreateDoubleMatrix(nts, nnu, 1)
 plhs(2)=mxCreateDoubleMatrix(2, 1, 0)
-call mxCopyComplex16ToPtr(m, mxGetPr(plhs(1)),mxGetPi(plhs(1)),kk*nints*nnu)
+call mxCopyComplex16ToPtr(m, mxGetPr(plhs(1)),mxGetPi(plhs(1)),nts*nnu)
 call mxCopyReal8ToPtr(ier, mxGetPr(plhs(2)),2)
 deallocate(ab,m,r,ts,nu,xs,avals,psivals)
 
