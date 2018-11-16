@@ -11,14 +11,16 @@ function [U,V] = ID_Cheby1(n,x,k,wghts,da,db,tol,opt)
 %
 % Copyright 2018 Haizhao Yang, Qiyuan Pang
 
-kk = 16;
+
 dd      = n;
 dd      = min(0.10,1/dd);
 dd      = log2(dd);
 nints   = ceil(-dd)+1;
 nints   = 2*nints;
+kk = 4*ceil(log2(n));
 %chebygrid = cos((2*[kk:-1:1]'-1)*pi/2/kk);
-chebygrid = cos((kk-[1:kk]')*pi/(kk-1))
+%chebygrid = cos((kk-[1:kk]')*pi/(kk-1))
+chebygrid = cos((2*[kk:-1:1]'-1)*pi/2/kk);
 
 nints0  = nints/2;
 dd      = 2.0;
@@ -36,10 +38,11 @@ ab(1,nints-int+1) = pi - ab(2,int);
 ab(2,nints-int+1) = pi - ab(1,int);
 end 
 
-ts = zeros(kk*nints,1);
-for i = 1:nints
-    ts((i-1)*kk+1:i*kk) = (chebygrid+1)/2*(ab(2,i)-ab(1,i))+ab(1,i);
-end
+%ts = zeros(kk*nints,1);
+%for i = 1:nints
+%    ts((i-1)*kk+1:i*kk) = (chebygrid+1)/2*(ab(2,i)-ab(1,i))+ab(1,i);
+%end
+ts = (chebygrid+1)/2*pi;
 
 nt = zeros(n,1);
 if opt > 0
@@ -47,7 +50,7 @@ if opt > 0
 else
 end
 [A,ier] = interpjac1(nt,ts,nu,da,db,1);
-ier
+
 [~,R,E] = qr(A',0);
 rr = find( abs(diag(R)/R(1)) > tol, 1, 'last');
 sk = E(1:rr);
@@ -73,10 +76,11 @@ bincounts = histc(x,binranges);
 
 
 U = zeros(size(x,1),rr);
-SS=zeros(size(x,1),kk*nints);
+nint = 1;%ninits
+SS=zeros(size(x,1),kk*nint);
 totalM = 0;
 totalN = 0;
-for i = 1:nints
+for i = 1:nint
     w = ts((i-1)*kk+1:i*kk);
     ll = zeros(kk-1,kk);
     for j = 1:kk
@@ -88,34 +92,34 @@ for i = 1:nints
         end
 	if 1<j && j<kk
             w1 = [w(1:j-1); w(j+1:end)];
-        end
-        
+    end
         ll(:,j) = 1./ones(kk-1,1)*w(j)-w1;
     end
     
-    S = zeros(bincounts(i),kk);
-    for j = 1:bincounts(i)
+    count = size(x,1);%bincounts(i)
+    S = zeros(count,kk);
+    for j = 1:count
         omega = ones(kk,1)*x(totalM+j)-w;
         flag = find(abs(omega) <= eps);
         if  isempty(flag)
             
             omega1 = prod(omega);
             ww = (omega1*ones(kk,1)./omega);
-	    for jj = 1:kk
-		for ii = 1:kk-1 
-		ww(jj) = ww(jj)*ll(ii,jj);
+	        for jj = 1:kk
+	     	    for ii = 1:kk-1 
+	             	ww(jj) = ww(jj)*ll(ii,jj);
+                end
 	        end
-	    end
         else
             ww = zeros(kk,1);
             ww(flag,1) = 1;
         end
         S(j,:) = ww.';
     end
-    SS(totalM+1:totalM+bincounts(i),totalN+1:totalN+kk) = S;
-    U(totalM+1:totalM+bincounts(i),:) = S*U1((i-1)*kk+1:i*kk,:);
-    totalM = totalM + bincounts(i);
-    totalN = totalN + kk;
+    SS(totalM+1:totalM+count,totalN+1:totalN+kk) = S;
+    U(totalM+1:totalM+count,:) = S*U1((i-1)*kk+1:i*kk,:);
+    %totalM = totalM + count;
+    %totalN = totalN + kk;
 end
 sqrtW = diag(sqrt(wghts));
 U = sqrtW*U;
@@ -127,6 +131,6 @@ end
 [B,ier] = interpjac1(nt,x,nu,da,db,1);
 norm(B-U*V.')
 norm(B-SS*A)
-C = A.'\B.';
-C(:,1:bincounts(1)).'
+%C = A.'\B.';
+%C(:,1:bincounts(1)).'
 end
