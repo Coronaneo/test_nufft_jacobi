@@ -17,8 +17,8 @@ mwSize       :: n,n1,n2,m1,m2,nts,nnu
 
 type(chebexps_data)           :: chebdata
 real*8, allocatable :: twhts(:),ab(:,:),t(:),k(:)
-complex*16, allocatable :: r(:),m(:,:),ier(:)
-real*8, allocatable :: psivals(:),avals(:),nu(:)
+complex*16, allocatable :: r(:),m(:,:)
+real*8, allocatable :: psivals(:),avals(:),nu(:),ier(:)
 real*8, allocatable :: ts(:),avals0(:),psivals0(:),xs(:),wghts(:)
 integer*4, allocatable :: t1(:),k1(:)
 integer*4 it,kk,ii,i,jj
@@ -40,7 +40,9 @@ nnu = mxGetM(prhs(3))
 allocate(ts(nts),nu(nnu))
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),ts,nts)
 call mxCopyPtrToReal8(mxGetPr(prhs(3)),nu,nnu)
-call mxCopyPtrToReal8(mxGetPr(prhs(4)),flag,1)
+call mxCopyPtrToReal8(mxGetPr(prhs(4)),da,1)
+call mxCopyPtrToReal8(mxGetPr(prhs(5)),db,1)
+call mxCopyPtrToReal8(mxGetPr(prhs(6)),flag,1)
 
 allocate(xs(nts))
 !call jacobi_quad_mod(n,da,db,ts,twhts)
@@ -60,7 +62,7 @@ call jacobi_phase_disc(nints,ab)
 
 allocate(psivals(kk*nints),avals(kk*nints))
 allocate(r(kk*nints),m(kk*nints,nnu))
-
+allocate(avals0(nts),psivals(nts))
 
 do i=1,nnu
     dnu = nu(i)
@@ -76,8 +78,15 @@ do i=1,nnu
     m(:,i) = r
 end do
 
+call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,nts,ts,avals0,psivals0)
+allocate(ier(2))
+ier(1) = sqrt((avals0-avals)*(avals0-avals))
+ier(2) = sqrt((psivals0-psivals)*(psivals0-psivals))
+
 plhs(1)=mxCreateDoubleMatrix(kk*nints, nnu, 1)
+plhs(2)=mxCreateDoubleMatrix(2, 1, 0)
 call mxCopyComplex16ToPtr(m, mxGetPr(plhs(1)),mxGetPi(plhs(1)),kk*nints*nnu)
+call mxCopyReal8ToPtr(ier, mxGetPr(plhs(2)),2)
 deallocate(ab,m,r,ts,nu,xs,avals,psivals)
 
 end subroutine

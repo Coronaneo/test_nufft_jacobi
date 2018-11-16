@@ -1,4 +1,4 @@
-function [U,V] = ID_Cheby1(n,x,k,wghts,tol,opt)
+function [U,V] = ID_Cheby1(n,x,k,wghts,da,db,tol,opt)
 % Compute decomposition A = U*V.' via ID approximation A(:,rd) ~ A(:,sk)*T. 
 % A =fun(rs,cs,x,k)
 % The precision is specified by tol and the rank is given by 'rank'; 
@@ -24,14 +24,14 @@ nints0  = nints/2;
 dd      = 2.0;
 
 ab = zeros(2,nints);
-for int=1,nints0
+for int=1:nints0
 ab(1,int) = dd^(-nints0+int-1);
 ab(2,int) = dd^(-nints0+int);
 end 
 
 ab = pi/2*ab;
 
-for int=1,nints0
+for int=1:nints0
 ab(1,nints-int+1) = pi - ab(2,int);
 ab(2,nints-int+1) = pi - ab(1,int);
 end 
@@ -46,7 +46,8 @@ if opt > 0
    nu = k;
 else
 end
-A = interpjac1(nt,ts,nu,1);
+[A,ier] = interpjac1(nt,ts,nu,da,db,1);
+ier
 [~,R,E] = qr(A',0);
 rr = find( abs(diag(R)/R(1)) > tol, 1, 'last');
 sk = E(1:rr);
@@ -75,21 +76,28 @@ for i = 1:nints
     w = ts((i-1)*kk+1:i*kk);
     ll = zeros(kk,1);
     for j = 1:kk
-        w1 = [w(1:j-1) w(j+1:end)];
-        ll(j) = prod(ones(1,kk-1)*w(j)-w1);
+        if j == 1
+            w1 = w(2:end);
+        elseif j == kk
+            w1 = w(1:end-1);
+        else
+            w1 = [w(1:j-1); w(j+1:end)];
+        end
+
+        ll(j) = prod(ones(kk-1,1)*w(j)-w1);
     end
     S = zeros(bincounts(i),kk);
     for j = 1:bincounts(i)
-        omega = ones(1,kk)*x(totalM+j)-w;
+        omega = ones(kk,1)*x(totalM+j)-w;
         flag = find(omega == 0);
         if  isempty(flag)
             omega1 = prod(omega);
-            ww = (omega1*ones(1,kk)./omega)./ll;
+            ww = (omega1*ones(kk,1)./omega)./ll;
         else
-            ww = zeros(1,kk);
+            ww = zeros(kk,1);
             ww(1,flag) = 1;
         end
-        S(j,:) = ww;
+        S(j,:) = ww.';
     end
     U(totalM+1:totalM+bincounts(i),:) = S*U1((i-1)*kk+1:i*kk,:);
     totalM = totalM + bincounts(i);

@@ -18,12 +18,12 @@ if opt >= 1
     JTM = @(rs,cs,n,da,db,ts,nu,wghts)JTM1d(rs,cs,n,da,db,ts,nu,wghts);
    [U,V] = lowrank(nts,JTM,da,db,tol,tR,mR,ts,nu,wghts);
    V = conj(V);
-elseif 0<=opt<1
+elseif 0 <= opt && opt<1
     %JTM = @(rs,cs,ts,nu)JTM1d(rs,cs,nts,da,db,ts,nu,wghts);
     %grid = cos(((2*[nts:-1:1]'-1)*pi/2/nts)+1)*pi/2;
-    [U,V] = ID_Cheby1(nts,ts,nu,wghts,tol,1);
+    [U,V] = ID_Cheby1(nts,ts,nu,wghts,da,db,tol,1);
 elseif opt < 0
-    [U,V] = ID_Cheby1(nts,ts,nu,wghts,tol,-1);
+    [U,V] = ID_Cheby1(nts,ts,nu,wghts,da,db,tol,-1);
 end
 rank = size(U,2);
 V = [zeros(it,rank);V];
