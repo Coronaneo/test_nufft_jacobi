@@ -17,10 +17,11 @@ dd      = min(0.10,1/dd);
 dd      = log2(dd);
 nints   = ceil(-dd)+1;
 nints   = 2*nints;
-kk = 4*ceil(log2(n));
-%chebygrid = cos((2*[kk:-1:1]'-1)*pi/2/kk);
-%chebygrid = cos((kk-[1:kk]')*pi/(kk-1))
+kk = 16*log2(n);
 chebygrid = cos((2*[kk:-1:1]'-1)*pi/2/kk);
+%chebygrid = cos([kk-1:-1:0]'/(kk-1)*pi);
+%chebygrid = cos((kk-[1:kk]')*pi/(kk-1))
+%chebygrid = cos((2*[kk:-1:1]'-1)*pi/2/kk);
 
 nints0  = nints/2;
 dd      = 2.0;
@@ -40,9 +41,9 @@ end
 
 %ts = zeros(kk*nints,1);
 %for i = 1:nints
-%    ts((i-1)*kk+1:i*kk) = (chebygrid+1)/2*(ab(2,i)-ab(1,i))+ab(1,i);
+%    ts((i-1)*kk+1:i*kk) = (chebygrid)/2*(ab(2,i)-ab(1,i))+(ab(1,i)+ab(2,i))/2;
 %end
-ts = (chebygrid+1)/2*pi;
+ts = pi/2*chebygrid+pi/2;
 
 nt = zeros(n,1);
 if opt > 0
@@ -50,7 +51,7 @@ if opt > 0
 else
 end
 [A,ier] = interpjac1(nt,ts,nu,da,db,1);
-
+%ier
 [~,R,E] = qr(A',0);
 rr = find( abs(diag(R)/R(1)) > tol, 1, 'last');
 sk = E(1:rr);
@@ -59,7 +60,7 @@ T = R(1:rr,1:rr)\R(1:rr,rr+1:end);
 T = T';
 V1 = A(sk,:);
 V1 = V1.';
-nn = kk*nints;
+nn = kk;
 U1 = zeros(nn,rr);
     for i = 1:nn
         flag = find(sk == i);
@@ -70,13 +71,13 @@ U1 = zeros(nn,rr);
             U1(i,:) = T(flag1,:);
         end
     end
-
+%norm(A-U1*V1.')
 binranges = [ab(1,:) ab(2,end)]';
 bincounts = histc(x,binranges);
 
 
 U = zeros(size(x,1),rr);
-nint = 1;%ninits
+nint = 1;
 SS=zeros(size(x,1),kk*nint);
 totalM = 0;
 totalN = 0;
@@ -92,11 +93,11 @@ for i = 1:nint
         end
 	if 1<j && j<kk
             w1 = [w(1:j-1); w(j+1:end)];
-    end
-        ll(:,j) = 1./ones(kk-1,1)*w(j)-w1;
+        end
+        ll(:,j) = 1./(ones(kk-1,1)*w(j)-w1);
     end
     
-    count = size(x,1);%bincounts(i)
+    count = size(x,1);%bincounts(i);
     S = zeros(count,kk);
     for j = 1:count
         omega = ones(kk,1)*x(totalM+j)-w;
@@ -108,7 +109,7 @@ for i = 1:nint
 	        for jj = 1:kk
 	     	    for ii = 1:kk-1 
 	             	ww(jj) = ww(jj)*ll(ii,jj);
-                end
+                    end
 	        end
         else
             ww = zeros(kk,1);
@@ -121,6 +122,11 @@ for i = 1:nint
     %totalM = totalM + count;
     %totalN = totalN + kk;
 end
+
+
+
+
+
 sqrtW = diag(sqrt(wghts));
 U = sqrtW*U;
 
@@ -129,8 +135,9 @@ if  opt > 0
 else
 end
 [B,ier] = interpjac1(nt,x,nu,da,db,1);
-norm(B-U*V.')
-norm(B-SS*A)
+%max(max(abs(B)))
+%norm(sqrtW*B-U*V.')/norm(sqrtW*B)
+
 %C = A.'\B.';
 %C(:,1:bincounts(1)).'
 end

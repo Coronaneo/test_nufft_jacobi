@@ -1,0 +1,45 @@
+MATLAB is selecting SOFTWARE OPENGL rendering.
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2018 The MathWorks, Inc.
+                   R2018a (9.4.0.813654) 64-bit (glnxa64)
+                             February 23, 2018
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+>> >> >> >> >> 
+tol =
+
+     1.000000000000000e-12
+
+>> >> >> >> >> >> >> >> >> >> >> >> 
+>> start 1D uniform Jacobi polynomial transform test:>> 
+>> da = 0.25,db = 0.25
+>> >> size  our_rank   error_our      our_time       dir_time       fac_time       
+>> >> >> >> >> >> >> >> >> 
+  7     15         4.612823E-12   2.449900E-03   7.398399E-02   1.197841E-01
+
+  8     18         3.081439E-13   2.711000E-04   1.614079E-01   1.963191E-01
+
+  9     16         1.809990E-10   3.867000E-04   1.293141E+00   7.194125E-01
+
+  10    22         7.592496E-13   6.887000E-04   9.143505E+00   1.257820E+00
+
+  11    23         4.446204E-12   9.571000E-04   5.803306E+01   3.363039E+00
+
+  12    22         6.323854E-12   1.659400E-03   4.232209E+02   1.406841E+01
+
+  13    24         3.643238E-12   2.610800E-03   3.135846E+03   3.411581E+01
+
+  14    26         1.210330E-11   5.021700E-03   2.328043E+04   1.221073E+02
+
+  15    30         2.108358E-11   1.108140E-02   1.739106E+05   4.276016E+02
+
+  16    31         2.620546E-11   3.024840E-02   1.306330E+06   1.586614E+03
+>> >> >> [Warning: MATLAB has disabled some advanced graphics rendering features by
+switching to software OpenGL. For more information, click <a
+href="matlab:opengl('problems')">here</a>.] 
+>> >> >> >> >> >> >> >> >> >> >> >> >> MATLAB: management.cpp:671: find: Assertion `' failed.
+MATLAB: management.cpp:671: find: Assertion `' failed.
