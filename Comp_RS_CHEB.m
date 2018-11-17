@@ -6,21 +6,24 @@ db=0.25;
 tol=1e-12
 str1='size';
 str2='RS_rank';
-str3='Ch_rank';
+str3='sCH_rank';
+str6='sdCH_rank';
 str4='RSapp_time';
-str5='Chapp_time';
-%str6='ratio_our/nyu';
+str5='sChapp_time';
+str12='sdChapp_time';
 str7='error_RS';
-str8='error_Ch';
+str8='error_sCh';
+str13='error_sdCh';
 str9='dir_time';
 str10='RSfac_time';
-str11='Chfac_time';
+str11='sChfac_time';
+str14='sdChfac_time';
 fprintf('\n');
 fprintf('start RS SVD vs CHEB ID comparison:');
 fprintf('\n');
 fprintf('da = %1.2f,db = %1.2f\n',da,db);
 %fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
-fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-15s%-15s\n',str1,str2,str3,str4,str5,str7,str8,str9,str10,str11);
+fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-15s%-15s%-15s%-15s%-15s\n',str1,str2,str3,str6,str4,str5,str12,str7,str8,str13,str9,str10,str11,str14);
 %funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
 %funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
 vd = [7:16];
@@ -29,9 +32,14 @@ rank1 = zeros(es,1);
 errorour1 = zeros(es,1);
 timeour1 = zeros(es,1);
 timefac1 = zeros(es,1);
+rank2 = zeros(es,1);
 errorour2 = zeros(es,1);
 timeour2 = zeros(es,1);
 timefac2 = zeros(es,1);
+rank3 = zeros(es,1);
+errorour3 = zeros(es,1);
+timeour3 = zeros(es,1);
+timefac3 = zeros(es,1);
 for ii=1:es
     m = vd(ii);
     nts=2^m;
@@ -113,7 +121,7 @@ for ii=1:es
     
         tic
         for i = 1:num
-            [fun,rank2(ii)] = JPT1D(nts,da,db,tR,mR,tol,1,-1);
+            [fun,rank2(ii)] = JPT1D(nts,da,db,tR,mR,tol,0,-1);
         end
         timefac2(ii)=toc/num;
 
@@ -124,6 +132,20 @@ for ii=1:es
         timeour2(ii)=toc/num;
     
         errorour2(ii)=norm(result2(n1)-result3)/norm(result3);
+        
+        tic
+        for i = 1:num
+            [fun,rank3(ii)] = JPT1D(nts,da,db,tR,mR,tol,-1,-1);
+        end
+        timefac3(ii)=toc/num;
+
+        tic;
+        for j=1:num
+            result2 = fun(c);
+        end
+        timeour3(ii)=toc/num;
+    
+        errorour3(ii)=norm(result2(n1)-result3)/norm(result3);
     else
         tic
         for i = 1:num
@@ -185,7 +207,7 @@ for ii=1:es
 %    error1=norm(result1-result2)/norm(result2)
 %    errornyu=norm(result1(n1)-result3)/norm(result3);
     
-    fprintf('\n  %-5d %-9d %-9d %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E\n',m,rank1(ii),rank2(ii),timeour1(ii),timeour2(ii),errorour1(ii),errorour2(ii),timedir,timefac1(ii),timefac2(ii));
+    fprintf('\n  %-5d %-9d %-9d %-9d %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E\n',m,rank1(ii),rank2(ii),rank3(ii),timeour1(ii),timeour2(ii),timeour3(ii),errorour1(ii),errorour2(ii),errorour3(ii),timedir,timefac1(ii),timefac2(ii),timefac3(ii));
   
 %    fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour,errornyu,timedir);
 %    gc=imagesc(real(jacobi1(:,it+1:end)));
@@ -198,14 +220,17 @@ end
     figure('visible','off');
     pic = figure;
     hold on;
-    ag = (timeour1(1)+timeour2(1)+timefac1(1)+timefac1(2)+3*vd(1))/6;
+    ag = (timeour1(1)+timeour2(1)+timeour3(1)+timefac1(1)+timefac1(2)+timefac3(1)+4*vd(1)+log2(vd(1)))/9;
     h(1) = plot(vd,vd-vd(1)+ag,'--k','LineWidth',2);
     h(2) = plot(vd,2*vd-vd(1)*2+ag,'--b','LineWidth',2);
-    h(3) = plot(vd,log2(timeour1)-log2(timeour1(1))+ag,'-^r','LineWidth',2);
-    h(4) = plot(vd,log2(timeour2)-log2(timeour1(2))+ag,'-^b','LineWidth',2);
-    h(5) = plot(vd,log2(timefac1)-log2(timefac1(1))+ag,'-^k','LineWidth',2);
-    h(6) = plot(vd,log2(timefac2)-log2(timefac2(1))+ag,'-^g','LineWidth',2);
-    legend('N log(N)','N^2','timeRSapp','timeCHapp','timeRSfac','timeCHfac','Location','NorthWest');
+    h(3) = plot(vd,2*vd-vd(1)-log2(vd(1))+ag,'--g','LineWidth',2);
+    h(4) = plot(vd,log2(timeour1)-log2(timeour1(1))+ag,'-^r','LineWidth',2);
+    h(5) = plot(vd,log2(timeour2)-log2(timeour2(1))+ag,'-^b','LineWidth',2);
+    h(6) = plot(vd,log2(timeour3)-log2(timeour3(1))+ag,'-^c','LineWidth',2);
+    h(7) = plot(vd,log2(timefac1)-log2(timefac1(1))+ag,'-xg','LineWidth',2);
+    h(8) = plot(vd,log2(timefac2)-log2(timefac2(1))+ag,'-xy','LineWidth',2);
+    h(9) = plot(vd,log2(timefac3)-log2(timefac3(1))+ag,'-xk','LineWidth',2);
+    legend('N','N^2','N log N','timeRSapp','timesCHapp','timesdCHapp','timeRSfac','timesCHfac','timesdCHapp','Location','NorthWest');
     if flag > 0
        title('RS SVD vs CHEB ID uni_JPT');
     else
