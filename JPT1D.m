@@ -42,5 +42,12 @@ if R_or_N > 0
  %       y = y + vals0*c(1:it,:);
     end
 else
-    
+    fun = @(c)JacPT1d(c);
+    function y = JacPT1d(c)
+        y = zeros(nts,1);
+        for i=1:rank1
+            cj = nufft1dIInyumex(ts,1,tol,V(:,i).*c);
+            y = y + U(:,i).*cj;
+        end
+    end
 end

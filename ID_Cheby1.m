@@ -1,4 +1,4 @@
-function [U,V] = ID_Cheby1(n,x,k,wghts,da,db,tol,opt)
+function [U,V] = ID_Cheby1(n,x,k,wghts,da,db,tol,opt,R_or_N)
 % Compute decomposition A = U*V.' via ID approximation A(:,rd) ~ A(:,sk)*T. 
 % A =fun(rs,cs,x,k)
 % The precision is specified by tol and the rank is given by 'rank'; 
@@ -53,7 +53,7 @@ else
     chebygrid1 = cos((2*[xx:-1:1]'-1)*pi/2/xx);
     nu = (n-k(1)+1)/2*chebygrid1+(n+k(1)-1)/2;
 end
-[A,ier] = interpjac1(nt,ts,nu,da,db,-1);
+[A,ier] = interpjac1(nt,ts,nu,da,db,R_or_N);
 %ier
 [~,R,E] = qr(A',0);
 rr = find( abs(diag(R)/R(1)) > tol, 1, 'last');
@@ -185,7 +185,7 @@ for i = 1:nint
 end
 
 end
-[B,ier] = interpjac1(nt,x,k,da,db,-1);
+[B,ier] = interpjac1(nt,x,k,da,db,R_or_N);
 %max(max(abs(SS)))
 %max(max(abs(A)))
 %max(max(abs(P)))
