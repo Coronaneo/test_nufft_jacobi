@@ -232,9 +232,9 @@ end
     h(9) = plot(vd,log2(timefac3)-log2(timefac3(1))+ag,'-xk','LineWidth',2);
     legend('N','N^2','N log N','timeRSapp','timesCHapp','timesdCHapp','timeRSfac','timesCHfac','timesdCHapp','Location','NorthWest');
     if flag > 0
-       title('RS SVD vs CHEB ID uni_JPT');
+       title('RS SVD vs CHEB ID time, uni_JPT');
     else
-        title('RS SVD vs CHEB ID non_JPT');
+        title('RS SVD vs CHEB ID time, non_JPT');
     end
     axis square;
     xlabel('log_2(N)'); ylabel('log_{2}(time)');
@@ -245,4 +245,48 @@ end
        saveas(pic,['Comp_RS_CHEB_uni.eps'],'epsc');
     else 
        saveas(pic,['Comp_RS_CHEB_non.eps'],'epsc');
+    end
+    hold off;
+    pic1 = figure;
+    hold on;
+    h(1) = plot(vd,log10(errorour1),'-^k','LineWidth',2);
+    h(2) = plot(vd,log10(errorour2),'-^g','LineWidth',2);
+    h(3) = plot(vd,log10(errorour1),'-^b','LineWidth',2);
+    legend('RS_relerr','sCH_relerr','sdCH_relerr','Location','NorthWest');
+    if flag > 0
+       title('relerr, uni_JPT');
+    else
+        title('relerr, non_JPT');
+    end
+    axis square;
+    xlabel('log_2(N)'); ylabel('log_{10}(time)');
+    set(gca, 'FontSize', 16);
+    b=get(gca);
+    set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
+    if flag > 0
+       saveas(pic1,['Comp_relerr_uni.eps'],'epsc');
+    else 
+       saveas(pic1,['Comp_relerr_non.eps'],'epsc');
+    end
+    hold off;
+    pic2 = figure;
+    hold on;
+    h(1) = plot(vd,rank1,'-^k','LineWidth',2);
+    h(2) = plot(vd,rank2,'-^g','LineWidth',2);
+    h(3) = plot(vd,rank3,'-^b','LineWidth',2);
+    legend('RS_rank','sCH_rank','sdCH_rank','Location','NorthWest');
+    if flag > 0
+       title('rank, uni_JPT');
+    else
+        title('rank, non_JPT');
+    end
+    axis square;
+    xlabel('log_2(N)'); ylabel('rank');
+    set(gca, 'FontSize', 16);
+    b=get(gca);
+    set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
+    if flag > 0
+       saveas(pic2,['Comp_rank_uni.eps'],'epsc');
+    else 
+       saveas(pic2,['Comp_rank_non.eps'],'epsc');
     end
