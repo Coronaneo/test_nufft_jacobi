@@ -1,6 +1,6 @@
 format long
 flag = 1;
-num=10;
+num=1;
 da=0.25;
 db=0.25;
 tol=1e-12
@@ -23,7 +23,7 @@ fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-15s%-15s\n',str1,str2,str3,str4,str5,str7,str8,str9,str10,str11);
 %funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
 %funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
-vd = [7:16];
+vd = [10:16];
 es = length(vd);
 rank1 = zeros(es,1);
 errorour1 = zeros(es,1);
@@ -113,7 +113,7 @@ for ii=1:es
     
         tic
         for i = 1:num
-            [fun,rank2(ii)] = JPT1D(nts,da,db,tR,mR,tol,0);
+            [fun,rank2(ii)] = JPT1D(nts,da,db,tR,mR,tol,-1);
         end
         timefac2(ii)=toc/num;
 

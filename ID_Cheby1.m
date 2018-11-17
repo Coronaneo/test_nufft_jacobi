@@ -17,7 +17,7 @@ dd      = min(0.10,1/dd);
 dd      = log2(dd);
 nints   = ceil(-dd)+1;
 nints   = 2*nints;
-kk = 16*log2(n);
+kk = 30*log2(n);
 chebygrid = cos((2*[kk:-1:1]'-1)*pi/2/kk);
 %chebygrid = cos([kk-1:-1:0]'/(kk-1)*pi);
 %chebygrid = cos((kk-[1:kk]')*pi/(kk-1))
@@ -43,14 +43,17 @@ end
 %for i = 1:nints
 %    ts((i-1)*kk+1:i*kk) = (chebygrid)/2*(ab(2,i)-ab(1,i))+(ab(1,i)+ab(2,i))/2;
 %end
-ts = pi/2*chebygrid+pi/2;
+ts = (pi/2-1/n)*chebygrid+pi/2;
 
 nt = zeros(n,1);
-if opt > 0
-   nu = k;
+if  opt > 0
+    nu = k;
 else
+    xx = 4*log2(n);
+    chebygrid1 = cos((2*[xx:-1:1]'-1)*pi/2/xx);
+    nu = (n-k(1)+1)/2*chebygrid1+(n+k(1)-1)/2;
 end
-[A,ier] = interpjac1(nt,ts,nu,da,db,1);
+[A,ier] = interpjac1(nt,ts,nu,da,db,-1);
 %ier
 [~,R,E] = qr(A',0);
 rr = find( abs(diag(R)/R(1)) > tol, 1, 'last');
@@ -74,7 +77,7 @@ U1 = zeros(nn,rr);
 %norm(A-U1*V1.')
 binranges = [ab(1,:) ab(2,end)]';
 bincounts = histc(x,binranges);
-
+%bincounts = histc(x,[ts(1) ts(end)])
 
 U = zeros(size(x,1),rr);
 nint = 1;
@@ -123,19 +126,74 @@ for i = 1:nint
     %totalN = totalN + kk;
 end
 
-
-
-
-
+%norm(SS,2)
 sqrtW = diag(sqrt(wghts));
 U = sqrtW*U;
+
+
 
 if  opt > 0
     V = V1;
 else
+V = zeros(size(k,1),rr);
+nint = 1;
+PP=zeros(size(k,1),xx*nint);
+totalM = 0;
+totalN = 0;
+for i = 1:nint
+    w = nu((i-1)*xx+1:i*xx);
+    ll = zeros(xx-1,xx);
+    for j = 1:xx
+        if j == 1
+            w1 = w(2:end);
+        end
+        if j == xx
+            w1 = w(1:end-1);
+        end
+        if 1<j && j<xx
+            w1 = [w(1:j-1); w(j+1:end)];
+        end
+        ll(:,j) = 1./(ones(xx-1,1)*w(j)-w1);
+    end
+    
+    count = size(k,1);%bincounts(i);
+    P = zeros(count,xx);
+    for j = 1:count
+        omega = ones(xx,1)*k(totalM+j)-w;
+	
+        flag = find(abs(omega) <= eps);
+        if  isempty(flag)
+
+            omega1 = prod(omega);
+            ww = omega1*ones(xx,1)./omega;
+	    
+                for jj = 1:xx
+                    for ii = 1:xx-1
+                        ww(jj) = ww(jj)*ll(ii,jj);
+                    end
+                end
+        else
+            ww = zeros(xx,1);
+            ww(flag,1) = 1;
+        end
+        P(j,:) = ww.';
+    end
+    PP(totalM+1:totalM+count,totalN+1:totalN+xx) = P;
+    V(totalM+1:totalM+count,:) = P*V1((i-1)*xx+1:i*xx,:);
+    %totalM = totalM + count;
+    %totalN = totalN + kk;
 end
-[B,ier] = interpjac1(nt,x,nu,da,db,1);
-%max(max(abs(B)))
+
+end
+[B,ier] = interpjac1(nt,x,k,da,db,-1);
+%max(max(abs(SS)))
+%max(max(abs(A)))
+%max(max(abs(P)))
+%sum(sum(isnan(SS*A*PP.')))
+%size(SS)
+%size(A)
+%size(PP)
+%norm(B-SS*A*(PP.'))/norm(B)
 %norm(sqrtW*B-U*V.')/norm(sqrtW*B)
 
 %C = A.'\B.';

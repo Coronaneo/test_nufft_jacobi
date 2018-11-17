@@ -13,10 +13,10 @@ end
 
 if(tR<Ny && tR<Nx)
     %get columns
-    %rs = randsample(Nx,tR);
-    grid = cos(([tR-1:-1:0])/(tR-1)*pi)*pi/2+pi/2;
-    rs = round(grid*(Nx-min(Nx,tR)) + (0:min(Nx,tR)-1)')+1;
-    rs = unique(rs);
+    rs = randsample(Nx,tR);
+    %grid = cos(([tR-1:-1:0])/(tR-1)*pi)*pi/2+pi/2;
+    %rs = round(grid*(Nx-min(Nx,tR)) + (0:min(Nx,tR)-1)')+1;
+    %rs = unique(rs);
 
     M2 = fun(rs,y,n,da,db,ts,nu,wghts);
     [~,R2,E2] = qr(M2,0);
