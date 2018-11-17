@@ -28,26 +28,34 @@ end
 rank = size(U,2);
 V = [zeros(it,rank);V];
 
-if R_or_N > 0
+if  R_or_N > 0
 
-   fun = @(c)JacPT1d(c);
+    fun = @(c)JacPT1d1(c);
+else
+    ex = exp(1i*nts/2*ts);
+    U = U.*repmat(ex,1,rank);
+    fun = @(c)JacPT1d2(c);
+end
 
-    function y = JacPT1d(c)
+    function y = JacPT1d1(c)
         ncol = size(c,2);
         d = repmat(V,1,ncol).*reshape(repmat(c,rank,1),nts,rank*ncol);
         fftc = ifft(d);
         fftc = fftc(xs,:);
         y = nts*squeeze(sum(reshape(repmat(U,1,ncol).*fftc,nts,rank,ncol),2));
         y = real(y)./sqrt(wghts);
- %       y = y + vals0*c(1:it,:);
+    %    y = y + vals0*c(1:it,:);
     end
-else
-    fun = @(c)JacPT1d(c);
-    function y = JacPT1d(c)
+
+    function y = JacPT1d2(c)
         y = zeros(nts,1);
-        for i=1:rank1
+        for i=1:rank
             cj = nufft1dIInyumex(ts,1,tol,V(:,i).*c);
             y = y + U(:,i).*cj;
         end
+	y = real(y)./sqrt(wghts);
     end
+
+
+
 end
