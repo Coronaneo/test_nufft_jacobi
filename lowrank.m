@@ -19,7 +19,7 @@ if(tR<Ny && tR<Nx)
     %rs = unique(rs);
 
     M2 = fun(rs,y,n,da,db,ts,nu,wghts);
-    [~,R2,E2] = qr(M2,0);
+    [~,R2,E2] = qr(M2',0);
     Cidx = E2(find(abs(diag(R2))>tol*abs(R2(1)))<=tR);
 
     %get rows
@@ -27,14 +27,14 @@ if(tR<Ny && tR<Nx)
     cs = unique([cs' Cidx]);
     
     M1 = fun(x,cs,n,da,db,ts,nu,wghts);
-    [~,R1,E1] = qr(M1',0);
+    [~,R1,E1] = qr(M1,0);
     Ridx = E1(find(abs(diag(R1))>tol*abs(R1(1)))<=tR);
 
     %get columns again
     rs = randsample(Nx,tR);
     rs = unique([rs' Ridx]);
     M2 = fun(rs,y,n,da,db,ts,nu,wghts);
-    [~,R2,E2] = qr(M2,0);
+    [~,R2,E2] = qr(M2',0);
     Cidx = E2(find(abs(diag(R2))>tol*abs(R2(1)))<=tR);
 
 else

@@ -221,16 +221,16 @@ end
     pic = figure;
     hold on;
     ag = (timeour1(1)+timeour2(1)+timeour3(1)+timefac1(1)+timefac1(2)+timefac3(1)+4*vd(1)+log2(vd(1)))/9;
-    h(1) = plot(vd,vd-vd(1)+ag,'--k','LineWidth',2);
-    h(2) = plot(vd,2*vd-vd(1)*2+ag,'--b','LineWidth',2);
-    h(3) = plot(vd,2*vd-vd(1)-log2(vd(1))+ag,'--g','LineWidth',2);
+    h(1) = plot(vd,vd-vd(1)+ag,'-k','LineWidth',4);
+    h(2) = plot(vd,2*vd-vd(1)*2+ag,'-b','LineWidth',4);
+    h(3) = plot(vd,vd+log2(vd)-vd(1)-log2(vd(1))+ag,'-r','LineWidth',4);
     h(4) = plot(vd,log2(timeour1)-log2(timeour1(1))+ag,'-^r','LineWidth',2);
     h(5) = plot(vd,log2(timeour2)-log2(timeour2(1))+ag,'-^b','LineWidth',2);
-    h(6) = plot(vd,log2(timeour3)-log2(timeour3(1))+ag,'-^c','LineWidth',2);
+    h(6) = plot(vd,log2(timeour3)-log2(timeour3(1))+ag,'-^m','LineWidth',2);
     h(7) = plot(vd,log2(timefac1)-log2(timefac1(1))+ag,'-xg','LineWidth',2);
-    h(8) = plot(vd,log2(timefac2)-log2(timefac2(1))+ag,'-xy','LineWidth',2);
+    h(8) = plot(vd,log2(timefac2)-log2(timefac2(1))+ag,'-xc','LineWidth',2);
     h(9) = plot(vd,log2(timefac3)-log2(timefac3(1))+ag,'-xk','LineWidth',2);
-    legend('N','N^2','N log N','timeRSapp','timesCHapp','timesdCHapp','timeRSfac','timesCHfac','timesdCHapp','Location','NorthWest');
+    legend('N','N^2','N log N','timeRSapp','timesCHapp','timesdCHapp','timeRSfac','timesCHfac','timesdCHfac','Location','NorthWest');
     if flag > 0
        title('RS SVD vs CHEB ID time, uni_JPT');
     else
