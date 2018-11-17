@@ -17,7 +17,8 @@ dd      = min(0.10,1/dd);
 dd      = log2(dd);
 nints   = ceil(-dd)+1;
 nints   = 2*nints;
-kk = 10*log2(n);
+kktol = ceil((log2(sqrt(pi/2)/tol)-0)/(4-log2(pi*exp(1))))*ceil(log2(n))
+kk = max(20*(ceil(log2(n))+1),kktol)
 chebygrid = cos((2*[kk:-1:1]'-1)*pi/2/kk);
 %chebygrid = cos([kk-1:-1:0]'/(kk-1)*pi);
 %chebygrid = cos((kk-[1:kk]')*pi/(kk-1))
@@ -49,7 +50,7 @@ nt = zeros(n,1);
 if  opt > 0
     nu = k;
 else
-    xx = 4*log2(n);
+    xx = 6*(ceil(log2(n))+1);
     chebygrid1 = cos((2*[xx:-1:1]'-1)*pi/2/xx);
     nu = (n-k(1)+1)/2*chebygrid1+(n+k(1)-1)/2;
 end

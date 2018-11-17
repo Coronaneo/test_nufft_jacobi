@@ -1,9 +1,9 @@
 format long
 flag = 1;
-num=1;
+num=5;
 da=0.25;
 db=0.25;
-tol=1e-12
+tol=1e-8
 str1='size';
 str2='RS_rank';
 str3='sCH_rank';
