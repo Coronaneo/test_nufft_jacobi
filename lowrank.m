@@ -23,7 +23,7 @@ if(tR<Ny && tR<Nx)
     Cidx = E2(find(abs(diag(R2))>tol*abs(R2(1)))<=tR);
 
     %get rows
-    cs = randsample(Ny,3);
+    cs = randsample(Ny,4);
     cs = unique([cs' Cidx]);
     
     M1 = fun(x,cs,n,da,db,ts,nu,wghts);
@@ -31,7 +31,7 @@ if(tR<Ny && tR<Nx)
     Ridx = E1(find(abs(diag(R1))>tol*abs(R1(1)))<=tR);
 
     %get columns again
-    rs = randsample(Nx,3);
+    rs = randsample(Nx,4);
     rs = unique([rs' Ridx]);
     M2 = fun(rs,y,n,da,db,ts,nu,wghts);
     [~,R2,E2] = qr(M2,0);

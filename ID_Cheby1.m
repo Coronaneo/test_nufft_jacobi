@@ -50,7 +50,7 @@ nt = zeros(n,1);
 if  opt > 0
     nu = k;
 else
-    xx = 6*(ceil(log2(n))+1);
+    xx = 5*(ceil(log2(n))+1);
     chebygrid1 = cos((2*[xx:-1:1]'-1)*pi/2/xx);
     nu = (n-k(1)+1)/2*chebygrid1+(n+k(1)-1)/2;
 end
@@ -82,7 +82,7 @@ bincounts = histc(x,binranges);
 
 U = zeros(size(x,1),rr);
 nint = 1;
-SS=zeros(size(x,1),kk*nint);
+%SS=zeros(size(x,1),kk*nint);
 totalM = 0;
 totalN = 0;
 for i = 1:nint
@@ -121,7 +121,7 @@ for i = 1:nint
         end
         S(j,:) = ww.';
     end
-    SS(totalM+1:totalM+count,totalN+1:totalN+kk) = S;
+    %SS(totalM+1:totalM+count,totalN+1:totalN+kk) = S;
     U(totalM+1:totalM+count,:) = S*U1((i-1)*kk+1:i*kk,:);
     %totalM = totalM + count;
     %totalN = totalN + kk;
@@ -138,7 +138,7 @@ if  opt > 0
 else
 V = zeros(size(k,1),rr);
 nint = 1;
-PP=zeros(size(k,1),xx*nint);
+%PP=zeros(size(k,1),xx*nint);
 totalM = 0;
 totalN = 0;
 for i = 1:nint
@@ -179,14 +179,14 @@ for i = 1:nint
         end
         P(j,:) = ww.';
     end
-    PP(totalM+1:totalM+count,totalN+1:totalN+xx) = P;
+    %PP(totalM+1:totalM+count,totalN+1:totalN+xx) = P;
     V(totalM+1:totalM+count,:) = P*V1((i-1)*xx+1:i*xx,:);
     %totalM = totalM + count;
     %totalN = totalN + kk;
 end
 
 end
-[B,ier] = interpjac1(nt,x,k,da,db,R_or_N);
+%[B,ier] = interpjac1(nt,x,k,da,db,R_or_N);
 %max(max(abs(SS)))
 %max(max(abs(A)))
 %max(max(abs(P)))

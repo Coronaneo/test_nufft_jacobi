@@ -26,7 +26,7 @@ fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-15s%-15s%-15s%-15s%-15s\n',str1,str2,str3,str6,str4,str5,str12,str7,str8,str13,str9,str10,str11,str14);
 %funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
 %funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
-vd = [7:16];
+vd = [7:15];
 es = length(vd);
 rank1 = zeros(es,1);
 errorour1 = zeros(es,1);
@@ -82,11 +82,11 @@ for ii=1:es
     if m<10
        K=ceil(10*gamma*exp(lw));
     elseif m<14
-       K=ceil(11*gamma*exp(lw));
-    elseif m<18
        K=ceil(12*gamma*exp(lw));
+    elseif m<18
+       K=ceil(14*gamma*exp(lw));
     elseif m<21
-       K=ceil(13*gamma*exp(lw));
+       K=ceil(16*gamma*exp(lw));
     elseif m<24
        K=ceil(14*gamma*exp(lw));
     elseif m<27
