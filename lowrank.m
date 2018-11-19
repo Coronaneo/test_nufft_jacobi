@@ -1,10 +1,10 @@
-function [U,V] = lowrank(n,fun,da,db,tol,tR,mR,ts,nu)
+function [U,V] = lowrank(n,fun,ts,nu,tol,tR,mR)
 
 
 Nx = size(ts,1);
 Ny = size(nu,1);
-x = [1:Nx]';
-y = [1:Ny]';
+%x = [1:Nx]';
+%y = [1:Ny]';
 if Nx==0 || Ny==0
     U = zeros(Nx,0);
     V = zeros(Ny,0);
@@ -14,6 +14,7 @@ end
 if(tR<Ny && tR<Nx)
     %get columns
     rs = randsample(Nx,tR);
+    rs = unique(rs);
     %grid = cos(([tR-1:-1:0])/(tR-1)*pi)*pi/2+pi/2;
     %rs = round(grid*(Nx-min(Nx,tR)) + (0:min(Nx,tR)-1)')+1;
     %rs = unique(rs);
@@ -43,7 +44,9 @@ else
 end
 
 %get rows
-MR = fun(ts(Ridx,:),nu);
+[x,ia,ix] = unique(Ridx);
+MR = fun(ts(x,:),nu);
+MR = MR(ix,:);
 
 %get columns
 MC = fun(ts,nu(Cidx,:));
