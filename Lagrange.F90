@@ -14,17 +14,17 @@ mwPointer    :: plhs(*), prhs(*)
 ! get some of the matlab mex functions
 mwPointer    :: mxGetPr, mxGetPi, mxCreateDoubleMatrix 
 ! define a size integer so that we can get its type
-mwSize       :: n,kk,
+mwSize       :: n,kk,xx
 
 
-real*8, allocatable :: ts(:),x(:),w(:),ll(:,:),S(:,:),omega(:)
-integer*4 ii,i,jj,nint
-real*8 da,db,flag,pi,dd
+real*8, allocatable :: ts(:),x(:),w(:),ll(:,:),S(:,:),omega(:),c(:),cc(:)
+integer*4 ii,i,j,flag
+real*8 ome
 
 kk = mxGetM(prhs(1))
 xx = mxGetM(prhs(2))
 
-allocate(ts(kk),x(xx),ll(kk-1,kk),w(kk-1))
+allocate(ts(kk),x(xx),ll(kk-1,kk),w(kk-1),c(kk-1),cc(kk))
 call mxCopyPtrToReal8(mxGetPr(prhs(1)),ts,kk)
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),x,xx)
 
@@ -35,31 +35,43 @@ do j = 1,kk
    if (j == kk) then
        w = ts(1:kk-1)
    end if
-   if (1<j & j<kk) then
+   if (1<j .AND. j<kk) then
        w(1:j-1) = ts(1:j-1)
        w(j:kk-1) = ts(j+1:kk)
    end if
-   ll(:,j) = ts(j)-w;
+   ll(:,j) = ts(j)*c-w;
 end do
     
+c = 1
+cc = 1
 allocate(S(xx,kk),omega(kk))
 do j = 1,xx
-   omega = x(j)-ts;
-   flag = find(abs(omega) <= eps);
-   if  isempty(flag)
-            
-            omega1 = prod(omega);
-            ww = (omega1*ones(kk,1)./omega);
-	        for jj = 1:kk
-	     	    for ii = 1:kk-1 
-	             	ww(jj) = ww(jj)*ll(ii,jj);
-                    end
-	        end
-        else
-            ww = zeros(kk,1);
-            ww(flag,1) = 1;
-        end
-        S(j,:) = ww.';
-    end
+   omega = x(j)*cc-ts;
+   ome = 1
+   do i = 1,kk
+      if (abs(x(j)-ts(i))<1d-15) then
+         ome = 0
+         flag = i
+      else
+         ome = ome*(x(j)-ts(i))
+      end if
+   end do     
+   if (abs(ome)>1d-15) then
+       do i = 1,kk
+          S(j,i) = ome/omega(i)
+          do ii = 1,kk-1
+             S(j,i) = S(j,i)/ll(ii,i)
+          end do
+       end do
+   else
+       S(j,:) = 0.0d0
+       S(j,flag) = 1.0d0
+   end if
+end do
+       
+plhs(1) = mxCreateDoubleMatrix(xx, kk, 0)
+call mxCopyReal8ToPtr(S, mxGetPr(plhs(1)),xx*kk)
+
+deallocate(ts,x,ll,w,S,omega,c,cc)
 
 end subroutine

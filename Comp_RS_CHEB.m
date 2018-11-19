@@ -1,5 +1,5 @@
 format long
-flag = 1;
+flag = 1;%don't change this value, now just works for flag > 0
 num=5;
 da=0.25;
 db=0.25;
@@ -75,25 +75,25 @@ for ii=1:es
 
 
     %xs=mod(floor(ts*nts/2/pi),nts)+1;
-    s=round(nts*ts);
-    gamma=norm(nts*ts-s,inf);
-    xi=log(log(10/tol)/gamma/7);
-    lw=xi-log(xi)+log(xi)/xi+0.5*log(xi)^2/xi^2-log(xi)/xi^2;
-    if m<10
-       K=ceil(10*gamma*exp(lw));
-    elseif m<14
-       K=ceil(12*gamma*exp(lw));
-    elseif m<18
-       K=ceil(14*gamma*exp(lw));
-    elseif m<21
-       K=ceil(16*gamma*exp(lw));
-    elseif m<24
-       K=ceil(14*gamma*exp(lw));
-    elseif m<27
-       K=ceil(15*gamma*exp(lw));
-    else
-       K=ceil(17*gamma*exp(lw));
-    end
+    %s=round(nts*ts);
+    %gamma=norm(nts*ts-s,inf);
+    %xi=log(log(10/tol)/gamma/7);
+    %lw=xi-log(xi)+log(xi)/xi+0.5*log(xi)^2/xi^2-log(xi)/xi^2;
+    %if m<10
+    %   K=ceil(10*gamma*exp(lw));
+    %elseif m<14
+    %   K=ceil(12*gamma*exp(lw));
+    %elseif m<18
+    %   K=ceil(14*gamma*exp(lw));
+    %elseif m<21
+    %   K=ceil(16*gamma*exp(lw));
+    %elseif m<24
+    %   K=ceil(14*gamma*exp(lw));
+    %elseif m<27
+    %   K=ceil(15*gamma*exp(lw));
+    %else
+    %   K=ceil(17*gamma*exp(lw));
+    %end
     %tR=K+2;
     %mR=K;
     p = 6;
