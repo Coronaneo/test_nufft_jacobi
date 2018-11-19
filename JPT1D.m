@@ -15,8 +15,10 @@ xs = mod(floor(ts*nts/2/pi),nts)+1;
 
 
 if opt >= 1
-    JTM = @(rs,cs,n,da,db,ts,nu,wghts)JTM1d(rs,cs,n,da,db,ts,nu,wghts,R_or_N);
-   [U,V] = lowrank(nts,JTM,da,db,tol,tR,mR,ts,nu,wghts);
+    JTM = @(ts,nu)interpjac1(nt,ts,nu,da,db,R_or_N);
+    %JTM = @(rs,cs,n,da,db,ts,nu,wghts)JTM1d(rs,cs,n,da,db,ts,nu,wghts,R_or_N);
+   [U,V] = lowrank(nts,JTM,da,db,tol,tR,mR,ts,nu);
+   U = diag(sqrt(wghts))*U;
    V = conj(V);
 elseif 0 <= opt && opt<1
     %JTM = @(rs,cs,ts,nu)JTM1d(rs,cs,nts,da,db,ts,nu,wghts);
