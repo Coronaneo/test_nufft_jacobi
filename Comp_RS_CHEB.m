@@ -94,9 +94,11 @@ for ii=1:es
     else
        K=ceil(17*gamma*exp(lw));
     end
-    tR=K+2;
-    mR=K;
- 
+    %tR=K+2;
+    %mR=K;
+    p = 6;
+    mR = ceil(1.5*log2(nts));
+    tR = p*mR;
 
 
 %    [U1,V1]=lowrank(nts,funnyu,da,db,tol,tR,mR,ts,nu);

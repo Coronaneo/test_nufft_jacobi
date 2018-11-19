@@ -23,9 +23,9 @@ if opt >= 1
 elseif 0 <= opt && opt<1
     %JTM = @(rs,cs,ts,nu)JTM1d(rs,cs,nts,da,db,ts,nu,wghts);
     %grid = cos(((2*[nts:-1:1]'-1)*pi/2/nts)+1)*pi/2;
-    [U,V] = ID_Cheby1(nts,ts,nu,wghts,da,db,tol,1,R_or_N);
+    [U,V] = ID_Cheby1(nts,ts,nu,wghts,da,db,tol,1,R_or_N,tR,mR);
 elseif opt < 0
-    [U,V] = ID_Cheby1(nts,ts,nu,wghts,da,db,tol,-1,R_or_N);
+    [U,V] = ID_Cheby1(nts,ts,nu,wghts,da,db,tol,-1,R_or_N,tR,mR);
 end
 rank = size(U,2);
 V = [zeros(it,rank);V];
