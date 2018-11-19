@@ -36,3 +36,12 @@ tol =
   14    10        16        15        3.437280E-02   5.532900E-02   5.131600E-02   3.026174E-07   5.596789E-07   1.729575E-06   2.360871E+04   1.405853E+01   1.822703E+01   1.270654E+01
 
   15    11        16        16        7.393740E-02   1.065294E-01   1.069004E-01   1.892770E-07   3.854782E-07   NaN   1.754345E+05   3.409813E+01   4.538346E+01   3.282352E+01
+
+  16    9         17        15        1.226324E-01   2.268686E-01   2.023390E-01   4.383851E-06   1.642693E-06   NaN   1.306444E+06   8.828916E+01   1.160015E+02   8.938162E+01
+
+  17    9         18        15        2.454800E-01   5.134324E-01   4.189476E-01   4.737034E-06   5.170978E-06   NaN   9.842096E+06   2.531318E+02   3.209685E+02   2.646023E+02
+>> >> >> [Warning: MATLAB has disabled some advanced graphics rendering features by
+switching to software OpenGL. For more information, click <a
+href="matlab:opengl('problems')">here</a>.] 
+>> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> MATLAB: management.cpp:671: find: Assertion `' failed.
+MATLAB: management.cpp:671: find: Assertion `' failed.

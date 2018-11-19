@@ -252,7 +252,7 @@ end
     hold on;
     h(1) = plot(vd,log10(errorour1),'-^k','LineWidth',2);
     h(2) = plot(vd,log10(errorour2),'-^g','LineWidth',2);
-    h(3) = plot(vd,log10(errorour1),'-^b','LineWidth',2);
+    h(3) = plot(vd,log10(errorour3),'-^b','LineWidth',2);
     legend('RS_relerr','sCH_relerr','sdCH_relerr','Location','NorthWest');
     if flag > 0
        title('relerr, uni_JPT');
