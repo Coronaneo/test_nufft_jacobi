@@ -1,9 +1,9 @@
-function [U,V] = ID_Cheby1(n,x,k,wghts,da,db,tol,opt,R_or_N,tR,mR)
+function [U,V] = ID_Cheby1(n,x,k,da,db,tol,opt,R_or_N,tR,mR)
 % Compute decomposition A = U*V.' via ID approximation A(:,rd) ~ A(:,sk)*T. 
 % A =fun(rs,cs)
 % x -- sample
 % k -- degree
-% wghts -- weights 
+%
 % tol -- accuracy
 % da,db -- parameters of jacobi polynomial
 % The precision is specified by tol and the rank is given by 'mR'; 
@@ -151,8 +151,8 @@ end
 %S = Lagrange(ts,x);
 %U = S*U1;
 
-sqrtW = diag(sqrt(wghts));
-U = sqrtW*U;
+%sqrtW = diag(sqrt(wghts));
+%U = sqrtW*U;
 
 
 %%%%%%%%%% construct left factor V in fun(x,k) = U*V.'

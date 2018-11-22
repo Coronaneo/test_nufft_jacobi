@@ -2,7 +2,7 @@ format long
 num=10;
 da=0.25;
 db=0.25;
-tol=1e-12
+tol=1e-8
 str1='size';
 str2='our_rank';
 str4='our_time';
@@ -45,32 +45,33 @@ for ii=1:es
     %result3 = real(result3);
     timedir = nts/m*(toc-t);
 
-    xs=mod(floor(ts*nts/2/pi),nts)+1;
-    s=round(nts*ts);
-    gamma=norm(nts*ts-s,inf);
-    xi=log(log(10/tol)/gamma/7);
-    lw=xi-log(xi)+log(xi)/xi+0.5*log(xi)^2/xi^2-log(xi)/xi^2;
-    if m<10
-       K=ceil(10*gamma*exp(lw));
-    elseif m<14
-       K=ceil(11*gamma*exp(lw));
-    elseif m<18
-       K=ceil(12*gamma*exp(lw));
-    elseif m<21
-       K=ceil(13*gamma*exp(lw));
-    elseif m<24
-       K=ceil(14*gamma*exp(lw));
-    elseif m<27
-       K=ceil(15*gamma*exp(lw));
-    else
-       K=ceil(17*gamma*exp(lw));
-    end
-    tR=K+2;
-    mR=K;
+    %xs=mod(floor(ts*nts/2/pi),nts)+1;
+    %s=round(nts*ts);
+    %gamma=norm(nts*ts-s,inf);
+    %xi=log(log(10/tol)/gamma/7);
+    %lw=xi-log(xi)+log(xi)/xi+0.5*log(xi)^2/xi^2-log(xi)/xi^2;
+    %if m<10
+    %   K=ceil(10*gamma*exp(lw));
+    %elseif m<14
+    %   K=ceil(11*gamma*exp(lw));
+    %elseif m<18
+    %   K=ceil(12*gamma*exp(lw));
+    %elseif m<21
+    %   K=ceil(13*gamma*exp(lw));
+    %elseif m<24
+    %   K=ceil(14*gamma*exp(lw));
+    %elseif m<27
+    %   K=ceil(15*gamma*exp(lw));
+    %else
+    %   K=ceil(17*gamma*exp(lw));
+    %end
+    p = 6;
+    mR = ceil(1.5*log2(nts));
+    tR = p*mR;
  
     tic
     for i = 1:num
-    [fun,rank(ii)] = NJPT1D(nts,ts,da,db,tR,mR,tol,1);
+    [fun,rank(ii)] = NJPT1D(nts,ts,da,db,tR,mR,tol,1,1);
     end
     timefac(ii)=toc/num;
     
@@ -88,10 +89,11 @@ end
    figure('visible','off');
     pic = figure;
     hold on;
-    h(1) = plot(vd,vd-vd(1)+timeour(1),'--k','LineWidth',2);
-    h(2) = plot(vd,2*vd-vd(1)*2-timeour(1),'--b','LineWidth',2);
-    h(3) = plot(vd,log2(timeour),'-^r','LineWidth',2);
-    h(4) = plot(vd,log2(timefac),'-^g','LineWidth',2);
+    ag = (3*vd(1)+log2(vd(1))+log2(timeour(1))+log2(timefac(1)))/4;
+    h(1) = plot(vd,vd+log2(vd)-vd(1)-log2(vd(1))+ag,'--k','LineWidth',2);
+    h(2) = plot(vd,2*vd-vd(1)*2+ag,'--b','LineWidth',2);
+    h(3) = plot(vd,log2(timeour)-log2(timeour(1))+ag,'-^r','LineWidth',2);
+    h(4) = plot(vd,log2(timefac)-log2(timefac(1))+ag,'-^g','LineWidth',2);
     legend('N log(N)','N^2','timeapp','timefac','Location','NorthWest');
     title('1D nonuniform JPT');
     axis square;

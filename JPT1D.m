@@ -1,4 +1,4 @@
-function [fun,rank,ts,wghts] = JPT1D(nts,da,db,tR,mR,tol,opt,R_or_N)
+function [fun,rank] = JPT1D(nts,da,db,tR,mR,tol,opt,R_or_N)
 
     if nts < 2^12
        it = 9;
@@ -17,15 +17,17 @@ xs = mod(floor(ts*nts/2/pi),nts)+1;
 if opt >= 1
     JTM = @(ts,nu)interpjac1(nt,ts,nu,da,db,R_or_N);
     %JTM = @(rs,cs,n,da,db,ts,nu,wghts)JTM1d(rs,cs,n,da,db,ts,nu,wghts,R_or_N);
-   [U,V] = lowrank(nts,JTM,ts,nu,tol,tR,mR);
-   U = diag(sqrt(wghts))*U;
-   V = conj(V);
+    [U,V] = lowrank(nts,JTM,ts,nu,tol,tR,mR);
+    U = diag(sqrt(wghts))*U;
+    V = conj(V);
 elseif 0 <= opt && opt<1
     %JTM = @(rs,cs,ts,nu)JTM1d(rs,cs,nts,da,db,ts,nu,wghts);
     %grid = cos(((2*[nts:-1:1]'-1)*pi/2/nts)+1)*pi/2;
     [U,V] = ID_Cheby1(nts,ts,nu,wghts,da,db,tol,1,R_or_N,tR,mR);
+    U = diag(sqrt(wghts))*U;
 elseif opt < 0
     [U,V] = ID_Cheby1(nts,ts,nu,wghts,da,db,tol,-1,R_or_N,tR,mR);
+    U = diag(sqrt(wghts))*U;
 end
 rank = size(U,2);
 V = [zeros(it,rank);V];
