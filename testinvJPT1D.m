@@ -43,7 +43,7 @@ for ii=1:es
     [result3,t]=directinvjac1(nt,d,da,db,n1,ts,nu,wghts);
     %result3 = real(result3);
 %    norm(result3)    
-    timedir = nts/m*(toc-t);
+    timedir = nts/m*(toc);
 
 
 

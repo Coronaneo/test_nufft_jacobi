@@ -71,7 +71,7 @@ for ii=1:es
     result3 = result3 + vals(n1,:)*d(1:it,:)./sqrt(wghts(n1));
     %size(v)
 %    norm(result3)    
-    timedir = nts/m*(toc-t);
+    timedir = nts/m*(toc);
 
 
 
@@ -125,7 +125,7 @@ for ii=1:es
     
         tic
         for i = 1:num
-            [fun,rank2(ii)] = JPT1D(nts,da,db,tR,mR,tol,0,-1);
+            [fun,rank2(ii)] = JPT1D(nts,da,db,tR,mR,tol,1,1);
         end
         timefac2(ii)=toc/num;
 
@@ -153,7 +153,7 @@ for ii=1:es
     else
         tic
         for i = 1:num
-            [fun,rank1(ii)] = NJPT1D(nts,ts,da,db,tR,mR,tol,1);
+            [fun,rank1(ii)] = NJPT1D(nts,ts,da,db,tR,mR,tol,1,-1);
         end
         timefac1(ii)=toc/num;
 
@@ -167,7 +167,7 @@ for ii=1:es
     
         tic
         for i = 1:num
-            [fun,rank2(ii)] = NJPT1D(nts,ts,da,db,tR,mR,tol,-1);
+            [fun,rank2(ii)] = NJPT1D(nts,ts,da,db,tR,mR,tol,1,1);
         end
         timefac2(ii)=toc/num;
 
@@ -178,6 +178,20 @@ for ii=1:es
         timeour2(ii)=toc/num;
     
         errorour2(ii)=norm(result2(n1)-result3)/norm(result3);
+        
+        tic
+        for i = 1:num
+            [fun,rank3(ii)] = NJPT1D(nts,ts,da,db,tR,mR,tol,-1,-1);
+        end
+        timefac3(ii)=toc/num;
+
+        tic;
+        for j=1:num
+            result2 = fun(c);
+        end
+        timeour3(ii)=toc/num;
+    
+        errorour3(ii)=norm(result2(n1)-result3)/norm(result3);
     end
         
         

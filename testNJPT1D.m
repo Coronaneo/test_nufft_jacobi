@@ -45,7 +45,7 @@ for ii=1:es
     vals = jacrecur(nts,ts,it-1,da,db);
     result3 = result3 + vals(n1,:)*d(1:it,:)./sqrt(wghts(n1));
     %result3 = real(result3);
-    timedir = nts/m*(toc-t);
+    timedir = nts/m*(toc);
 
     %xs=mod(floor(ts*nts/2/pi),nts)+1;
     %s=round(nts*ts);

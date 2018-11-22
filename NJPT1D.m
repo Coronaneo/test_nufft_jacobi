@@ -1,4 +1,21 @@
 function [fun,rank] = NJPT1D(nts,ts,da,db,tR,mR,tol,opt,R_or_N)
+%  Return:(a function handle computing 1D nonuniform Jacobi polynomial transform)
+%    fun(c) = J*c, 
+%    where W = diag(wghts);
+%      if R_or_N > 0, J(j,k) = M^(da,db)_(ts(j),k-1)*exp(1i*(psi^(da,db)_(t(j),k-1)-2*pi/nts*[ts(j)*nts/2/pi]*(k-1))), 1=<j,k<=nts;               
+%      if R_or_N > 0, J(j,k) = M^(da,db)_(ts(j),k-1)*exp(1i*(psi^(da,db)_(t(j),k-1)-t(j)*(k-1))), 1=<j,k<=nts;
+%  
+%  ts    - specific samples for users
+%  mR    - maximum rank    
+%  tR    - p*mR, where p>5 sould be a oversampling parameter
+%  tol   - accuracy
+%  opt   - an option decides which lowrank approximation to use
+%          opt >= 1, use Randomized sampling SVD
+%          0 <= opt < 1, use lowrank approximation based on applying chebyshev grids interpolation for sample dimension                    
+%          opt <= 0, use lowrank approximation based on applying chebyshev grids interpolation for both sample and degree dimensions
+%         
+%  Copyright reserved by Qiyuan Pang, 22/11/2018  
+
 
     if nts < 2^12
        it = 9;

@@ -15,7 +15,7 @@ str9='dir_time';
 str10='fac_time';
 %str11='error_cheb';
 fprintf('\n');
-fprintf('start 1D uniform Jacobi polynomial transform test:');
+fprintf('start 2D uniform Jacobi polynomial transform test:');
 fprintf('\n');
 fprintf('da = %1.2f,db = %1.2f\n',da,db);
 %fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
@@ -38,23 +38,24 @@ for ii=1:es
     end
     
     nt=zeros(nts,1);
-    c = randn(nts,1);
+    c = randn(nts,nts);
+    c = c(:);
 
     [ts,wghts] = getts(nt,da,db);
     %ts = unique(rand(nts,1)*(pi-2/nts)+1/nts);
     nu = [0:nts-1]';
-    n1 = randsample(nts,m);
+    n1 = randsample(nts*nts,m);
 
     d = c;
     tic;
     
-    [result3,t]=directjac1(nt,d,da,db,n1,ts,nu,wghts);
-    result3 = result3./sqrt(wghts(n1));
-    vals = jacrecur(nts,ts,it-1,da,db);
-    result3 = result3 + vals(n1,:)*d(1:it,:)./sqrt(wghts(n1));
+    result3 = directjac2d(nts,ts,ts,n1,da,db,c)
+    %result3 = result3./sqrt(wghts(n1));
+    %vals = jacrecur(nts,ts,it-1,da,db);
+    %result3 = result3 + vals(n1,:)*d(1:it,:)./sqrt(wghts(n1));
     %size(v)
 %    norm(result3)    
-    timedir = nts/m*(toc);
+    timedir = nts*nts/m*(toc);
 
 
 
@@ -93,7 +94,7 @@ for ii=1:es
 
     tic
     for i = 1:num
-    [fun,rank(ii)] = JPT1D(nts,da,db,tR,mR,tol,1,1);
+    [fun,rank(ii)] = JPT2D(nts,da,db,tR,mR,tol,1,1);
     end
     timefac(ii)=toc/num;
 
@@ -151,7 +152,7 @@ end
     h(3) = plot(vd,log2(timeour)-log2(timeour(1))+ag,'-^r','LineWidth',2);
     h(4) = plot(vd,log2(timefac)-log2(timefac(1))+ag,'-^g','LineWidth',2);
     legend('N log(N)','N^2','timeapp','timefac','Location','NorthWest');
-    title('1D uniform JPT');
+    title('2D uniform JPT');
     axis square;
     xlabel('log_2(N)'); ylabel('log_{2}(time)');
     set(gca, 'FontSize', 16);
