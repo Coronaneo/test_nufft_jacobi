@@ -52,7 +52,7 @@ end
         fftc = conj(fft(conj(d)));
         y = squeeze(sum(reshape(repmat(V,1,ncol).*fftc,nts,rank,ncol),2));
         y = real(y);
-        y = y + vals.'*(c.*sqrt(wghts));
+        y(1:it,:) = y(1:it,:) + vals.'*(c.*sqrt(wghts));
     end
     
     function y = invJacPT1d2(c)

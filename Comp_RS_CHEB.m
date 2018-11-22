@@ -67,6 +67,8 @@ for ii=1:es
     
     [result3,t]=directjac1(nt,d,da,db,n1,ts,nu,wghts);
     result3 = result3./sqrt(wghts(n1));
+    vals = jacrecur(nts,ts,it-1,da,db);
+    result3 = result3 + vals(n1,:)*d(1:it,:)./sqrt(wghts(n1));
     %size(v)
 %    norm(result3)    
     timedir = nts/m*(toc-t);
