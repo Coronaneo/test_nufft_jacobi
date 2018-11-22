@@ -35,6 +35,8 @@ end
 rank = size(U,2);
 V = [zeros(it,rank);V];
 
+vals = jacrecur(nts,ts,it-1,da,db);
+
 if  R_or_N > 0
     fun = @(c)invJacPT1d1(c);
 else
@@ -50,6 +52,7 @@ end
         fftc = conj(fft(conj(d)));
         y = squeeze(sum(reshape(repmat(V,1,ncol).*fftc,nts,rank,ncol),2));
         y = real(y);
+        y = y + vals.'*(c.*sqrt(wghts));
     end
     
     function y = invJacPT1d2(c)
