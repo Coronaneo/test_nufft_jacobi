@@ -95,7 +95,8 @@ end
         sl = [1:it:it*nts]';
         fft2c = zeros(nts*it,rank1);
         for i = 1:it
-            fft2c(sl+(i-1),:) = nts*ifft(d(sl+(i-1),:));
+            d1 = nts*ifft(d(sl+(i-1),:));
+             fft2c(sl+(i-1),:) = d1(xs,:);
         end
         y2 = zeros(nts*nts,rank1);
         for i = 1:nts
@@ -109,7 +110,7 @@ end
         fft2c = ifft2(d);
         fft2c = nts^2*reshape(fft2c,nts^2,rank1*rank2);
         fft2c = fft2c(xsub,:);
-        y2 = U1.*fft2c;
+        y2 = UU.*fft2c;
         y = y + sum(y2,2);
         y = real(y);
     end
