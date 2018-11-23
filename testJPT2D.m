@@ -43,18 +43,17 @@ for ii=1:es
 
     [ts,wghts] = getts(nt,da,db);
     %ts = unique(rand(nts,1)*(pi-2/nts)+1/nts);
-    nu = [0:nts-1]';
-    n1 = randsample(nts*nts,m);
-
+    nu = [it:nts-1]';
+    %n1 = randsample(nts*nts,m);
+    n1 = [1:nts*nts]';
     d = c;
     tic;
     
-    result3 = directjac2d(nts,ts,ts,n1,da,db,c)
-    %result3 = result3./sqrt(wghts(n1));
-    %vals = jacrecur(nts,ts,it-1,da,db);
-    %result3 = result3 + vals(n1,:)*d(1:it,:)./sqrt(wghts(n1));
-    %size(v)
-%    norm(result3)    
+    %result3 = directjac2d(nts,ts,ts,n1,da,db,c);
+    vals = jacrecur(nts,ts,it-1,da,db);
+    J = interpjac1(nt,ts,nu,da,db,-1);
+    J = real([vals J]);
+    result3 = kron(J,J)*c;
     timedir = nts*nts/m*(toc);
 
 
