@@ -3,7 +3,7 @@ function [fun,rank] = JPT1D(nts,da,db,tR,mR,tol,opt,R_or_N)
 %    fun(c) = J*c, 
 %    where W = diag(wghts);
 %      if R_or_N > 0, J(j,k) = M^(da,db)_(ts(j),k-1)*exp(1i*(psi^(da,db)_(t(j),k-1)-2*pi/nts*[ts(j)*nts/2/pi]*(k-1))), 1=<j,k<=nts;               
-%      if R_or_N > 0, J(j,k) = M^(da,db)_(ts(j),k-1)*exp(1i*(psi^(da,db)_(t(j),k-1)-t(j)*(k-1))), 1=<j,k<=nts;
+%      if R_or_N < 0, J(j,k) = M^(da,db)_(ts(j),k-1)*exp(1i*(psi^(da,db)_(t(j),k-1)-t(j)*(k-1))), 1=<j,k<=nts;
 %  ts    - built-in uniform samples
 %  mR    - maximum rank    
 %  tR    - p*mR, where p>5 sould be a oversampling parameter
