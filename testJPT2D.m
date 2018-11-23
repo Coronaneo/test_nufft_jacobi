@@ -1,5 +1,5 @@
 format long
-num=10;
+num=1;
 da=0.25;
 db=0.25;
 tol=1e-8
@@ -43,19 +43,23 @@ for ii=1:es
 
     [ts,wghts] = getts(nt,da,db);
     %ts = unique(rand(nts,1)*(pi-2/nts)+1/nts);
+    xs = mod(floor(ts*nts/2/pi),nts)+1;
     nu = [it:nts-1]';
-    %n1 = randsample(nts*nts,m);
-    n1 = [1:nts*nts]';
-    d = c;
+    n1 = randsample(nts*nts,m);
+    %n1 = [1:nts*nts]';
+    %d = c;
     tic;
     
-    %result3 = directjac2d(nts,ts,ts,n1,da,db,c);
-    vals = jacrecur(nts,ts,it-1,da,db);
-    J = interpjac1(nt,ts,nu,da,db,-1);
-    J = real([vals J]);
-    result3 = kron(J,J)*c;
+    result3 = directjac2d(nts,ts,ts,n1,da,db,c);
+    %vals = jacrecur(nts,ts,it-1,da,db);
+    %J = interpjac1(nt,ts,nu,da,db,1);
+    %J = [zeros(nts,it) J];
+    %F = exp(1i*2*pi/nts*(xs-1)*[0:nts-1]);
+    %J = J.*F;
+    %J(:,1:it) = vals;
+    %result3 = real(kron(J,J)*c);
     timedir = nts*nts/m*(toc);
-
+    %norm(result4-result3(1:10))/norm(result3(1:10))
 
 
 
@@ -96,7 +100,9 @@ for ii=1:es
     [fun,rank(ii)] = JPT2D(nts,da,db,tR,mR,tol,1,1);
     end
     timefac(ii)=toc/num;
-
+    %P = U*V.';
+    %P = [vals P];
+    %norm(J-P)/norm(J)
     tic;
     for j=1:num
         result2 = fun(c);
