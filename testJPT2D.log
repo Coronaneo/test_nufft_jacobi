@@ -1,0 +1,48 @@
+MATLAB is selecting SOFTWARE OPENGL rendering.
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2018 The MathWorks, Inc.
+                   R2018a (9.4.0.813654) 64-bit (glnxa64)
+                             February 23, 2018
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+>> >> >> >> >> 
+tol =
+
+     1.000000000000000e-08
+
+>> >> >> >> >> >> >> >> >> >> >> >> 
+>> start 2D uniform Jacobi polynomial transform test:>> 
+>> da = 0.25,db = 0.25
+>> >> size  our_rank1  our_rank2  error_our      our_time       dir_time       fac_time       
+>> >> >> >> >> >> >> >> >> >> 
+  5     8          8          8.990020E-09   3.432340E-02   2.419098E+01   3.938700E-02
+
+  6     9          9          3.517134E-08   1.009914E-01   6.952823E+01   5.263820E-02
+
+  7     11         11         5.867008E-09   7.150438E-01   5.196818E+02   8.516940E-02
+
+  8     12         12         4.982924E-09   5.490212E+00   4.832027E+03   1.958836E-01
+
+  9     14         14         9.220196E-09   4.626371E+01   4.814513E+04   6.827330E-01
+
+  10    15         15         9.265878E-09   3.805286E+02   3.772376E+05   1.718451E+00
+{Out of memory. Type HELP MEMORY for your options.
+
+Error in kron (line 34)
+   K = reshape(A.*B,[ma*mb na*nb]);
+
+Error in JPT2D/JacPT2d1 (line 122)
+	    zz = zz + kron(diag(U(:,kk)),vals2)*fft2c(:,kk);
+
+Error in JPT2D>@(c)JacPT2d1(c) (line 67)
+    fun = @(c)JacPT2d1(c);
+} 
+>> >> >> [Warning: MATLAB has disabled some advanced graphics rendering features by
+switching to software OpenGL. For more information, click <a
+href="matlab:opengl('problems')">here</a>.] 
+>> >> >> >> >> >> >> >> >> >> >> >> >> >> >> MATLAB: management.cpp:671: find: Assertion `' failed.
+MATLAB: management.cpp:671: find: Assertion `' failed.

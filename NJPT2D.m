@@ -86,7 +86,7 @@ end
         fft2c = zeros(it*nts,rank2);
         for i = 1:it
             d1 = ifft(d((i-1)*nts+1:i*nts,:));
-            fft2c((i-1)*nts+1:i*nts,:) = d1(xs,:);
+            fft2c((i-1)*nts+1:i*nts,:) = d1(xs2,:);
         end
         fft2c = nts*fft2c;
         y2 = zeros(nts*nts,rank2);
@@ -112,17 +112,17 @@ end
         fft2c = zeros(nts*it,rank1);
         for i = 1:it
             d1 = nts*ifft(d(sl+(i-1),:));
-             fft2c(sl+(i-1),:) = d1(xs,:);
+             fft2c(sl+(i-1),:) = d1(xs1,:);
         end
         y2 = zeros(nts*nts,rank1);
         for i = 1:nts 
             y2((i-1)*nts+1:i*nts,:) = repmat(U1(i,:),nts,1).*(vals2*fft2c((i-1)*it+1:i*it,:));
         end
         
-	zz = zeros(nts*nts,1);
-	for kk = 1:rank1
-	    zz = zz + kron(diag(U(:,kk)),vals2)*fft2c(:,kk);
-	end
+	%zz = zeros(nts*nts,1);
+	%for kk = 1:rank1
+	%    zz = zz + kron(diag(U(:,kk)),vals2)*fft2c(:,kk);
+	%end
 
      
         %z3 = kron(FF,[vals2 zeros(nts,nts-it)])*c;

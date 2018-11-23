@@ -1,11 +1,11 @@
 format long
-num=1;
+num=5;
 da=0.25;
 db=0.25;
 tol=1e-8
 str1='size';
-str2='our_rank';
-%str3='nyu_rank';
+str2='our_rank1';
+str3='our_rank2';
 str4='our_time';
 %str5='nyu_time';
 %str6='ratio_our/nyu';
@@ -19,12 +19,13 @@ fprintf('start 2D uniform Jacobi polynomial transform test:');
 fprintf('\n');
 fprintf('da = %1.2f,db = %1.2f\n',da,db);
 %fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
-fprintf('%-6s%-11s%-15s%-15s%-15s%-15s\n',str1,str2,str7,str4,str9,str10);
+fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s\n',str1,str2,str3,str7,str4,str9,str10);
 %funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
 %funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
-vd = [6:16];
+vd = [5:12];
 es = length(vd);
-rank = zeros(es,1);
+rank1 = zeros(es,1);
+rank2 = zeros(es,1);
 errorour = zeros(es,1);
 timeour = zeros(es,1);
 timefac = zeros(es,1);
@@ -97,7 +98,7 @@ for ii=1:es
 
     tic
     for i = 1:num
-    [fun,rank(ii)] = JPT2D(nts,da,db,tR,mR,tol,1,1);
+    [fun,rank1(ii),rank2(ii)] = JPT2D(nts,da,db,tR,mR,tol,1,1);
     end
     timefac(ii)=toc/num;
     %P = U*V.';
@@ -138,7 +139,7 @@ for ii=1:es
 %    error1=norm(result1-result2)/norm(result2)
 %    errornyu=norm(result1(n1)-result3)/norm(result3);
     errorour(ii)=norm(result2(n1)-result3)/norm(result3);
-    fprintf('\n  %-5d %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E\n',m,rank(ii),errorour(ii),timeour(ii),timedir,timefac(ii));
+    fprintf('\n  %-5d %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E\n',m,rank1(ii),rank2(ii),errorour(ii),timeour(ii),timedir,timefac(ii));
   
 %    fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour,errornyu,timedir);
 %    gc=imagesc(real(jacobi1(:,it+1:end)));
@@ -151,16 +152,17 @@ end
     figure('visible','off');
     pic = figure;
     hold on;
-    ag = (3*vd(1)+log2(vd(1))+log2(timeour(1))+log2(timefac(1)))/4;
-    h(1) = plot(vd,vd+log2(vd)-vd(1)-log2(vd(1))+ag,'--k','LineWidth',2);
-    h(2) = plot(vd,2*vd-vd(1)*2+ag,'--b','LineWidth',2);
-    h(3) = plot(vd,log2(timeour)-log2(timeour(1))+ag,'-^r','LineWidth',2);
-    h(4) = plot(vd,log2(timefac)-log2(timefac(1))+ag,'-^g','LineWidth',2);
-    legend('N log(N)','N^2','timeapp','timefac','Location','NorthWest');
+    ag = (8*vd(1)+3*log2(vd(1))+log2(timeour(1))+log2(timefac(1)))/5;
+    h(1) = plot(vd,2*vd+log2(vd)-2*vd(1)-log2(vd(1))+ag,'--k','LineWidth',2);
+    h(2) = plot(vd,2*vd+2*log2(vd)-2*vd(1)-2*log2(vd(1))+ag,'--b','LineWidth',2);
+    h(3) = plot(vd,4*vd-4*vd(1)+ag,'--r','LineWidth',2);
+    h(4) = plot(vd,log2(timeour)-log2(timeour(1))+ag,'-^r','LineWidth',2);
+    h(5) = plot(vd,log2(timefac)-log2(timefac(1))+ag,'-^g','LineWidth',2);
+    legend('N^2 log(N)','N^2 log(N)^2','N^4','timeapp','timefac','Location','NorthWest');
     title('2D uniform JPT');
     axis square;
     xlabel('log_2(N)'); ylabel('log_{2}(time)');
     set(gca, 'FontSize', 16);
     b=get(gca);
     set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
-    saveas(pic,['testJPT1D.eps'],'epsc');
+    saveas(pic,['testJPT2D.eps'],'epsc');

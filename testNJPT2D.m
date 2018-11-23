@@ -1,5 +1,5 @@
 format long
-num=1;
+num=5;
 da=0.25;
 db=0.25;
 tol=1e-8
@@ -22,7 +22,7 @@ fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s\n',str1,str2,str3,str7,str4,str9,str10);
 %funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
 %funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
-vd = [6:16];
+vd = [5:12];
 es = length(vd);
 rank1 = zeros(es,1);
 rank2 = zeros(es,1);
@@ -43,6 +43,7 @@ for ii=1:es
     c = c(:);
 
     %[ts,wghts] = getts(nt,da,db);
+    rand('state',sum(100*clock));
     ts1 = unique(rand(nts,1)*(pi-2/nts)+1/nts);
     ts2 = unique(rand(nts,1)*(pi-2/nts)+1/nts);
     nu = [it:nts-1]';
@@ -152,16 +153,17 @@ end
     figure('visible','off');
     pic = figure;
     hold on;
-    ag = (3*vd(1)+log2(vd(1))+log2(timeour(1))+log2(timefac(1)))/4;
-    h(1) = plot(vd,vd+log2(vd)-vd(1)-log2(vd(1))+ag,'--k','LineWidth',2);
-    h(2) = plot(vd,2*vd-vd(1)*2+ag,'--b','LineWidth',2);
-    h(3) = plot(vd,log2(timeour)-log2(timeour(1))+ag,'-^r','LineWidth',2);
-    h(4) = plot(vd,log2(timefac)-log2(timefac(1))+ag,'-^g','LineWidth',2);
-    legend('N log(N)','N^2','timeapp','timefac','Location','NorthWest');
-    title('2D uniform JPT');
+    ag = (8*vd(1)+3*log2(vd(1))+log2(timeour(1))+log2(timefac(1)))/5;
+    h(1) = plot(vd,2*vd+log2(vd)-2*vd(1)-log2(vd(1))+ag,'--k','LineWidth',2);
+    h(2) = plot(vd,2*vd+2*log2(vd)-2*vd(1)-2*log2(vd(1))+ag,'--b','LineWidth',2);
+    h(3) = plot(vd,4*vd-4*vd(1)+ag,'--r','LineWidth',2);
+    h(4) = plot(vd,log2(timeour)-log2(timeour(1))+ag,'-^r','LineWidth',2);
+    h(5) = plot(vd,log2(timefac)-log2(timefac(1))+ag,'-^g','LineWidth',2);
+    legend('N^2 log(N)','N^2 log(N)^2','N^4','timeapp','timefac','Location','NorthWest');
+    title('2D nonuniform JPT');
     axis square;
     xlabel('log_2(N)'); ylabel('log_{2}(time)');
     set(gca, 'FontSize', 16);
     b=get(gca);
     set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
-    saveas(pic,['testJPT1D.eps'],'epsc');
+    saveas(pic,['testNJPT2D.eps'],'epsc');

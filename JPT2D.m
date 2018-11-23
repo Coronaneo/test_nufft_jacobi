@@ -1,4 +1,4 @@
-function [fun,rank] = JPT2D(nts,da,db,tR,mR,tol,opt,R_or_N)
+function [fun,rank1,rank2] = JPT2D(nts,da,db,tR,mR,tol,opt,R_or_N)
 %  Return:(a function handle computing 2D uniform Jacobi polynomial transform)
 %    fun(c) = kron(J,J)*c(:), 
 %    where W = diag(wghts);
