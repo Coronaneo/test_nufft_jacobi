@@ -15,21 +15,21 @@ tol =
      1.000000000000000e-08
 
 >> >> >> >> >> >> >> >> >> >> >> >> 
->> start 2D uniform Jacobi polynomial transform test:>> 
+>> start 2D inverse uniform Jacobi polynomial transform test:>> 
 >> da = 0.25,db = 0.25
 >> >> size  our_rank1  our_rank2  error_our      our_time       dir_time       fac_time       
 >> >> >> >> >> >> >> >> >> >> 
-  5     8          8          8.990020E-09   3.443100E-02   2.680136E+01   4.508360E-02
+  5     8          8          9.423406E-09   2.179660E-02   1.918587E+01   4.429200E-02
 
-  6     9          9          3.517134E-08   1.598978E-01   7.118780E+01   9.718000E-02
+  6     9          9          5.462126E-08   2.263280E-02   4.283733E+00   4.371440E-02
 
-  7     11         11         5.867008E-09   7.462982E-01   6.224375E+02   1.127820E-01
+  7     11         11         8.591541E-09   1.064698E-01   2.558479E+01   9.236280E-02
 
-  8     12         12         4.982924E-09   6.293092E+00   5.821047E+03   2.943528E-01
+  8     12         12         7.315706E-09   6.109098E-01   1.117962E+02   2.039196E-01
 
-  9     14         14         9.220196E-09   4.877874E+01   5.590993E+04   1.180981E+00
+  9     14         14         9.421122E-09   2.816751E+00   9.584858E+02   5.676812E-01
 
-  10    15         15         9.265878E-09   3.810714E+02   3.913957E+05   1.790549E+00
+  10    15         15         4.570541E-09   1.470557E+01   5.453119E+03   1.822337E+00
 >> >> >> [Warning: MATLAB has disabled some advanced graphics rendering features by
 switching to software OpenGL. For more information, click <a
 href="matlab:opengl('problems')">here</a>.] 
