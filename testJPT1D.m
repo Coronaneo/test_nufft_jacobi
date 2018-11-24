@@ -22,7 +22,7 @@ fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-15s%-15s%-15s%-15s\n',str1,str2,str7,str4,str9,str10);
 %funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
 %funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
-vd = [7:15];
+vd = [7:16];
 es = length(vd);
 rank = zeros(es,1);
 errorour = zeros(es,1);
