@@ -63,9 +63,9 @@ UU = kron(U1,U2);
 VV = kron(V1,V2);
 rank = rank1*rank2;
 
-vals1 = jacrecur(nts,ts,it-1,da,db);
+vals1 = diag(sqrt(wghts))*jacrecur(nts,ts,it-1,da,db);
 vals1 = vals1.';
-vals2 = jacrecur(nts,ts,it-1,da,db);
+vals2 = diag(sqrt(wghts))*jacrecur(nts,ts,it-1,da,db);
 vals2 = vals2.';
 vals = kron(vals1,vals2);
 
@@ -79,14 +79,18 @@ end
 
     function y = invJacPT2d1(c)
         c = c(:);
-        c = kron(sqrt(wghts),sqrt(wghts)).*c;
+        c = kron(1./sqrt(wghts),1./sqrt(wghts)).*c;
         y = zeros(nts*nts,1);
-        ind = reshape(repmat([0:it-1],it,1),it*it,1)+repmat([1:it]',it,1);
-        y(ind,:) = kron(vals2,vals1)*c;
+        ind = reshape(repmat([0:it-1],it,1),it*it,1)*nts+repmat([1:it]',it,1);
+        y(ind,:) = vals*c;
+
+        %z1 = kron([vals2;zeros(nts-it,nts)],[vals1;zeros(nts-it,nts)])*c;
+	%e1 = norm(z1-y)/norm(z1)
+
         d = zeros(nts*it,rank1);
         for i = 1:it
             for j = 1:nts
-                d((i-1)*nts+1:i*nts,:) = d((i-1)*nts+1:i*nts,:) + vals2(i,j)*V1.*c((j-1)*nts+1:j*nts,:);
+                d((i-1)*nts+1:i*nts,:) = d((i-1)*nts+1:i*nts,:) + vals2(i,j)*U1.*c((j-1)*nts+1:j*nts,:);
             end
         end
         fft2c = zeros(nts*it,rank1);
@@ -97,6 +101,15 @@ end
         y2 = kron(ones(it,1),V1).*fft2c;
         ind = [1:it*nts]';
         y(ind,:) = y(ind,:) + sum(real(y2),2);
+
+        %F = exp(1i*2*pi/nts*(xs-1)*[0:nts-1]).';
+	%FF = zeros(nts,nts);
+	%for kk = 1:rank1
+	%    FF = FF + diag(V1(:,kk))*F*diag(U1(:,kk));
+	%end
+	%z2 = kron([vals2;zeros(nts-it,nts)],FF)*c;
+	%e2 = norm(z2(ind,:)-sum(y2,2))/norm(z2(ind,:))
+
         d = kron(U2,ones(nts,1)).*repmat(c,1,rank2);
         sl = [1:nts:nts*nts]';
         fft2c = zeros(nts*nts,rank2);
@@ -108,15 +121,24 @@ end
         for i = 1:nts 
             y2((i-1)*it+1:i*it,:) = repmat(V2(i,:),it,1).*(vals1*fft2c((i-1)*nts+1:i*nts,:));
         end
-        ind = reshape(repmat([0:nts-1],it,1),it*nts,1)+repmat([1:it]',nts,1);
+        ind = reshape(repmat([0:nts-1],it,1),it*nts,1)*nts+repmat([1:it]',nts,1);
         y(ind,:) = y(ind,:) + sum(real(y2),2);
+
+        %z3 = kron(FF,[vals1;zeros(nts-it,nts)])*c;
+	%e3 = norm(z3(ind,:)-sum(y2,2))/norm(z3(ind,:))
+
         d = UU.*repmat(c,1,rank1*rank2); 
         d = PP*d;
         d = reshape(d,nts,nts,rank1*rank2);
         fft2c = conj(fft2(conj(d)));
         fft2c = reshape(fft2c,nts^2,rank1*rank2);
         y2 = VV.*fft2c;
+
+        %z4 = kron(FF,FF)*c;
+	%e4 = norm(z4-sum(y2,2))/norm(z4)
+
         y = y + sum(real(y2),2);
+
     end
 
 end

@@ -11,14 +11,14 @@ y = zeros(m,1);
 nu = [it:nts-1]';
 nt = zeros(nts,1);
 c = c(:);
-c = kron(sqrt(wghtt),sqrt(wghts)).*c;
+c = kron(1./sqrt(wghtt),1./sqrt(wghts)).*c;
 
 for i = 1:m
     jj = floor((n(i)-0.5)/nts);
     ii = n(i) - nts*jj;
     if  jj < it
         x = valt(:,jj+1);
-        x = sqrt(wghtt).*x.*exp(1i*t*jj);
+        x = sqrt(wghtt).*x;
         x = x.';
     else
         x = interpjac1(nt,t,jj,da,db,-1);
@@ -27,11 +27,11 @@ for i = 1:m
     end
     if  ii < it+1
         z = vals(:,ii);
-        z = sqrt(wghts).*z.*exp(1i*s*(ii-1));
+        z = sqrt(wghts).*z;
         z = z.';
     else
         z = interpjac1(nt,s,ii-1,da,db,-1);
-        z = sqrt(wghts).*z.*exp(1i*s*(i-1));
+        z = sqrt(wghts).*z.*exp(1i*s*(ii-1));
         z = z.';
     end
     y(i) = real(kron(x,z)*c);

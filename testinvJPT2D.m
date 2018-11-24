@@ -1,5 +1,5 @@
 format long
-num=5;
+num=1;
 da=0.25;
 db=0.25;
 tol=1e-8
@@ -58,9 +58,10 @@ for ii=1:es
     %F = exp(1i*2*pi/nts*(xs-1)*[0:nts-1]);
     %J = J.*F;
     %J(:,1:it) = vals;
-    %result3 = real(kron(J,J)*c);
+    %J = J.';
+    %result4 = real(kron(J,J)*c);
     timedir = nts*nts/m*(toc);
-    %norm(result4-result3(1:10))/norm(result3(1:10))
+    %norm(result3-result4(n1))/norm(result3)
 
 
 
