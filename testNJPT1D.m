@@ -88,7 +88,7 @@ for ii=1:es
     fprintf('\n  %-5d %-9d  %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank(ii),errorour(ii),timeour(ii),timedir,timefac(ii));
 
 end
-   figure('visible','off');
+    figure('visible','off');
     pic = figure;
     hold on;
     ag = (3*vd(1)+log2(vd(1))+log2(timeour(1))+log2(timefac(1)))/4;
@@ -97,10 +97,34 @@ end
     h(3) = plot(vd,log2(timeour)-log2(timeour(1))+ag,'-^r','LineWidth',2);
     h(4) = plot(vd,log2(timefac)-log2(timefac(1))+ag,'-^g','LineWidth',2);
     legend('N log(N)','N^2','timeapp','timefac','Location','NorthWest');
-    title('1D nonuniform JPT');
+    title('1D nonuniform JPT, time');
     axis square;
     xlabel('log_2(N)'); ylabel('log_{2}(time)');
     set(gca, 'FontSize', 16);
     b=get(gca);
     set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
-    saveas(pic,['testNJPT1D.eps'],'epsc');
+    saveas(pic,['testNJPT1D_time.eps'],'epsc');
+    hold off;
+    pic1 = figure;
+    hold on;
+    h(1) = plot(vd,log10(errorour),'--k','LineWidth',2);
+    legend('relerr','Location','NorthWest');
+    title('1D nonuniform JPT, relerr');
+    axis square;
+    xlabel('log_2(N)'); ylabel('log_{10}(relerr)');
+    set(gca, 'FontSize', 16);
+    b=get(gca);
+    set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
+    saveas(pic1,['testNJPT1D_err.eps'],'epsc');
+    hold off;
+    pic2 = figure;
+    hold on;
+    h(1) = plot(vd,rank,'--b','LineWidth',2);
+    legend('rank','Location','NorthWest');
+    title('1D nonuniform JPT, rank');
+    axis square;
+    xlabel('log_2(N)'); ylabel('rank');
+    set(gca, 'FontSize', 16);
+    b=get(gca);
+    set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
+    saveas(pic2,['testNJPT1D_rank.eps'],'epsc');
