@@ -15,7 +15,7 @@ str9='dir_time';
 str10='fac_time';
 %str11='error_cheb';
 fprintf('\n');
-fprintf('start 2D nonuniform Jacobi polynomial transform test:');
+fprintf('start 2D inverse uniform Jacobi polynomial transform test:');
 fprintf('\n');
 fprintf('da = %1.2f,db = %1.2f\n',da,db);
 %fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
@@ -42,17 +42,16 @@ for ii=1:es
     c = randn(nts,nts);
     c = c(:);
 
-    %[ts,wghts] = getts(nt,da,db);
-    rand('state',sum(100*clock));
-    ts1 = unique(rand(nts,1)*(pi-2/nts)+1/nts);
-    ts2 = unique(rand(nts,1)*(pi-2/nts)+1/nts);
+    [ts,wghts] = getts(nt,da,db);
+    %ts = unique(rand(nts,1)*(pi-2/nts)+1/nts);
+    xs = mod(floor(ts*nts/2/pi),nts)+1;
     nu = [it:nts-1]';
     n1 = randsample(nts*nts,m);
     %n1 = [1:nts*nts]';
     %d = c;
     tic;
     
-    result3 = directjac2d(nts,ts1,ts2,n1,da,db,c);
+    result3 = directinvjac2d(nts,ts,ts,wghts,wghts,n1,da,db,c);
     %vals = jacrecur(nts,ts,it-1,da,db);
     %J = interpjac1(nt,ts,nu,da,db,1);
     %J = [zeros(nts,it) J];
@@ -99,7 +98,7 @@ for ii=1:es
 
     tic
     for i = 1:num
-    [fun,rank1(ii),rank2(ii)] = NJPT2D(nts,ts1,ts2,da,db,tR,mR,tol,1,1);
+    [fun,rank1(ii),rank2(ii)] = invJPT2D(nts,da,db,tR,mR,tol,1,1);
     end
     timefac(ii)=toc/num;
     %P = U*V.';
@@ -160,10 +159,10 @@ end
     h(4) = plot(vd,log2(timeour)-log2(timeour(1))+ag,'-^r','LineWidth',2);
     h(5) = plot(vd,log2(timefac)-log2(timefac(1))+ag,'-^g','LineWidth',2);
     legend('N^2 log(N)','N^2 log(N)^2','N^4','timeapp','timefac','Location','NorthWest');
-    title('2D nonuniform JPT');
+    title('2D inv uniform JPT');
     axis square;
     xlabel('log_2(N)'); ylabel('log_{2}(time)');
     set(gca, 'FontSize', 16);
     b=get(gca);
     set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
-    saveas(pic,['testNJPT2D.eps'],'epsc');
+    saveas(pic,['testinvJPT2D.eps'],'epsc');
