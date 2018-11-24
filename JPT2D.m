@@ -76,9 +76,6 @@ end
         c1 = c(reshape(repmat([0:it-1],it,1),it*it,1)*nts+repmat([1:it]',it,1));
         y = vals*c1;
 
-        %z1 = kron([vals1 zeros(nts,nts-it)],[vals2 zeros(nts,nts-it)])*c;
-	%e1 = norm(z1-y)/norm(z1)
-
         c1 = c(1:it*nts);
         d = kron(ones(it,1),V2).*repmat(c1,1,rank2);
         fft2c = zeros(it*nts,rank2);
@@ -94,15 +91,6 @@ end
             end
         end
 
-        %F = exp(2*pi*1i/nts*(xs-1)*[0:nts-1]);
-        %FF = zeros(nts,nts);
-        %for kk = 1:rank2
-        %    FF = FF + diag(U1(:,kk))*F*diag(V1(:,kk));
-        %end
-	%z2 = kron([vals1 zeros(nts,nts-it)],FF)*c;
-	%e2 = norm(z2-sum(y2,2))/norm(z2)
-
-
         y = y + sum(y2,2);
         c1 = c(reshape(repmat([0:nts-1],it,1),it*nts,1)*nts+repmat([1:it]',nts,1));
         d = kron(V1,ones(it,1)).*repmat(c1,1,rank1);
@@ -116,16 +104,6 @@ end
         for i = 1:nts 
             y2((i-1)*nts+1:i*nts,:) = repmat(U1(i,:),nts,1).*(vals2*fft2c((i-1)*it+1:i*it,:));
         end
-        
-	zz = zeros(nts*nts,1);
-	for kk = 1:rank1
-	    zz = zz + kron(diag(U(:,kk)),vals2)*fft2c(:,kk);
-	end
-
-     
-        %z3 = kron(FF,[vals2 zeros(nts,nts-it)])*c;
-        %e3 = norm(z3-sum(y2,2))/norm(z3)
-
 
         y = y + sum(y2,2);
         d = VV.*repmat(c,1,rank1*rank2);   
@@ -135,15 +113,8 @@ end
         fft2c = fft2c(xsub,:);
         y2 = UU.*fft2c;
 
-
-	%z4 = kron(FF,FF)*c;
-	%e4 = norm(z4-sum(y2,2))/norm(z4)
-
         y = y + sum(y2,2);
         y = real(y);
-	%z = real(z1+z2+z3+z4);
-	%e = norm(z-y)/norm(z)
-	%y = z;
     end
 
     function y = JacPT2d2(c)
