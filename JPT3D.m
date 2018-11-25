@@ -1,4 +1,4 @@
-function [fun,rank1,rank2,rank3] = NJPT3D(nts,ts1,ts2,ts3,da,db,tR,mR,tol,opt,R_or_N)
+function [fun,rank1,rank2,rank3] = JPT3D(nts,da,db,tR,mR,tol,opt,R_or_N)
 %  Return:(a function handle computing 2D nonuniform Jacobi polynomial transform)
 %    fun(c) = kron(J,J)*c(:), 
 %    where W = diag(wghts);
@@ -21,8 +21,11 @@ function [fun,rank1,rank2,rank3] = NJPT3D(nts,ts1,ts2,ts3,da,db,tR,mR,tol,opt,R_
        it = 27;
     end
 nt = zeros(nts,1);
-%[ts,wghts] = getts(nt,da,db);
+[ts,wghts] = getts(nt,da,db);
 nu = [it:nts-1]';
+ts1 = ts;
+ts2 = ts;
+ts3 = ts;
 %xs = mod(floor(ts*nts/2/pi),nts)+1;
 
 

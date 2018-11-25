@@ -15,7 +15,7 @@ str9='dir_time';
 str10='fac_time';
 %str11='error_cheb';
 fprintf('\n');
-fprintf('start 3D nonuniform Jacobi polynomial transform test:');
+fprintf('start 3D uniform Jacobi polynomial transform test:');
 fprintf('\n');
 fprintf('da = %1.2f,db = %1.2f\n',da,db);
 %fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-14s%-10s\n',str1,str10,str2,str3,str4,str5,str6,str11,str7,str8,str9);
@@ -45,13 +45,13 @@ for ii=1:es
 
     [ts,wghts] = getts(nt,da,db);
     xs = mod(floor(ts*nts/2/pi),nts)+1;
-    %ts1 = ts;
-    %ts2 = ts;
-    %ts3 = ts;
+    ts1 = ts;
+    ts2 = ts;
+    ts3 = ts;
     rand('state',sum(100*clock));
-    ts1 = unique(rand(nts,1)*(pi-2/nts)+1/nts);
-    ts2 = unique(rand(nts,1)*(pi-2/nts)+1/nts);
-    ts3 = unique(rand(nts,1)*(pi-2/nts)+1/nts);
+    %ts1 = unique(rand(nts,1)*(pi-2/nts)+1/nts);
+    %ts2 = unique(rand(nts,1)*(pi-2/nts)+1/nts);
+    %ts3 = unique(rand(nts,1)*(pi-2/nts)+1/nts);
     nu = [it:nts-1]';
     n1 = randsample(nts*nts*nts,m);
     %n1 = [1:nts*nts]';
@@ -105,7 +105,7 @@ for ii=1:es
 
     tic
     for i = 1:num
-    [fun,rank1(ii),rank2(ii),rank3(ii)] = NJPT3D(nts,ts1,ts2,ts3,da,db,tR,mR,tol,1,1);
+    [fun,rank1(ii),rank2(ii),rank3(ii)] = JPT3D(nts,da,db,tR,mR,tol,1,1);
     end
     timefac(ii)=toc/num;
     %P = U*V.';
@@ -168,25 +168,25 @@ end
     h(5) = plot(vd,log2(timeour)-log2(timeour(1))+ag,'-^r','LineWidth',2);
     h(6) = plot(vd,log2(timefac)-log2(timefac(1))+ag,'-^g','LineWidth',2);
     legend('N^3 log(N)','N^3 log(N)^2','N^3 log(N)^3','N^6','timeapp','timefac','Location','NorthWest');
-    title('3D nonuniform JPT, time');
+    title('3D uniform JPT, time');
     axis square;
     xlabel('log_2(N)'); ylabel('log_{2}(time)');
     set(gca, 'FontSize', 16);
     b=get(gca);
     set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
-    saveas(pic,['testNJPT3D_time.eps'],'epsc');
+    saveas(pic,['testJPT3D_time.eps'],'epsc');
     hold off;
     pic1 = figure;
     hold on;
     h(1) = plot(vd,log10(errorour),'--k','LineWidth',2);
     legend('relerr','Location','NorthWest');
-    title('3D nonuniform JPT, relerr');
+    title('3D uniform JPT, relerr');
     axis square;
     xlabel('log_2(N)'); ylabel('log_{10}(relerr)');
     set(gca, 'FontSize', 16);
     b=get(gca);
     set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
-    saveas(pic1,['testNJPT3D_err.eps'],'epsc');
+    saveas(pic1,['testJPT3D_err.eps'],'epsc');
     hold off;
     pic2 = figure;
     hold on;
@@ -194,10 +194,10 @@ end
     h(2) = plot(vd,rank2,'--b','LineWidth',2);
     h(3) = plot(vd,rank3,'--r','LineWidth',2);
     legend('rank1','rank2','rank3','Location','NorthWest');
-    title('3D nonuniform JPT, rank');
+    title('3D uniform JPT, rank');
     axis square;
     xlabel('log_2(N)'); ylabel('rank');
     set(gca, 'FontSize', 16);
     b=get(gca);
     set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
-    saveas(pic2,['testNJPT3D_rank.eps'],'epsc');
+    saveas(pic2,['testJPT3D_rank.eps'],'epsc');
