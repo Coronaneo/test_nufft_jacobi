@@ -61,7 +61,7 @@ VV23 = kron(V2,V3);
 UU12 = kron(U1,U2);
 VV12 = kron(V1,V2);
 UUU = kron(kron(U1,U2),U3);
-VVV = kron(kron(V1,V2),U3);
+VVV = kron(kron(V1,V2),V3);
 rank = rank1*rank2*rank3;
 
 vals1 = jacrecur(nts,ts1,it-1,da,db);
@@ -124,7 +124,7 @@ end
         y2 = zeros(nts^3,rank3);
         for i = 1:nts^2
             for j = 1:it^2
-                y2((i-1)*nts+1:i*nts,:) = y2((i-1)*nts+1:i*nts,:) + vals12(i,j)*U3.*fft3c((j-1)*nts+1:j*nts,:)
+                y2((i-1)*nts+1:i*nts,:) = y2((i-1)*nts+1:i*nts,:) + vals12(i,j)*U3.*fft3c((j-1)*nts+1:j*nts,:);
             end
         end
         y = y + sum(real(y2),2);
@@ -176,7 +176,9 @@ end
         d = kron(ones(it,1),VV23).*repmat(c1,1,rank2*rank3);
         fft3c = zeros(it*nts^2,rank2*rank3);
         for i = 1:it
-            d1 = nts^2*ifft2(d((i-1)*nts^2+1:i*nts^2,:));
+            d2 = reshape(d((i-1)*nts^2+1:i*nts^2,:),nts,nts,rank2*rank3);
+            d1 = nts^2*ifft2(d2);
+            d1 = reshape(d1,nts^2,rank2*rank3);
             fft3c((i-1)*nts^2+1:i*nts^2,:) = d1(xsub23,:);
         end
         y2 = zeros(nts^3,rank2*rank3);
@@ -216,16 +218,14 @@ end
         c1 = c(reshape(repmat([0:nts-1],it*nts,1),it*nts^2,1)*nts^2+repmat([1:it*nts]',nts,1));
         d = kron(V1,kron(ones(it,1),V3)).*repmat(c1,1,rank1*rank3);
         fft3c = zeros(it*nts^2,rank1*rank3);
-        for i = 1:nts
-            for j = 1:nts
-                d1 = d((j-1)*it*nts+1:j*ts*nts,:);
-                fft3c1 = zeros(it*nts,rank1*rank3);
-                for k = 1:it
-                    d2 = nts*ifft(d1((k-1)*nts+1:k*nts,:));
-                    fft3c1((k-1)*nts+1:k*nts,:) = d2(xs3,:);
-                end
-                fft3c((i-1)*nts*it+1:i*nts*it,:) = fft3c((i-1)*nts*it+1:i*nts*it,:) + fft3c1;
+        for j = 1:nts
+            d1 = d((j-1)*it*nts+1:j*it*nts,:);
+            fft3c1 = zeros(it*nts,rank1*rank3);
+            for k = 1:it
+                d2 = nts*ifft(d1((k-1)*nts+1:k*nts,:));
+                fft3c1((k-1)*nts+1:k*nts,:) = d2(xs3,:);
             end
+            fft3c((j-1)*nts*it+1:j*nts*it,:) = fft3c1;
         end
         sl = [1:it*nts:it*nts^2]';
         for i = 1:it*nts
@@ -243,7 +243,7 @@ end
                             y3((jj-1)*nts+1:jj*nts,:) = y3((jj-1)*nts+1:jj*nts,:) + vals2(jj,jjj)*U3(:,k).*d1((jjj-1)*nts+1:jjj*nts,:);
                         end
                     end
-                    y2((j-1)*nts^2+1:j*nts^2,(i-1)*rank3+k) = y3;
+                    y2((j-1)*nts^2+1:j*nts^2,(i-1)*rank3+k) = U1(j,i)*y3;
                 end
             end
         end
@@ -251,6 +251,7 @@ end
         
         z6 = kron(kron(FF1,[vals2 zeros(nts,nts-it)]),FF3)*c;
         e6 = norm(z6-sum(y2,2))/norm(z6)
+	%y = y + sum(real(z6),2);
         
         c1 = c(reshape(repmat([0:nts^2-1],it,1),it*nts^2,1)*nts+repmat([1:it]',nts^2,1));
         d = kron(VV12,ones(it,1)).*repmat(c1,1,rank1*rank2);
@@ -277,6 +278,7 @@ end
         fft3c = SSS*fft3c;
         y2 = UUU.*fft3c;
         y = y + sum(real(y2),2);
+	y = real(y);
         
         z8 = kron(kron(FF1,FF2),FF3)*c;
         e8 = norm(z8-sum(y2,2))/norm(z8)

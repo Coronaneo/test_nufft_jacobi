@@ -1,5 +1,5 @@
 format long
-num=5;
+num=1;
 da=0.25;
 db=0.25;
 tol=1e-8
@@ -44,6 +44,7 @@ for ii=1:es
     c = c(:);
 
     [ts,wghts] = getts(nt,da,db);
+    xs = mod(floor(ts*nts/2/pi),nts)+1;
     ts1 = ts;
     ts2 = ts;
     ts3 = ts;

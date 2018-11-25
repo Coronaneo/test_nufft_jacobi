@@ -1,4 +1,4 @@
-function y = directjac3d(nts,r,s,t,n1,da,db,c)
+function w = directjac3d(nts,r,s,t,n,da,db,c)
 if nts < 2^12
    it = 9;
 else
@@ -19,7 +19,7 @@ for i = 1:m
     ii = n(i)-kk*nts*nts-nts*jj;
     x = interpjac1(nt,r(kk+1),nu,da,db,-1);
     %x1 = exp(1i*2*pi/nts*floor(s(jj+1)*nts/2/pi)*nu');
-    x1 = exp(1i*r(jj+1)*nu');
+    x1 = exp(1i*r(kk+1)*nu');
     x = x.*x1;
     y = interpjac1(nt,s(jj+1),nu,da,db,-1);
     %z1 = exp(1i*2*pi/nts*floor(t(ii)*nts/2/pi)*nu');
