@@ -53,7 +53,7 @@ for ii=1:es
     ts2 = unique(rand(nts,1)*(pi-2/nts)+1/nts);
     ts3 = unique(rand(nts,1)*(pi-2/nts)+1/nts);
     nu = [it:nts-1]';
-    n1 = randsample(nts*nts*nts,m);
+    n1 = randsample(nts*nts*nts,round(m));
     %n1 = [1:nts*nts]';
     %d = c;
     tic;
@@ -66,7 +66,7 @@ for ii=1:es
     %J = J.*F;
     %J(:,1:it) = vals;
     %result4 = real(kron(kron(J,J),J)*c);
-    timedir = nts*nts*nts/m*(toc);
+    timedir = nts*nts*nts/round(m)*(toc);
     %norm(result3-result4(n1))/norm(result3)
 
 
@@ -146,7 +146,7 @@ for ii=1:es
 %    error1=norm(result1-result2)/norm(result2)
 %    errornyu=norm(result1(n1)-result3)/norm(result3);
     errorour(ii)=norm(result2(n1)-result3)/norm(result3);
-    fprintf('\n  %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E\n',m,rank1(ii),rank2(ii),rank3(ii),errorour(ii),timeour(ii),timedir,timefac(ii));
+    fprintf('\n  %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E\n',nts,rank1(ii),rank2(ii),rank3(ii),errorour(ii),timeour(ii),timedir,timefac(ii));
   
 %    fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour,errornyu,timedir);
 %    gc=imagesc(real(jacobi1(:,it+1:end)));
