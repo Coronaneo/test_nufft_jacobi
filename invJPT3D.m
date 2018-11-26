@@ -32,15 +32,15 @@ ts3 = ts;
 if opt >= 1
     JTM1 = @(ts,nu)interpjac1(nt,ts,nu,da,db,R_or_N);
     [U1,V1] = lowrank(nts,JTM1,ts1,nu,tol,tR,mR);
-    %U = diag(sqrt(wghts))*U;
+    U1 = diag(sqrt(wghts))*U1;
     V1 = conj(V1);
     JTM2 = @(ts,nu)interpjac1(nt,ts,nu,da,db,R_or_N);
     [U2,V2] = lowrank(nts,JTM2,ts2,nu,tol,tR,mR);
-    %U = diag(sqrt(wghts))*U;
+    U2 = diag(sqrt(wghts))*U2;
     V2 = conj(V2);
     JTM3 = @(ts,nu)interpjac1(nt,ts,nu,da,db,R_or_N);
     [U3,V3] = lowrank(nts,JTM1,ts3,nu,tol,tR,mR);
-    %U = diag(sqrt(wghts))*U;
+    U3 = diag(sqrt(wghts))*U3;
     V3 = conj(V3);
 elseif 0 <= opt && opt<1
     [U1,V1] = ID_Cheby1(nts,ts1,nu,da,db,tol,1,R_or_N,tR,mR);
@@ -58,7 +58,7 @@ rank2 = size(U2,2);
 rank3 = size(U3,2);
 V1 = [zeros(it,rank1);V1];
 V2 = [zeros(it,rank2);V2];
-V3 = [zeros(it,rank2);V3];
+V3 = [zeros(it,rank3);V3];
 UU23 = kron(U2,U3);
 VV23 = kron(V2,V3);
 UU12 = kron(U1,U2);
@@ -68,8 +68,11 @@ VVV = kron(kron(V1,V2),V3);
 rank = rank1*rank2*rank3;
 
 vals1 = jacrecur(nts,ts1,it-1,da,db).';
+vals1 = vals1*diag(sqrt(wghts));
 vals2 = jacrecur(nts,ts2,it-1,da,db).';
+vals2 = vals2*diag(sqrt(wghts));
 vals3 = jacrecur(nts,ts3,it-1,da,db).';
+vals3 = vals3*diag(sqrt(wghts));
 vals12 = kron(vals1,vals2);
 vals23 = kron(vals2,vals3);
 vals = kron(kron(vals1,vals2),vals3);
@@ -103,16 +106,16 @@ else
     fun = @(c)invJacPT3d2(c);
 end
 
-    function y = NJacPT3d1(c)
+    function y = invJacPT3d1(c)
         c = c(:);
-        c = kron(kron(1./sqrt(wghts),1./sqrt(wghts)),1./sqrt(wghts))*c;
+        c = kron(kron(1./sqrt(wghts),1./sqrt(wghts)),1./sqrt(wghts)).*c;
         ind1 = reshape(repmat([0:it-1],it,1),it^2,1)*nts+repmat([1:it]',it,1);
         ind = reshape(repmat([0:it-1],it^2,1),it^3,1)*nts^2+repmat(ind1,it,1);
         y = zeros(nts^3,1);
         y(ind,:) = vals*c;
         
-        z1 = kron(kron([vals1;zeros(nts-it,nts)],[vals2;zeros(nts-it,nts)]),[vals3;zeros(nts-it,nts)])*c;
-        e1 = norm(z1-y)/norm(z1)
+        %z1 = kron(kron([vals1;zeros(nts-it,nts)],[vals2;zeros(nts-it,nts)]),[vals3;zeros(nts-it,nts)])*c;
+        %e1 = norm(z1-y)/norm(z1)
         
         ind1 = [1:it*nts]';
         ind = reshape(repmat([0:it-1],it*nts,1),it^2*nts,1)*nts^2+repmat(ind1,it,1);
@@ -131,16 +134,16 @@ end
         y2 = kron(kron(ones(it,1),ones(it,1)),V3).*fft3c;
         y(ind,:) = y(ind,:) + sum(real(y2),2);
         
-        F3 = exp(1i*2*pi/nts*(xs3-1)*[0:nts-1]);
-        FF3 = zeros(nts,nts);
-        for i = 1:rank3
-            FF3 = FF3 + diag(V3(:,i))*F3.'*diag(U3(:,i));
-        end
-        z2 = kron(kron([vals1;zeros(nts-it,nts)],[vals2;zeros(nts-it,nts)]),FF3)*c;
-        e2 = norm(z2(ind,:)-sum(y2,2))/norm(z2(ind,:))
+        %F3 = exp(1i*2*pi/nts*(xs3-1)*[0:nts-1]);
+        %FF3 = zeros(nts,nts);
+        %for i = 1:rank3
+        %    FF3 = FF3 + diag(V3(:,i))*F3.'*diag(U3(:,i));
+        %end
+        %z2 = kron(kron([vals1;zeros(nts-it,nts)],[vals2;zeros(nts-it,nts)]),FF3)*c;
+        %e2 = norm(z2(ind,:)-sum(y2,2))/norm(z2(ind,:))
         
         ind1 = reshape(repmat([0:nts-1],it,1),it*nts,1)*nts+repmat([1:it]',nts,1);
-        ind = reshape(repmat([0:it-1],it*nts,1),it*it*nts,1)*nts^2+repmat(ind1,it,1));
+        ind = reshape(repmat([0:it-1],it*nts,1),it*it*nts,1)*nts^2+repmat(ind1,it,1);
         d = zeros(nts*it^2,rank2);
         C = repmat(c,1,rank2);
         for i = 1:it
@@ -150,7 +153,7 @@ end
                 for k = 1:nts
                     d1((k-1)*it+1:k*it,:) = repmat(U2(k,:),it,1).*(vals3*C1((k-1)*nts+1:k*nts,:));
                 end
-                d((i-1)*nts*it+1:i*nts*it,:) = d((i-1)*nts^2+1:i*nts^2,:) + vals1(i,j)*d1;
+                d((i-1)*nts*it+1:i*nts*it,:) = d((i-1)*nts*it+1:i*nts*it,:) + vals1(i,j)*d1;
             end
         end
         fft3c = zeros(nts*it^2,rank2);
@@ -167,13 +170,13 @@ end
         y2 = kron(kron(ones(it,1),V2),ones(it,1)).*fft3c;
         y(ind,:) = y(ind,:) + sum(real(y2),2);
         
-        F2 = exp(1i*2*pi/nts*(xs2-1)*[0:nts-1]);
-        FF2 = zeros(nts,nts);
-        for i = 1:rank2
-            FF2 = FF2 + diag(V2(:,i))*F2.'*diag(U2(:,i));
-        end
-        z3 = kron(kron([vals1;zeros(nts-it,nts)],FF2),[vals3;zeros(nts-it,nts)])*c;
-        e3 = norm(z3(ind,:)-sum(y2,2))/norm(z3(ind,:))
+        %F2 = exp(1i*2*pi/nts*(xs2-1)*[0:nts-1]);
+        %FF2 = zeros(nts,nts);
+        %for i = 1:rank2
+        %    FF2 = FF2 + diag(V2(:,i))*F2.'*diag(U2(:,i));
+        %end
+        %z3 = kron(kron([vals1;zeros(nts-it,nts)],FF2),[vals3;zeros(nts-it,nts)])*c;
+        %e3 = norm(z3(ind,:)-sum(y2,2))/norm(z3(ind,:))
         
         ind = [1:it*nts^2]';
         d = zeros(nts^2*it,rank2*rank3);
@@ -193,11 +196,11 @@ end
         y2 = kron(ones(it,1),VV23).*fft3c;
         y(ind,:) = y(ind,:) + sum(real(y2),2);
         
-        z4 = kron(kron([vals1;zeros(nts-it,nts)],FF2),FF3)*c;
-        e4 = norm(z4(ind,:)-sum(y2,2))/norm(z4(ind,:))
+        %z4 = kron(kron([vals1;zeros(nts-it,nts)],FF2),FF3)*c;
+        %e4 = norm(z4(ind,:)-sum(y2,2))/norm(z4(ind,:))
         
         ind1 = reshape(repmat([0:it-1],it,1),it*it,1)*nts+repmat([1:it]',it,1);
-        ind = reshape(repmat([0:nts-1],it*it,1),it*it*nts,1)*nts^2+repmat(ind1,nts,1));
+        ind = reshape(repmat([0:nts-1],it*it,1),it*it*nts,1)*nts^2+repmat(ind1,nts,1);
         d = zeros(nts*it^2,rank1);
         C = repmat(c,1,rank1);
         for i = 1:nts 
@@ -207,18 +210,18 @@ end
         fft3c = zeros(nts*it*it,rank1);
         for i = 1:it*it
             d1 = P1*d(sl+(i-1),:);
-            fft3c(sl+(i-1),:) = conj(fft(conj(d)));
+            fft3c(sl+(i-1),:) = conj(fft(conj(d1)));
         end
         y2 = kron(V1,kron(ones(it,1),ones(it,1))).*fft3c;
         y(ind,:) = y(ind,:) + sum(y2,2);
         
-        F1 = exp(1i*2*pi/nts*(xs1-1)*[0:nts-1]);
-        FF1 = zeros(nts,nts);
-        for i = 1:rank1
-            FF1 = FF1 + diag(V1(:,i))*F1.'*diag(U1(:,i));
-        end
-        z5 = kron(kron(FF1,[vals2;zeros(nts-it,nts)]),[vals3;zeros(nts-it,nts)])*c;
-        e5 = norm(z5(ind,:)-sum(y2,2))/norm(z5(ind,:))
+        %F1 = exp(1i*2*pi/nts*(xs1-1)*[0:nts-1]);
+        %FF1 = zeros(nts,nts);
+        %for i = 1:rank1
+        %    FF1 = FF1 + diag(V1(:,i))*F1.'*diag(U1(:,i));
+        %end
+        %z5 = kron(kron(FF1,[vals2;zeros(nts-it,nts)]),[vals3;zeros(nts-it,nts)])*c;
+        %e5 = norm(z5(ind,:)-sum(y2,2))/norm(z5(ind,:))
         
         ind = reshape(repmat([0:nts-1],it*nts,1),it*nts^2,1)*nts^2+repmat([1:it*nts]',nts,1);
         d = zeros(nts^2*it,rank1*rank3);
@@ -252,11 +255,11 @@ end
             d1 = P1*fft3c(sl+(i-1),:);
             fft3c(sl+(i-1),:) = conj(fft(conj(d1)));
         end
-        d = kron(V1,kron(ones(it,1),V3)).*fft3c;
+        y2 = kron(V1,kron(ones(it,1),V3)).*fft3c;
         y(ind,:) = y(ind,:) + sum(real(y2),2);
         
-        z6 = kron(kron(FF1,[vals2;zeros(nts-it,nts)]),FF3)*c;
-        e6 = norm(z6(ind,:)-sum(y2,2))/norm(z6(ind,:))
+        %z6 = kron(kron(FF1,[vals2;zeros(nts-it,nts)]),FF3)*c;
+        %e6 = norm(z6(ind,:)-sum(y2,2))/norm(z6(ind,:))
 	%y = y + sum(real(z6),2);
         
         ind = reshape(repmat([0:nts^2-1],it,1),it*nts^2,1)*nts+repmat([1:it]',nts^2,1);
@@ -276,19 +279,19 @@ end
         y2 = kron(VV12,ones(it,1)).*fft3c;
         y(ind,:) = y(ind,:) + sum(real(y2),2);
         
-        z7 = kron(kron(FF1,FF2),[vals3;zeros(nts-it,nts)])*c;
-        e7 = norm(z7(ind,:)-sum(y2,2))/norm(z7(ind,:))
+        %z7 = kron(kron(FF1,FF2),[vals3;zeros(nts-it,nts)])*c;
+        %e7 = norm(z7(ind,:)-sum(y2,2))/norm(z7(ind,:))
         
         d = UUU.*repmat(c,1,rank1*rank2*rank3);
         fft3c = PPP*d;
-        fft3c = conj(ifft3(conj(reshape(fft3c,nts,nts,nts,rank1*rank2*rank3))));
+        fft3c = conj(fft3(conj(reshape(fft3c,nts,nts,nts,rank1*rank2*rank3))));
         fft3c = reshape(fft3c,nts^3,rank1*rank2*rank3);
-        d = VVV.*fft3c;
+        y2 = VVV.*fft3c;
         y = y + sum(real(y2),2);
 	    y = real(y);
         
-        z8 = kron(kron(FF1,FF2),FF3)*c;
-        e8 = norm(z8-sum(y2,2))/norm(z8)
+        %z8 = kron(kron(FF1,FF2),FF3)*c;
+        %e8 = norm(z8-sum(y2,2))/norm(z8)
     end
 
     

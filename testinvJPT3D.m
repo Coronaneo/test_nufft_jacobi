@@ -59,18 +59,19 @@ for ii=1:es
     tic;
     
     result3 = directinvjac3d(nts,ts1,ts2,ts3,wghts,wghts,wghts,n1,da,db,c);
-    vals = jacrecur(nts,ts,it-1,da,db);
-    J = interpjac1(nt,ts,nu,da,db,1);
-    J = [zeros(nts,it) J];
-    F = exp(1i*2*pi/nts*(xs-1)*[0:nts-1]);
-    J = J.*F;
-    J(:,1:it) = vals;
-    J = J.';
-    c = kron(kron(1./sqrt(wghts),1./sqrt(wghts)),1./sqrt(wghts))*c;
-    result4 = real(kron(kron(J,J),J)*c);
+    %vals = jacrecur(nts,ts,it-1,da,db);
+    %J = interpjac1(nt,ts,nu,da,db,1);
+    %J = [zeros(nts,it) J];
+    %F = exp(1i*2*pi/nts*(xs-1)*[0:nts-1]);
+    %J = J.*F;
+    %J(:,1:it) = vals;
+    %J = diag(sqrt(wghts))*J;
+    %J = J.';
+    %d = kron(kron(1./sqrt(wghts),1./sqrt(wghts)),1./sqrt(wghts)).*c;
+    %result4 = real(kron(kron(J,J),J)*d);
     timedir = nts*nts*nts/round(m)*(toc);
-    norm(result3-result4(n1))/norm(result3)
-
+    %norm(result3-result4(n1))/norm(result3)
+    %result3 = result4(n1);
 
 
     %xs=mod(floor(ts*nts/2/pi),nts)+1;

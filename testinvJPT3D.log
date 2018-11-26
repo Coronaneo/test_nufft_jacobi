@@ -1,0 +1,47 @@
+MATLAB is selecting SOFTWARE OPENGL rendering.
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2018 The MathWorks, Inc.
+                   R2018a (9.4.0.813654) 64-bit (glnxa64)
+                             February 23, 2018
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+>> >> >> >> >> 
+tol =
+
+     1.000000000000000e-08
+
+>> >> >> >> >> >> >> >> >> >> >> >> 
+>> start 3D inv uniform Jacobi polynomial transform test:>> 
+>> da = 0.25,db = 0.25
+>> >> size  our_rank1  our_rank2  our_rank3  error_our      our_time       dir_time       fac_time       
+>> >> >> >> >> >> >> >> >> >> >> 
+  21    7          7          7          9.821786E-09   1.033500E+00   3.238595E+02   6.523430E-02
+
+  23    7          7          7          5.973184E-08   1.215328E+00   3.384129E+01   5.445990E-02
+
+  26    8          8          8          2.138396E-09   1.995191E+00   2.763299E+01   8.536800E-02
+
+  29    8          8          8          6.550470E-09   2.807029E+00   2.574503E+01   1.110545E-01
+
+  32    8          8          8          4.380410E-08   4.588258E+00   6.990725E+01   1.427795E-01
+
+  36    8          8          8          1.930466E-08   6.631272E+00   7.063718E+01   1.967611E-01
+
+  39    8          8          8          4.570847E-08   7.917903E+00   1.000830E+02   2.374008E-01
+
+  44    9          9          9          2.357284E-08   1.275265E+01   2.165888E+02   3.969600E-01
+
+  49    9          9          9          3.481226E-08   1.604278E+01   2.523375E+02   5.297832E-01
+
+  54    9          9          9          1.346995E-08   2.023993E+01   2.012390E+02   6.875016E-01
+
+  60    9          9          9          5.031932E-08   2.708703E+01   5.047560E+02   9.204509E-01
+>> >> >> [Warning: MATLAB has disabled some advanced graphics rendering features by
+switching to software OpenGL. For more information, click <a
+href="matlab:opengl('problems')">here</a>.] 
+>> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> MATLAB: management.cpp:671: find: Assertion `' failed.
+MATLAB: management.cpp:671: find: Assertion `' failed.

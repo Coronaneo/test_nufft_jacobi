@@ -12,7 +12,7 @@ w = zeros(m,1);
 nu = [it:nts-1]';
 nt = zeros(nts,1);
 c = c(:);
-c = kron(kron(1./wghtr,1./wghts),1./wghtt).*c;
+c = kron(kron(1./sqrt(wghtr),1./sqrt(wghts)),1./sqrt(wghtt)).*c;
 for i = 1:m
     kk = floor((n(i)-0.5)/nts/nts);
     jj = floor((n(i)-kk*nts*nts-0.5)/nts);
@@ -27,7 +27,7 @@ for i = 1:m
         x = x.';
     end
     if  jj < it
-        y = valr(:,jj+1);
+        y = vals(:,jj+1);
         y = sqrt(wghts).*y;
         y = y.';
     else
@@ -36,7 +36,7 @@ for i = 1:m
         y = y.';
     end
     if  ii < it+1
-        z = valr(:,ii);
+        z = valt(:,ii);
         z = sqrt(wghtt).*z;
         z = z.';
     else
