@@ -46,9 +46,9 @@ nts = mxGetM(prhs(6))
 nnu = mxGetM(prhs(7))
 
 if (n .lt. (2**12)) then
-it = 9
+it = 10
 else 
-it = 27
+it = 28
 end if
 
 allocate(c(nnu),r(nn),ts(nts),nu(nnu),twhts(n),rd(nn),rd1(nn),wghts(nts))

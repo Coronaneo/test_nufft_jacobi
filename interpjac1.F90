@@ -28,9 +28,9 @@ real*8 da,db,flag,pi,dd
 pi=acos(-1.0d0)
 
 if (n .lt. (2**12)) then
-it = 9
+it = 10
 else 
-it = 27
+it = 28
 end if
 
 n = mxGetM(prhs(1))

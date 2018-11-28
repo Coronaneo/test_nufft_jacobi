@@ -18,9 +18,9 @@ function [fun,rank] = NJPT1D(nts,ts,da,db,tR,mR,tol,opt,R_or_N)
 
 
     if nts < 2^12
-       it = 9;
+       it = 10;
     else
-       it = 27;
+       it = 28;
     end
 nu = [it:nts-1]';
 xs = mod(floor(ts*nts/2/pi),nts)+1;

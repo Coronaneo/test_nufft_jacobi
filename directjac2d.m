@@ -1,8 +1,8 @@
 function y = directjac2d(nts,s,t,n,da,db,c)
 if nts < 2^12
-   it = 9;
+   it = 10;
 else
-   it = 27;
+   it = 28;
 end
 vals = jacrecur(nts,s,it-1,da,db);
 valt = jacrecur(nts,t,it-1,da,db);

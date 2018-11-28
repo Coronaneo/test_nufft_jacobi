@@ -44,10 +44,10 @@ nn1 = mxGetM(prhs(5))
 nn2 = mxGetM(prhs(6))
 nn3 = mxGetM(prhs(7))
 
-if (n .lt. (2**12-1)) then
-it = 27
+if (n .lt. 2**12) then
+it = 10
 else 
-it = 9
+it = 28
 end if
 
 allocate(c((n-it)**3),r(nn1*nn2*nn3),r1(nn1),r2(nn2),r3(nn3),rr(nn3),ts(n),twhts(n))

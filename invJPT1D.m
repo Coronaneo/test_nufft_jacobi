@@ -19,9 +19,9 @@ function [fun,rank,ts,wghts] = invJPT1D(nts,da,db,tR,mR,tol,opt,R_or_N)
 
 
     if nts < 2^12
-       it = 9;
+       it = 10;
     else
-       it = 27;
+       it = 28;
     end
 nt = zeros(nts,1);
 [ts,wghts] = getts(nt,da,db);

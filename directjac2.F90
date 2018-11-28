@@ -42,10 +42,10 @@ n = mxGetM(prhs(1))
 nn1 = mxGetM(prhs(5))
 nn2 = mxGetM(prhs(6))
 
-if (n .lt. (2**12-1)) then
-it = 27
+if (n .lt. 2**12) then
+it = 10
 else 
-it = 9
+it = 28
 end if
 
 allocate(c((n-it)**2),r(nn1*nn2),rr(nn2),rrr(nn1),ts(n),twhts(n))

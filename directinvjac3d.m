@@ -1,8 +1,8 @@
 function w = directinvjac3d(nts,r,s,t,wghtr,wghts,wghtt,n,da,db,c)
 if nts < 2^12
-   it = 9;
+   it = 10;
 else
-   it = 27;
+   it = 28;
 end
 valr = jacrecur(nts,r,it-1,da,db);
 vals = jacrecur(nts,s,it-1,da,db);

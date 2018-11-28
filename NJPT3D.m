@@ -16,9 +16,9 @@ function [fun,rank1,rank2,rank3] = NJPT3D(nts,ts1,ts2,ts3,da,db,tR,mR,tol,opt,R_
 %  Copyright reserved by Qiyuan Pang, 22/11/2018     
 
     if nts < 2^12
-       it = 9;
+       it = 10;
     else
-       it = 27;
+       it = 28;
     end
 nt = zeros(nts,1);
 %[ts,wghts] = getts(nt,da,db);
