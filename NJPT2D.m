@@ -36,12 +36,12 @@ if opt >= 1
     %U = diag(sqrt(wghts))*U;
     V2 = conj(V2);
 elseif 0 <= opt && opt<1
-    [U1,V1] = ID_Cheby1(nts,ts1,nu,da,db,tol,1,R_or_N,tR,mR);
-    [U2,V2] = ID_Cheby1(nts,ts2,nu,da,db,tol,1,R_or_N,tR,mR);
+    [U1,V1] = ID_Cheby(nts,ts1,nu,da,db,tol,1,R_or_N,tR,mR);
+    [U2,V2] = ID_Cheby(nts,ts2,nu,da,db,tol,1,R_or_N,tR,mR);
     %U = diag(sqrt(wghts))*U;
 elseif opt < 0
-    [U1,V1] = ID_Cheby1(nts,ts1,nu,da,db,tol,-1,R_or_N,tR,mR);
-    [U2,V2] = ID_Cheby1(nts,ts2,nu,da,db,tol,-1,R_or_N,tR,mR);
+    [U1,V1] = ID_Cheby(nts,ts1,nu,da,db,tol,-1,R_or_N,tR,mR);
+    [U2,V2] = ID_Cheby(nts,ts2,nu,da,db,tol,-1,R_or_N,tR,mR);
     %U = diag(sqrt(wghts))*U;
 end
 rank1 = size(U1,2);

@@ -32,9 +32,9 @@ if  opt > 0
     [U,V] = lowrank(nts,JTM,ts,nu,tol,tR,mR);
      V = conj(V);
 elseif 0 <= opt && opt<1
-    [U,V] = ID_Cheby1(nts,ts,nu,da,db,tol,1,R_or_N,tR,mR);
+    [U,V] = ID_Cheby(nts,ts,nu,da,db,tol,1,R_or_N,tR,mR);
 elseif opt < 0
-    [U,V] = ID_Cheby1(nts,ts,nu,da,db,tol,-1,R_or_N,tR,mR);
+    [U,V] = ID_Cheby(nts,ts,nu,da,db,tol,-1,R_or_N,tR,mR);
 end
 rank = size(U,2);
 V = [zeros(it,rank);V];

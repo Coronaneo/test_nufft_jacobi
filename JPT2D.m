@@ -32,10 +32,10 @@ if opt >= 1
     %U = diag(sqrt(wghts))*U;
     V = conj(V);
 elseif 0 <= opt && opt<1
-    [U,V] = ID_Cheby1(nts,ts,nu,da,db,tol,1,R_or_N,tR,mR);
+    [U,V] = ID_Cheby(nts,ts,nu,da,db,tol,1,R_or_N,tR,mR);
     %U = diag(sqrt(wghts))*U;
 elseif opt < 0
-    [U,V] = ID_Cheby1(nts,ts,nu,da,db,tol,-1,R_or_N,tR,mR);
+    [U,V] = ID_Cheby(nts,ts,nu,da,db,tol,-1,R_or_N,tR,mR);
     %U = diag(sqrt(wghts))*U;
 end
 U1 = U;
