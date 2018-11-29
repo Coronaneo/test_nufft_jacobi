@@ -1,6 +1,6 @@
 format long
-flag = -1;%don't change this value, now just works for flag > 0
-num=5;
+flag = 1%don't change this value, now just works for flag > 0
+num=1;
 da=0.25;
 db=0.25;
 tol=1e-8
@@ -125,7 +125,7 @@ for ii=1:es
     
         tic
         for i = 1:num
-            [fun,rank2(ii)] = JPT1D(nts,da,db,tR,mR,tol,1,1);
+            [fun,rank2(ii)] = JPT1D(nts,da,db,tR,mR,tol,0,-1);
         end
         timefac2(ii)=toc/num;
 
@@ -167,7 +167,7 @@ for ii=1:es
     
         tic
         for i = 1:num
-            [fun,rank2(ii)] = NJPT1D(nts,ts,da,db,tR,mR,tol,1,1);
+            [fun,rank2(ii)] = NJPT1D(nts,ts,da,db,tR,mR,tol,0,-1);
         end
         timefac2(ii)=toc/num;
 

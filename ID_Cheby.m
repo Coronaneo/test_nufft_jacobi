@@ -30,7 +30,7 @@ function [U,V] = ID_Cheby(n,x,k,da,db,tol,opt,R_or_N,tR,mR)
 %kk = max(20*(ceil(log2(n))+1),kktol);
 
 
-kk = tR;
+kk = 3*tR;
 chebygrid = cos([kk-1:-1:0]'*pi/(kk-1));
 
 %%%%%%%% chebyshev grids on (0,pi)
@@ -42,8 +42,9 @@ if  opt > 0
     nu = k;
 else
 %%%%%%%%%%%%%%  chebyshev grids on (n-26,n) or (n-8,n), depends on n
-    xx = 5*(ceil(log2(n))+1);
-    chebygrid = cos([xx-1:-1:0]'*pi/(xx-1));
+    %xx = 10*(ceil(log2(n))+1);
+    xx = 30*tR;
+    chebygrid1 = cos([xx-1:-1:0]'*pi/(xx-1));
     nu = (n-k(1)-1)/2*chebygrid1+(n+k(1)-1)/2;
 end
 
@@ -79,12 +80,15 @@ end
 if  opt > 0
 %%%%%%%%%% construct left factor V in fun(x,k) = U*V.'
     V = V1;
+    B = interpjac1(nt,x,k,da,db,R_or_N);
+    norm(B-S*A)/norm(B)
 else
 V = zeros(size(k,1),rr);
 w = [1/2 (-1).^[1:xx-2] 1/2*(-1)^(xx-1)]';
-P = Lagrange(k,nu,w);
+P = barcycheby(k,nu,w);
 V = P*V1;
-
+B = interpjac1(nt,ts,k,da,db,R_or_N);
+norm(B-A*P.')/norm(B)
 end
 
 end
