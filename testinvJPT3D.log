@@ -19,29 +19,59 @@ tol =
 >> da = 0.25,db = 0.25
 >> >> size  our_rank1  our_rank2  our_rank3  error_our      our_time       dir_time       fac_time       
 >> >> >> >> >> >> >> >> >> >> >> 
-  21    7          7          7          1.445629E-08   2.124021E+00   4.619757E+02   8.133410E-02
+  21    7          7          7          1.246167E-08   1.781673E+00   3.461785E+02   1.829967E-01
 
-  23    7          7          7          1.518477E-08   2.311247E+00   1.294593E+02   7.008450E-02
+  23    7          7          7          2.647772E-08   2.258674E+00   3.466135E+01   2.361466E-01
 
-  26    8          8          8          3.407174E-10   4.436904E+00   6.796288E+01   1.126968E-01
+  26    8          8          8          2.230946E-09   3.654101E+00   2.887034E+01   4.314882E-01
 
-  29    8          8          8          1.004538E-08   5.067236E+00   1.830248E+02   1.434131E-01
+  29    8          8          8          6.589734E-09   5.042755E+00   2.792053E+01   5.917034E-01
 
-  32    8          8          8          8.504952E-09   7.310438E+00   8.678932E+01   1.726284E-01
+  32    8          8          8          4.248545E-08   5.969462E+00   7.377388E+01   7.839788E-01
 
-  36    8          8          8          3.406736E-08   9.356354E+00   5.663012E+02   2.585312E-01
+  36    8          8          8          3.536009E-08   8.251179E+00   7.200887E+01   1.049843E+00
 
-  39    8          8          8          1.597025E-08   1.086379E+01   6.350336E+02   3.241919E-01
+  39    8          8          8          2.932257E-08   9.721299E+00   7.042352E+01   1.209199E+00
 
-  44    9          9          9          6.080096E-09   1.760317E+01   8.171871E+02   7.564646E-01
+  44    9          9          9          2.482232E-09   1.688543E+01   1.386114E+02   2.241318E+00
 
-  49    9          9          9          7.120180E-09   2.177550E+01   1.294610E+03   1.090303E+00
+  49    9          9          9          1.033000E-08   2.246298E+01   2.252586E+02   3.063103E+00
 
-  54    9          9          9          1.269705E-08   3.128383E+01   9.847799E+02   1.015735E+00
+  54    9          9          9          1.724399E-08   2.903869E+01   3.573121E+02   3.873865E+00
 
-  60    9          9          9          3.664848E-08   4.287820E+01   4.563324E+03   1.634841E+00
+  60    9          9          9          3.715491E-08   3.831323E+01   5.974200E+02   5.586000E+00
 >> >> >> [Warning: MATLAB has disabled some advanced graphics rendering features by
 switching to software OpenGL. For more information, click <a
 href="matlab:opengl('problems')">here</a>.] 
->> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> MATLAB: management.cpp:671: find: Assertion `' failed.
+>> >> >> >> >> >> >> >> >> {Error using legend>process_inputs (line 554)
+Invalid argument. Type 'help legend' for more information.
+
+Error in legend>make_legend (line 306)
+[autoupdate,orient,location,position,children,listen,strings,propargs] =
+process_inputs(ha,argin); %#ok
+
+Error in legend (line 259)
+    make_legend(ha,args(arg:end),version);
+} 
+>> >> >> >> >> >> >> >> >> >> >> >> {Error using legend>process_inputs (line 554)
+Invalid argument. Type 'help legend' for more information.
+
+Error in legend>make_legend (line 306)
+[autoupdate,orient,location,position,children,listen,strings,propargs] =
+process_inputs(ha,argin); %#ok
+
+Error in legend (line 259)
+    make_legend(ha,args(arg:end),version);
+} 
+>> >> >> >> >> >> >> >> >> >> >> >> {Error using legend>process_inputs (line 554)
+Invalid argument. Type 'help legend' for more information.
+
+Error in legend>make_legend (line 306)
+[autoupdate,orient,location,position,children,listen,strings,propargs] =
+process_inputs(ha,argin); %#ok
+
+Error in legend (line 259)
+    make_legend(ha,args(arg:end),version);
+} 
+>> >> >> >> >> >> >> >> MATLAB: management.cpp:671: find: Assertion `' failed.
 MATLAB: management.cpp:671: find: Assertion `' failed.

@@ -19,19 +19,49 @@ tol =
 >> da = 0.25,db = 0.25
 >> >> size  our_rank1  our_rank2  error_our      our_time       dir_time       fac_time       
 >> >> >> >> >> >> >> >> >> >> 
-  5     8          8          1.119405E-08   2.759760E-02   2.295910E+01   4.599600E-02
+  5     8          8          1.119405E-08   1.294010E-02   2.333778E+01   2.064255E-02
 
-  6     9          9          2.453516E-08   3.731700E-02   5.763891E+01   3.829020E-02
+  6     9          9          2.453516E-08   3.001990E-02   6.785297E+01   3.211250E-02
 
-  7     11         11         1.150347E-08   1.191024E-01   5.310920E+02   8.959480E-02
+  7     11         11         3.544419E-09   1.089465E-01   5.276654E+02   8.073030E-02
 
-  8     12         12         8.644323E-09   4.289684E-01   5.293924E+03   2.163342E-01
+  8     12         12         7.877737E-09   4.087436E-01   4.860854E+03   1.986390E-01
 
-  9     14         14         1.035050E-08   1.937278E+00   4.515360E+04   5.779684E-01
+  9     14         14         2.461210E-09   1.789565E+00   4.360346E+04   5.470124E-01
 
-  10    15         15         5.981520E-09   8.440491E+00   4.205274E+05   1.873699E+00
+  10    15         15         1.489208E-08   2.281610E+01   4.283464E+05   8.700190E+00
 >> >> >> [Warning: MATLAB has disabled some advanced graphics rendering features by
 switching to software OpenGL. For more information, click <a
 href="matlab:opengl('problems')">here</a>.] 
->> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> MATLAB: management.cpp:671: find: Assertion `' failed.
+>> >> >> >> >> >> >> {Error using legend>process_inputs (line 554)
+Invalid argument. Type 'help legend' for more information.
+
+Error in legend>make_legend (line 306)
+[autoupdate,orient,location,position,children,listen,strings,propargs] =
+process_inputs(ha,argin); %#ok
+
+Error in legend (line 259)
+    make_legend(ha,args(arg:end),version);
+} 
+>> >> >> >> >> >> >> >> >> >> >> >> {Error using legend>process_inputs (line 554)
+Invalid argument. Type 'help legend' for more information.
+
+Error in legend>make_legend (line 306)
+[autoupdate,orient,location,position,children,listen,strings,propargs] =
+process_inputs(ha,argin); %#ok
+
+Error in legend (line 259)
+    make_legend(ha,args(arg:end),version);
+} 
+>> >> >> >> >> >> >> >> >> >> >> >> {Error using legend>process_inputs (line 554)
+Invalid argument. Type 'help legend' for more information.
+
+Error in legend>make_legend (line 306)
+[autoupdate,orient,location,position,children,listen,strings,propargs] =
+process_inputs(ha,argin); %#ok
+
+Error in legend (line 259)
+    make_legend(ha,args(arg:end),version);
+} 
+>> >> >> >> >> >> >> >> MATLAB: management.cpp:671: find: Assertion `' failed.
 MATLAB: management.cpp:671: find: Assertion `' failed.

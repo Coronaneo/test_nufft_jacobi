@@ -17,20 +17,20 @@ mwPointer    :: mxGetPr, mxGetPi, mxCreateDoubleMatrix
 ! define a size integer so that we can get its type
 mwSize       :: nt,nx,nw
 
-type(jacobi_expansion_data), intent(out)  :: expdata
+type(jacobi_expansion_data)  :: expdata
 real*8, allocatable :: cosvals(:,:),sinvals(:,:),r(:,:)
 real*8 eps,iffactor,dmax,da,db
-integer*4 nv,mv,nr,mr
+integer*4 nv,mv,nr,mr,iffactor1
 
 call mxCopyPtrToReal8(mxGetPr(prhs(1)),eps,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(2)),iffactor,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(3)),dmax,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(4)),da,1)
 call mxCopyPtrToReal8(mxGetPr(prhs(5)),db,1)
+iffactor1 = int(iffactor)
+call jacobi_expansion(eps,iffactor1,dmax,da,db,expdata)
 
-call jacobi_expansion(eps,iffactor,dmax,da,db,expdata)
-
-if (iffactor .eq. 1) then
+if (iffactor .eq. 1.0d0) then
    nv = size(expdata%cosvals0,1)
    mv = size(expdata%cosvals0,2)
    nr = size(expdata%r,1)
@@ -41,9 +41,9 @@ else
    nr = 1
    mr = 1
 end if
-allocate(cosvals(nv,mv),sinvals(nv,mv),r(nr,mr),r(nr,mr))
+allocate(cosvals(nv,mv),sinvals(nv,mv),r(nr,mr))
 
-if (iffactor .eq. 1) then
+if (iffactor .eq. 1.0d0) then
    cosvals = expdata%cosvals0
    sinvals = expdata%sinvals0
    r = expdata%r

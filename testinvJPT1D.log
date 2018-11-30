@@ -19,27 +19,57 @@ tol =
 >> da = 0.25,db = 0.25
 >> size  our_rank   error_our      our_time       dir_time       time_fac       
 >> >> >> >> >> >> >> 
-  7     11         1.027128E-08   3.149800E-03   7.173486E-02   1.428215E-01
+  7     11         5.816731E-08   1.363300E-03   5.386971E-02   8.168165E-02
 
-  8     12         1.364692E-08   4.222000E-04   6.144000E-02   2.186546E-01
+  8     12         3.742956E-09   1.508000E-04   5.408000E-02   1.403546E-01
 
-  9     14         8.453014E-09   3.319000E-04   1.503573E-01   5.229877E-01
+  9     14         5.428523E-09   2.738500E-04   1.317547E-01   2.931919E-01
 
-  10    15         2.409004E-09   8.131000E-04   3.414016E-01   9.546827E-01
+  10    15         7.768468E-09   5.625000E-04   3.191808E-01   6.270107E-01
 
-  11    16         5.540649E-09   2.761800E-03   1.109085E+00   2.065587E+00
+  11    16         4.455565E-09   1.227150E-03   9.860189E-01   1.439808E+00
 
-  12    16         3.514641E-09   2.445400E-03   2.962432E+00   4.521774E+00
+  12    16         8.796778E-09   2.393850E-03   2.820779E+00   3.130241E+00
 
-  13    16         6.528630E-09   1.068970E-02   1.112978E+01   9.510581E+00
+  13    17         5.022246E-09   5.469950E-03   8.357730E+00   7.045259E+00
 
-  14    17         5.341728E-09   3.829440E-02   3.528060E+01   1.948395E+01
+  14    17         7.679475E-09   1.174175E-02   2.959184E+01   1.743642E+01
 
-  15    17         2.364447E-08   2.373730E-02   1.340430E+02   4.624369E+01
+  15    18         1.461999E-08   2.735210E-02   1.261284E+02   4.850488E+01
 
-  16    17         5.671223E-08   2.247190E-02   4.831437E+02   1.143775E+02
+  16    19         9.388832E-09   5.593385E-02   4.868956E+02   1.439809E+02
 >> >> >> [Warning: MATLAB has disabled some advanced graphics rendering features by
 switching to software OpenGL. For more information, click <a
 href="matlab:opengl('problems')">here</a>.] 
->> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> MATLAB: management.cpp:671: find: Assertion `' failed.
+>> >> >> >> >> >> {Error using legend>process_inputs (line 554)
+Invalid argument. Type 'help legend' for more information.
+
+Error in legend>make_legend (line 306)
+[autoupdate,orient,location,position,children,listen,strings,propargs] =
+process_inputs(ha,argin); %#ok
+
+Error in legend (line 259)
+    make_legend(ha,args(arg:end),version);
+} 
+>> >> >> >> >> >> >> >> >> >> >> >> {Error using legend>process_inputs (line 554)
+Invalid argument. Type 'help legend' for more information.
+
+Error in legend>make_legend (line 306)
+[autoupdate,orient,location,position,children,listen,strings,propargs] =
+process_inputs(ha,argin); %#ok
+
+Error in legend (line 259)
+    make_legend(ha,args(arg:end),version);
+} 
+>> >> >> >> >> >> >> >> >> >> >> >> {Error using legend>process_inputs (line 554)
+Invalid argument. Type 'help legend' for more information.
+
+Error in legend>make_legend (line 306)
+[autoupdate,orient,location,position,children,listen,strings,propargs] =
+process_inputs(ha,argin); %#ok
+
+Error in legend (line 259)
+    make_legend(ha,args(arg:end),version);
+} 
+>> >> >> >> >> >> >> >> MATLAB: management.cpp:671: find: Assertion `' failed.
 MATLAB: management.cpp:671: find: Assertion `' failed.
