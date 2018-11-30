@@ -167,7 +167,7 @@ end
     h(4) = plot(vd,6*vd-6*vd(1)+ag,'--r','LineWidth',2);
     h(5) = plot(vd,log2(timeour)-log2(timeour(1))+ag,'-^r','LineWidth',2);
     h(6) = plot(vd,log2(timefac)-log2(timefac(1))+ag,'-^g','LineWidth',2);
-    legend('N^3 log(N)','N^3 log(N)^2','N^3 log(N)^3','N^6','timeapp','timefac','Location','NorthWest','FontSize',12);
+    legend('N^3 log(N)','N^3 log(N)^2','N^3 log(N)^3','N^6','timeapp','timefac','Location','NorthWest');
     %title('3D nonuniform JPT, time');
     axis square;
     xlabel('log_2(N)'); ylabel('log_{2}(time)');
@@ -179,7 +179,7 @@ end
     pic1 = figure;
     hold on;
     h(1) = plot(vd,log10(errorour),'--k','LineWidth',2);
-    legend('relerr','Location','NorthWest','FontSize',12);
+    legend('relerr','Location','NorthWest');
     %title('3D nonuniform JPT, relerr');
     axis square;
     xlabel('log_2(N)'); ylabel('log_{10}(relerr)');
@@ -191,7 +191,7 @@ end
     pic2 = figure;
     hold on;
     h(1) = plot(vd,rank1.*rank2.*rank3,'--k','LineWidth',2);
-    legend('rank','Location','NorthWest','FontSize',12);
+    legend('rank','Location','NorthWest');
     %title('3D nonuniform JPT, rank');
     axis square;
     xlabel('log_2(N)'); ylabel('rank');

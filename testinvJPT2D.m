@@ -159,7 +159,7 @@ end
     h(3) = plot(vd,4*vd-4*vd(1)+ag,'--r','LineWidth',2);
     h(4) = plot(vd,log2(timeour)-log2(timeour(1))+ag,'-^r','LineWidth',2);
     h(5) = plot(vd,log2(timefac)-log2(timefac(1))+ag,'-^g','LineWidth',2);
-    legend('N^2 log(N)','N^2 log(N)^2','N^4','timeapp','timefac','Location','NorthWest','FontSize',12);
+    legend('N^2 log(N)','N^2 log(N)^2','N^4','timeapp','timefac','Location','NorthWest');
     %title('2D inv uniform JPT, time');
     axis square;
     xlabel('log_2(N)'); ylabel('log_{2}(time)');
@@ -171,7 +171,7 @@ end
     pic1 = figure;
     hold on;
     h(1) = plot(vd,log10(errorour),'--k','LineWidth',2);
-    legend('relerr','Location','NorthWest','FontSize',12);
+    legend('relerr','Location','NorthWest');
     %title('2D inv uniform JPT, relerr');
     axis square;
     xlabel('log_2(N)'); ylabel('log_{10}(relerr)');
@@ -183,7 +183,7 @@ end
     pic2 = figure;
     hold on;
     h(1) = plot(vd,rank1.*rank2,'--k','LineWidth',2);
-    legend('rank','Location','NorthWest','FontSize',12);
+    legend('rank','Location','NorthWest');
     %title('2D inv uniform JPT, rank');
     axis square;
     xlabel('log_2(N)'); ylabel('rank');

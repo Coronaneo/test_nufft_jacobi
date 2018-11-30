@@ -19,111 +19,27 @@ tol =
 >> da = 0.25,db = 0.25
 >> size  our_rank   error_our      our_time       dir_time       time_fac       
 >> >> >> >> >> >> >> >> 
-  7     11         7.930717E-09   1.215150E-03   1.763237E+00  7.472940E-02
+  7     11         7.930717E-09   1.176600E-03   1.800503E+00  7.660515E-02
 
-  8     12         8.237045E-09   1.374000E-04   1.397792E+00  1.357608E-01
+  8     12         8.237045E-09   1.343000E-04   1.398912E+00  1.371609E-01
 
-  9     14         4.474659E-09   2.970500E-04   5.960306E+00  2.870616E-01
+  9     14         4.474659E-09   2.923500E-04   6.008320E+00  2.904499E-01
 
-  10    14         9.211653E-09   5.015000E-04   2.828411E+01  6.065423E-01
+  10    14         9.211653E-09   5.019000E-04   2.918922E+01  6.160189E-01
 
-  11    16         2.791661E-09   1.214450E-03   1.379192E+02  1.316812E+00
+  11    16         2.791661E-09   1.225150E-03   1.333343E+02  1.351794E+00
 
---------------------------------------------------------------------------------
-       Segmentation violation detected at Thu Nov 29 19:51:22 2018 -0800
---------------------------------------------------------------------------------
+  12    17         2.987681E-09   2.690900E-03   8.082104E+02  3.051075E+00
 
-Configuration:
-  Crash Decoding           : Disabled - No sandbox or build area path
-  Crash Mode               : continue (default)
-  Default Encoding         : UTF-8
-  Deployed                 : false
-  GNU C Library            : 2.27 stable
-  Graphics Driver          : Unknown software 
-  Java Version             : Java 1.8.0_144-b01 with Oracle Corporation Java HotSpot(TM) 64-Bit Server VM mixed mode
-  MATLAB Architecture      : glnxa64
-  MATLAB Entitlement ID    : 5215510
-  MATLAB Root              : /usr/local/MATLAB/R2018a
-  MATLAB Version           : 9.4.0.813654 (R2018a)
-  OpenGL                   : software
-  Operating System         : Ubuntu 18.04.1 LTS
-  Process ID               : 20262
-  Processor ID             : x86 Family 6 Model 63 Stepping 2, GenuineIntel
-  Session Key              : 9bc85c8f-e0f4-467c-868b-7c0b27520ad3
-  Static TLS mitigation    : Disabled: Unnecessary 1
-  Window System            : No active display
+  13    17         9.621175E-09   5.545450E-03   4.922704E+03  6.559066E+00
 
-Fault Count: 1
+  14    18         4.635745E-09   1.353565E-02   3.142299E+04  1.417735E+01
 
+  15    18         1.745053E-08   2.656100E-02   2.205612E+05  3.019145E+01
 
-Abnormal termination
-
-Register State (from fault):
-  RAX = 000000000000056d  RBX = 00007f167aeb5580
-  RCX = 00007f15d8a80da0  RDX = 00007f15cbf774a0
-  RSP = 00007f167fffc090  RBP = 00007f167fffc490
-  RSI = 00007f16780008d0  RDI = 00007f15d8b687a0
-
-   R8 = 00007f15cb1d3d48   R9 = 00007f1678bdffc0
-  R10 = 0000000000000010  R11 = 0000000000000010
-  R12 = 0000000000001000  R13 = 00007f15d8a70d90
-  R14 = 00007f15d8b871a0  R15 = 0000000000001000
-
-  RIP = 00007f15cd8e3619  EFL = 0000000000010216
-
-   CS = 0033   FS = 0000   GS = 0000
-
-Stack Trace (from fault):
-[  0] 0x00007f15cd8e3619   /home/qiyuan/test_nufft_jacobi/interpjac1.mexa64+00009753 mexfunction_+00003343
-[  1] 0x00007f16925be352                              bin/glnxa64/libmex.so+00414546
-[  2] 0x00007f16925be447                              bin/glnxa64/libmex.so+00414791
-[  3] 0x00007f16925bef2b                              bin/glnxa64/libmex.so+00417579
-[  4] 0x00007f16925a930c                              bin/glnxa64/libmex.so+00328460
-[  5] 0x00007f16943b22ad                   bin/glnxa64/libmwm_dispatcher.so+00979629 _ZN8Mfh_file16dispatch_fh_implEMS_FviPP11mxArray_tagiS2_EiS2_iS2_+00000829
-[  6] 0x00007f16943b2bae                   bin/glnxa64/libmwm_dispatcher.so+00981934 _ZN8Mfh_file11dispatch_fhEiPP11mxArray_tagiS2_+00000030
-[  7] 0x00007f169075ada1                          bin/glnxa64/libmwm_lxe.so+12619169
-[  8] 0x00007f169075b982                          bin/glnxa64/libmwm_lxe.so+12622210
-[  9] 0x00007f1690843e79                          bin/glnxa64/libmwm_lxe.so+13573753
-[ 10] 0x00007f16907e53e1                          bin/glnxa64/libmwm_lxe.so+13186017
-[ 11] 0x00007f169012dcdd                          bin/glnxa64/libmwm_lxe.so+06143197
-[ 12] 0x00007f1690117784                          bin/glnxa64/libmwm_lxe.so+06051716
-[ 13] 0x00007f169011bcf3                          bin/glnxa64/libmwm_lxe.so+06069491
-[ 14] 0x00007f169062bf6d                          bin/glnxa64/libmwm_lxe.so+11378541
-[ 15] 0x00007f16905d960c                          bin/glnxa64/libmwm_lxe.so+11040268
-[ 16] 0x00007f16905e0448                          bin/glnxa64/libmwm_lxe.so+11068488
-[ 17] 0x00007f16905e1e22                          bin/glnxa64/libmwm_lxe.so+11075106
-[ 18] 0x00007f169066f807                          bin/glnxa64/libmwm_lxe.so+11655175
-[ 19] 0x00007f169066faea                          bin/glnxa64/libmwm_lxe.so+11655914
-[ 20] 0x00007f169282391a                         bin/glnxa64/libmwbridge.so+00207130 _Z8mnParserv+00000874
-[ 21] 0x00007f169489cbb8                            bin/glnxa64/libmwmcr.so+00641976
-[ 22] 0x00007f16a1a2ce9f                         bin/glnxa64/libmwmlutil.so+06524575 _ZNSt13__future_base13_State_baseV29_M_do_setEPSt8functionIFSt10unique_ptrINS_12_Result_baseENS3_8_DeleterEEvEEPb+00000031
-[ 23] 0x00007f16a2a82827              /lib/x86_64-linux-gnu/libpthread.so.0+00063527
-[ 24] 0x00007f16a1a2d126                         bin/glnxa64/libmwmlutil.so+06525222 _ZSt9call_onceIMNSt13__future_base13_State_baseV2EFvPSt8functionIFSt10unique_ptrINS0_12_Result_baseENS4_8_DeleterEEvEEPbEJPS1_S9_SA_EEvRSt9once_flagOT_DpOT0_+00000102
-[ 25] 0x00007f169489c9d3                            bin/glnxa64/libmwmcr.so+00641491
-[ 26] 0x00007f16a62661a2                            bin/glnxa64/libmwmvm.so+03367330 _ZN14cmddistributor15PackagedTaskIIP10invokeFuncIN7mwboost8functionIFvvEEEEENS2_10shared_ptrINS2_13unique_futureIDTclfp_EEEEEERKT_+00000082
-[ 27] 0x00007f16a62664e8                            bin/glnxa64/libmwmvm.so+03368168 _ZNSt17_Function_handlerIFN7mwboost3anyEvEZN14cmddistributor15PackagedTaskIIP10createFuncINS0_8functionIFvvEEEEESt8functionIS2_ET_EUlvE_E9_M_invokeERKSt9_Any_data+00000024
-[ 28] 0x00007f1694ea6e6c                            bin/glnxa64/libmwiqm.so+00867948 _ZN7mwboost6detail8function21function_obj_invoker0ISt8functionIFNS_3anyEvEES4_E6invokeERNS1_15function_bufferE+00000028
-[ 29] 0x00007f1694ea697f                            bin/glnxa64/libmwiqm.so+00866687 _ZN3iqm18PackagedTaskPlugin7executeEP15inWorkSpace_tagRN7mwboost10shared_ptrIN14cmddistributor17IIPCompletedEventEEE+00000447
-[ 30] 0x00007f1694e84ab1                            bin/glnxa64/libmwiqm.so+00727729
-[ 31] 0x00007f1694e67ac8                            bin/glnxa64/libmwiqm.so+00608968
-[ 32] 0x00007f1694e628bf                            bin/glnxa64/libmwiqm.so+00587967
-[ 33] 0x00007f16a5398a05                       bin/glnxa64/libmwservices.so+03262981
-[ 34] 0x00007f16a5399ff2                       bin/glnxa64/libmwservices.so+03268594
-[ 35] 0x00007f16a539a8fb                       bin/glnxa64/libmwservices.so+03270907 _Z25svWS_ProcessPendingEventsiib+00000187
-[ 36] 0x00007f169489dfc3                            bin/glnxa64/libmwmcr.so+00647107
-[ 37] 0x00007f169489e6a4                            bin/glnxa64/libmwmcr.so+00648868
-[ 38] 0x00007f16948973f1                            bin/glnxa64/libmwmcr.so+00619505
-[ 39] 0x00007f16a2a7a6db              /lib/x86_64-linux-gnu/libpthread.so.0+00030427
-[ 40] 0x00007f16a43f288f                    /lib/x86_64-linux-gnu/libc.so.6+01185935 clone+00000063
-[ 41] 0x0000000000000000                                   <unknown-module>+00000000
-
-
-This error was detected while a MEX-file was running. If the MEX-file
-is not an official MathWorks function, please examine its source code
-for errors. Please consult the External Interfaces Guide for information
-on debugging MEX-files.
-** This crash report has been saved to disk as /home/qiyuan/matlab_crash_dump.20262-1 **
-
-
-
-MATLAB is exiting because of fatal error
+  16    19         1.449044E-08   6.090055E-02   1.513300E+06  6.309560E+01
+>> >> >> [Warning: MATLAB has disabled some advanced graphics rendering features by
+switching to software OpenGL. For more information, click <a
+href="matlab:opengl('problems')">here</a>.] 
+>> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> MATLAB: management.cpp:671: find: Assertion `' failed.
+MATLAB: management.cpp:671: find: Assertion `' failed.
