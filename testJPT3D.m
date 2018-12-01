@@ -199,3 +199,4 @@ end
     b=get(gca);
     set(b.XLabel, 'FontSize', 20);set(b.YLabel, 'FontSize', 20);set(b.ZLabel, 'FontSize', 20);set(b.Title, 'FontSize', 20);
     saveas(pic2,['testJPT3D_rank.eps'],'epsc');
+    hold off;

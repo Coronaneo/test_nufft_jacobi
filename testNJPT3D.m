@@ -111,7 +111,7 @@ for ii=1:es
     %P = U*V.';
     %P = [vals P];
     %norm(J-P)/norm(J)
-    tic;
+    tic
     for j=1:num
         result2 = fun(c);
     end
