@@ -163,13 +163,13 @@ end
     pic = figure;
     hold on;
     vd = log2(round(2.^vd));
-    ag = (15*vd(1)+6*log2(vd(1))+log2(timeour(1))+log2(timefac(1)))/6;
+    ag = (log2(timeour(1))+log2(timefac(1)))/2;
     h(1) = plot(vd,3*vd+log2(vd)-3*vd(1)-log2(vd(1))+ag,'--k','LineWidth',2);
     h(2) = plot(vd,3*vd+2*log2(vd)-3*vd(1)-2*log2(vd(1))+ag,'--b','LineWidth',2);
     h(3) = plot(vd,3*vd+3*log2(vd)-3*vd(1)-3*log2(vd(1))+ag,'--m','LineWidth',2);
     h(4) = plot(vd,6*vd-6*vd(1)+ag,'--r','LineWidth',2);
-    h(5) = plot(vd,log2(timeour)-log2(timeour(1))+ag,'-^r','LineWidth',2);
-    h(6) = plot(vd,log2(timefac)-log2(timefac(1))+ag,'-^g','LineWidth',2);
+    h(5) = plot(vd,log2(timeour),'-^r','LineWidth',2);
+    h(6) = plot(vd,log2(timefac),'-^g','LineWidth',2);
     legend('N^3 log(N)','N^3 log(N)^2','N^3 log(N)^3','N^6','timeapp','timefac','Location','NorthWest');
     %title('3D inv uniform JPT, time');
     axis square;

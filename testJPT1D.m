@@ -145,11 +145,11 @@ end
     figure('visible','off');
     pic = figure;
     hold on;
-    ag = (3*vd(1)+log2(vd(1))+log2(timeour(1))+log2(timefac(1)))/4;
+    ag = (log2(timeour(1))+log2(timefac(1)))/2;
     h(1) = plot(vd,vd+log2(vd)-vd(1)-log2(vd(1))+ag,'--k','LineWidth',2);
     h(2) = plot(vd,2*vd-vd(1)*2+ag,'--b','LineWidth',2);
-    h(3) = plot(vd,log2(timeour)-log2(timeour(1))+ag,'-^r','LineWidth',2);
-    h(4) = plot(vd,log2(timefac)-log2(timefac(1))+ag,'-^g','LineWidth',2);
+    h(3) = plot(vd,log2(timeour),'-^r','LineWidth',2);
+    h(4) = plot(vd,log2(timefac),'-^g','LineWidth',2);
     legend('N log(N)','N^2','timeapp','timefac','Location','NorthWest');
     %title('1D uniform JPT, time');
     axis square;
