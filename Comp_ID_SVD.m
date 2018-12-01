@@ -18,7 +18,7 @@ vd = [7:16];
 es = length(vd);
 rank0 = zeros(es,1);
 rank1 = zeros(es,1);
-error = zeros(es,1);
+error01 = zeros(es,1);
 timefac = zeros(es,1);
 for ii=1:es
     m = vd(ii);
@@ -32,19 +32,22 @@ for ii=1:es
     [cosvals1,sinvals1,r1] = jac_exp_extr(tol,1,nts,da,db);
     J1 = (cosvals1+1i*sinvals1)*r1;
     rank1(ii) = size(r1,1);
-    
+    size(cosvals1)   
     [cosvals0,sinvals0,r0] = jac_exp_extr(tol,0,nts,da,db);
     J0 = cosvals0+1i*sinvals0;
+    size(cosvals0)
+    norm(J0-J1)/norm(J1)
     tic
     for i = 1:num
-        [U S V] = svdtrunc(J0,2*rank1,tol);
+        [U S V] = svdtrunc(J0,rank(ii),tol);
     end
     rank0(ii) = size(S,1);
     timefac(ii) = toc/num;
     
-    n1 = randsample(nts,m);
-    error(ii)=norm(J1(n1,:)-U(n1,:)*S*V')/norm(J1(n1,:));
-    fprintf('\n  %-5d %-9d  %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank0(ii),rank1(ii),error(ii),timefac(ii));
+    nn = min(size(J1,1),size(J0,1));
+    n1 = randsample(nn,m);
+    error01(ii)=norm(J1-U*S*V')/norm(J1);
+    fprintf('\n  %-5d %-9d  %-9d   %-1.6E   %-1.6E\n',m,rank0(ii),rank1(ii),error01(ii),timefac(ii));
 
 end
     
