@@ -18,7 +18,7 @@ mwPointer    :: mxGetPr, mxGetPi, mxCreateDoubleMatrix
 mwSize       :: nv,mv,nr,mr
 
 type(jacobi_expansion_data)  :: expdata
-real*8, allocatable :: cosvals(:,:),sinvals(:,:),r(:,:)
+real*8, allocatable :: cosvals(:,:),sinvals(:,:),r(:,:),ts(:),dnus(:)
 real*8 eps,iffactor,dmax,da,db
 integer*4 iffactor1,i,j
 
@@ -37,42 +37,38 @@ if (iffactor .eq. 1.0d0) then
    nr = size(expdata%r,1)
    mr = size(expdata%r,2)
 else
-   nv = size(expdata%cosvals,1)
-   mv = size(expdata%cosvals,2)
+   nv = size(expdata%avals,1)
+   mv = size(expdata%avals,2)
    nr = 1
    mr = 1
 end if
-allocate(cosvals(nv,mv),sinvals(nv,mv),r(nr,mr))
+allocate(cosvals(nv,mv),sinvals(nv,mv),r(nr,mr),ts(nv),dnus(mv))
 
 !cosvals = expdata%cosvals0
 if (iffactor .eq. 1.0d0) then
-   do i = 1,nv
-      do j = 1,mv
-         cosvals(i,j) = expdata%cosvals0(i,j)
-         sinvals(i,j) = expdata%sinvals0(i,j)
-      end do
-   end do
-   do i = 1,nr
-      do j = 1,mr
-         r(i,j) = expdata%r(i,j)
-      end do
-   end do
+   cosvals = expdata%cosvals0
+   sinvals = expdata%sinvals0
+   r = expdata%r
+   ts = expdata%ts
+   dnus = expdata%dnus0
 else
-   do i = 1,nv
-      do j = 1,mv
-         cosvals(i,j) = expdata%cosvals(i,j)
-         sinvals(i,j) = expdata%sinvals(i,j)
-      end do
-   end do
+   cosvals = expdata%avals
+   sinvals = expdata%psivals
    r = 1
+   ts = expdata%ts
+   dnus = expdata%dnus
 end if
 
 plhs(1) = mxCreateDoubleMatrix(nv, mv, 0)
 plhs(2) = mxCreateDoubleMatrix(nv, mv, 0)
 plhs(3) = mxCreateDoubleMatrix(nr, mr, 0)
+plhs(4) = mxCreateDoubleMatrix(nv, 1, 0)
+plhs(5) = mxCreateDoubleMatrix(mv, 1, 0)
 call mxCopyReal8ToPtr(cosvals, mxGetPr(plhs(1)),nv*mv)
 call mxCopyReal8ToPtr(sinvals, mxGetPr(plhs(2)),nv*mv)
 call mxCopyReal8ToPtr(r, mxGetPr(plhs(3)),nr*mr)
+call mxCopyReal8ToPtr(ts, mxGetPr(plhs(4)),nv)
+call mxCopyReal8ToPtr(dnus, mxGetPr(plhs(5)),mv)
 !plhs(1) = mxCreateDoubleMatrix(1, 1, 0)
 !call mxCopyReal8ToPtr(sinvals(nv,mv), mxGetPr(plhs(1)),1)
 
