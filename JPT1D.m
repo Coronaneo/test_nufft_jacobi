@@ -53,9 +53,16 @@ if  R_or_N > 0
 
     fun = @(c)JacPT1d1(c);
 else
-    ex = exp(1i*nts/2*ts);
-    U = U.*repmat(ex,1,rank);
-    fun = @(c)JacPT1d2(c);
+    %ex = exp(1i*nts/2*ts);
+    %U = U.*repmat(ex,1,rank);
+    %fun = @(c)JacPT1d2(c);
+    
+    nufft = @(x,k)exp(1i*(x-floor(x*nts/2/pi)*2*pi/nts)*k.');
+    [X,Y] = lowrank(n,nufft,ts,[0:nts-1]',tol,tR,mR);
+    Y = conj(Y);
+    rankn = size(X,2);
+    fun = @(c)JacPT1d3(c);
+    
 end
 
     function y = JacPT1d1(c)
@@ -74,6 +81,23 @@ end
         for i=1:rank
             cj = nufft1dIInyumex(ts,1,tol,V(:,i).*c);
             y = y + U(:,i).*cj;
+        end
+	    y = real(y)./sqrt(wghts);
+        y = y + vals*c(1:it,:)./sqrt(wghts);
+    end
+
+    function y = JacPT1d3(c)
+        y = zeros(nts,1);
+        for i=1:rank
+            cj = V(:,i).*c;
+            y1 = zeros(nts,1);
+            for j = 1:rankn
+                ccj = Y(:,j).*cj;
+                fftc = ifft(ccj);
+                fftc = fftc(xs,:);
+                y1 = y1 + nts*X(:,j).*fftc;
+            end
+            y = y + U(:,i).*y1;
         end
 	    y = real(y)./sqrt(wghts);
         y = y + vals*c(1:it,:)./sqrt(wghts);
