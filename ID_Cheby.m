@@ -30,25 +30,88 @@ function [U,V] = ID_Cheby(n,x,k,da,db,tol,opt,R_or_N,tR,mR)
 %kk = max(20*(ceil(log2(n))+1),kktol);
 
 
-kk = 3*tR;
-chebygrid = cos([kk-1:-1:0]'*pi/(kk-1));
+   k1 = 16;
+   chebdata1 = cos([k1-1:-1:0]*pi/(k1-1))';
 
-%%%%%%%% chebyshev grids on (0,pi)
-ts = (pi/2)*chebygrid+pi/2;
+   dd         = 1/n;
+   dd         = min(0.01,dd);
 
-nt = zeros(n,1);
-%%%%%%%% decide which cheb method to use 
-if  opt > 0
-    nu = k;
-else
-%%%%%%%%%%%%%%  chebyshev grids on (n-26,n) or (n-8,n), depends on n
-    %xx = 10*(ceil(log2(n))+1);
-    xx = 30*tR;
-    chebygrid1 = cos([xx-1:-1:0]'*pi/(xx-1));
-    nu = (n-k(1)-1)/2*chebygrid1+(n+k(1)-1)/2;
-end
+   dd         = log(dd)/log(2);
+   nints      = ceil(-dd)+1;
+   nintsab    = 2*nints;
+
+   nints0  = nintsab/2;
+   dd      = 2.0;
+   
+   ab = zeros(2,nintsab);
+   for int=1:nints0
+      ab(1,int) = dd^(-nints0+int-1);
+      ab(2,int) = dd^(-nints0+int);
+   end 
+
+   ab = pi/2*ab;
+
+   for int=1:nints0
+      ab(1,nintsab-int+1) = pi - ab(2,int);
+      ab(2,nintsab-int+1) = pi - ab(1,int);
+   end 
+   idx = 0;
+   ts = zeros(nintsab*k1,1);
+   for intab=1:nintsab
+       a = ab(1,intab);
+       b = ab(2,intab);
+       for i=1:k1
+           t = chebdata1(i)*(b-a)/2 + (b+a)/2;
+           idx = idx+1;
+           ts(idx)    = t;
+       end
+   end
+   
+   
+   if  opt > 0
+       nu = k;
+   else
+       k2 = 24;
+       chebdata2 = cos([k2-1:-1:0]*pi/(k2-1))';
+       cd0 = zeros(2,1000);
+       nintscd = 0;
+       if n < 2^12
+          nintscd        =  nintscd+1;
+          cd0(1,nintscd) =  9.0;
+          cd0(2,nintscd) =  27.0;
+       else
+          nintscd        =  nintscd+1;
+          cd0(1,nintscd) =  27.0;
+          cd0(2,nintscd) =  81.0;
+       end
+
+
+       while cd0(2,nintscd) < n
+             nintscd        = nintscd+1;
+             cd0(1,nintscd) =  cd0(2,nintscd-1);
+             cd0(2,nintscd) =  cd0(2,nintscd-1)*3.0;
+       end
+
+       cd0(2,nintscd) = min(n,cd0(2,nintscd));
+
+       cd = cd0(:,1:nintscd); 
+       dnus = zeros(nintscd*k2,1);
+       for intcd=1:nintscd
+           c = cd(1,intcd);
+           d = cd(2,intcd);
+
+           for i=1:k2
+               dnu                = chebdata2(i)*(d-c)/2 + (d+c)/2;
+               idx                = i+(intcd-1)*k2;
+               dnus(idx)  = dnu;
+           end
+       end
+       nu = dnus;
+   end
 
 %%%%%%%%%% consturct lowrank approximation for the matrix obtained via chebyshev grids
+if opt > 0
+    nt = zeros(n,1);
     A = interpjac1(nt,ts,nu,da,db,R_or_N);
     [~,R,E] = qr(A',0);
     rr = find( abs(diag(R)/R(1)) > tol, 1, 'last');
@@ -73,22 +136,21 @@ end
 
 %%%%%%%%% construct right factor U in fun(x,k) = U*V.'
     U = zeros(size(x,1),rr);
-    w = [1/2 (-1).^[1:kk-2] 1/2*(-1)^(kk-1)]';
-    S = barcycheby(x,ts,w);
+    w = [1/2 (-1).^[1:k1-2] 1/2*(-1)^(k1-1)]';
+    S = barcycheby(x,chebdata1,w,ab);
     U = S*U1;
-    
-if  opt > 0
 %%%%%%%%%% construct left factor V in fun(x,k) = U*V.'
     V = V1;
-    B = interpjac1(nt,x,k,da,db,R_or_N);
-    norm(B-S*A)/norm(B)
 else
-V = zeros(size(k,1),rr);
-w = [1/2 (-1).^[1:xx-2] 1/2*(-1)^(xx-1)]';
-P = barcycheby(k,nu,w);
-V = P*V1;
-B = interpjac1(nt,ts,k,da,db,R_or_N);
-norm(B-A*P.')/norm(B)
+    nt = zeros(n,1);
+    A = interpjac1(nt,ts,nu,da,db,R_or_N);
+    [U1,S1,V1] = svdtrunc(A,mR,tol);
+    w = [1/2 (-1).^[1:k1-2] 1/2*(-1)^(k1-1)]';
+    S = barcycheby(x,chebdata1,w,ab);
+    U = S*U1*S1;
+    w = [1/2 (-1).^[1:k2-2] 1/2*(-1)^(k2-1)]';
+    P = barcycheby(k,chebdata2,w,cd);
+    V = P*conj(V1);
 end
 
 end
