@@ -122,9 +122,8 @@ if opt > 0
     T = T';
     V1 = A(sk,:);
     V1 = V1.';
-    nn = kk;
-    U1 = zeros(nn,rr);
-    for i = 1:nn
+    U1 = zeros(size(ts,1),rr);
+    for i = 1:size(ts,1)
         flag = find(sk == i);
         if ~isempty(flag)
             U1(i,flag) = 1;
@@ -135,7 +134,6 @@ if opt > 0
     end
 
 %%%%%%%%% construct right factor U in fun(x,k) = U*V.'
-    U = zeros(size(x,1),rr);
     w = [1/2 (-1).^[1:k1-2] 1/2*(-1)^(k1-1)]';
     S = barcycheby(x,chebdata1,w,ab);
     U = S*U1;

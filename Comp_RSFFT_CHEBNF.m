@@ -1,6 +1,6 @@
 format long
-flag = -1%don't change this value, now just works for flag > 0
-num=20;
+flag = 1%don't change this value, now just works for flag > 0
+num=8;
 da=0.25;
 db=0.25;
 tol=1e-8
@@ -111,7 +111,7 @@ for ii=1:es
     if  flag > 0
         tic
         for i = 1:num
-            [fun,rank1(ii)] = JPT1D(nts,da,db,tR,mR,tol,1,-1);
+            [fun,rank1(ii)] = JPT1D(nts,da,db,tR,mR,tol,1,1);
         end
         timefac1(ii)=toc/num;
 
@@ -153,7 +153,7 @@ for ii=1:es
     else
         tic
         for i = 1:num
-            [fun,rank1(ii)] = NJPT1D(nts,ts,da,db,tR,mR,tol,1,-1);
+            [fun,rank1(ii)] = NJPT1D(nts,ts,da,db,tR,mR,tol,1,1);
         end
         timefac1(ii)=toc/num;
 
@@ -238,22 +238,22 @@ end
     figure('visible','off');
     pic = figure;
     hold on;
-    ag = (timeour1(1)+timeour2(1)+timeour3(1)+timefac1(1)+timefac1(2)+timefac3(1)+5*vd(1)+3*log2(vd(1)))/10;
+    ag = (log2(timeour1(1))+log2(timeour2(1))+log2(timeour3(1))+log2(timefac1(1))+log2(timefac1(1))+log2(timefac3(1)))/6;
     h(1) = plot(vd,vd-vd(1)+ag,'-k','LineWidth',4);
     h(2) = plot(vd,2*vd-vd(1)*2+ag,'-b','LineWidth',4);
     h(3) = plot(vd,vd+log2(vd)-vd(1)-log2(vd(1))+ag,'-r','LineWidth',4);
     h(4) = plot(vd,vd+2*log2(vd)-vd(1)-2*log2(vd(1))+ag,'-m','LineWidth',4);
-    h(5) = plot(vd,log2(timeour1)-log2(timeour1(1))+ag,'-^r','LineWidth',2);
-    h(6) = plot(vd,log2(timeour2)-log2(timeour2(1))+ag,'-^b','LineWidth',2);
-    h(7) = plot(vd,log2(timeour3)-log2(timeour3(1))+ag,'-^m','LineWidth',2);
-    h(8) = plot(vd,log2(timefac1)-log2(timefac1(1))+ag,'-xg','LineWidth',2);
-    h(9) = plot(vd,log2(timefac2)-log2(timefac2(1))+ag,'-xc','LineWidth',2);
-    h(10) = plot(vd,log2(timefac3)-log2(timefac3(1))+ag,'-xk','LineWidth',2);
-    legend('N','N^2','N log N','N(log N)^2','timeRSapp','timesCHapp','timesdCHapp','timeRSfac','timesCHfac','timesdCHfac','Location','NorthWest');
+    h(5) = plot(vd,log2(timeour1),'-^r','LineWidth',2);
+    h(6) = plot(vd,log2(timeour2),'-^b','LineWidth',2);
+    h(7) = plot(vd,log2(timeour3),'-^m','LineWidth',2);
+    h(8) = plot(vd,log2(timefac1),'-xg','LineWidth',2);
+    h(9) = plot(vd,log2(timefac2),'-xc','LineWidth',2);
+    h(10) = plot(vd,log2(timefac3),'-xk','LineWidth',2);
+    legend('N','N^2','N log N','N(log N)^2','timeRSFFTapp','timesCHNFapp','timesdCHNFapp','timeRSFFTfac','timesCHNFfac','timesdCHNFfac','Location','NorthWest');
     if flag > 0
-       title('RS SVD vs CHEB ID time, uni_JPT');
+       title('RS FFT vs CHEB NUFFT time, uni JPT');
     else
-        title('RS SVD vs CHEB ID time, non_JPT');
+        title('RS FFT vs CHEB NUFFT time, non JPT');
     end
     axis square;
     xlabel('log_2(N)'); ylabel('log_{2}(time)');
@@ -261,9 +261,9 @@ end
     b=get(gca);
     set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
     if flag > 0
-       saveas(pic,['Comp_RS_CHEB_uni.eps'],'epsc');
+       saveas(pic,['Comp_RSFFT_CHEBNF_uni.eps'],'epsc');
     else 
-       saveas(pic,['Comp_RS_CHEB_non.eps'],'epsc');
+       saveas(pic,['Comp_RSFFT_CHEBNF_non.eps'],'epsc');
     end
     hold off;
     pic1 = figure;
@@ -271,11 +271,11 @@ end
     h(1) = plot(vd,log10(errorour1),'-^k','LineWidth',2);
     h(2) = plot(vd,log10(errorour2),'-^g','LineWidth',2);
     h(3) = plot(vd,log10(errorour3),'-^b','LineWidth',2);
-    legend('RS_relerr','sCH_relerr','sdCH_relerr','Location','NorthWest');
+    legend('RSFFT_relerr','sCHNF_relerr','sdCHNF_relerr','Location','NorthWest');
     if flag > 0
-       title('relerr, uni_JPT');
+       title('relerr, uni JPT');
     else
-        title('relerr, non_JPT');
+        title('relerr, non JPT');
     end
     axis square;
     xlabel('log_2(N)'); ylabel('log_{10}(time)');
@@ -283,9 +283,9 @@ end
     b=get(gca);
     set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
     if flag > 0
-       saveas(pic1,['Comp_relerr_uni.eps'],'epsc');
+       saveas(pic1,['CompFN_relerr_uni.eps'],'epsc');
     else 
-       saveas(pic1,['Comp_relerr_non.eps'],'epsc');
+       saveas(pic1,['CompFN_relerr_non.eps'],'epsc');
     end
     hold off;
     pic2 = figure;
@@ -293,11 +293,11 @@ end
     h(1) = plot(vd,rank1,'-^k','LineWidth',2);
     h(2) = plot(vd,rank2,'-^g','LineWidth',2);
     h(3) = plot(vd,rank3,'-^b','LineWidth',2);
-    legend('RS_rank','sCH_rank','sdCH_rank','Location','NorthWest');
+    legend('RSFFT_rank','sCHNF_rank','sdCHNF_rank','Location','NorthWest');
     if flag > 0
-       title('rank, uni_JPT');
+       title('rank, uni JPT');
     else
-        title('rank, non_JPT');
+        title('rank, non JPT');
     end
     axis square;
     xlabel('log_2(N)'); ylabel('rank');
@@ -305,7 +305,7 @@ end
     b=get(gca);
     set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
     if flag > 0
-       saveas(pic2,['Comp_rank_uni.eps'],'epsc');
+       saveas(pic2,['CompFN_rank_uni.eps'],'epsc');
     else 
-       saveas(pic2,['Comp_rank_non.eps'],'epsc');
+       saveas(pic2,['CompFN_rank_non.eps'],'epsc');
     end
