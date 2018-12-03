@@ -30,7 +30,7 @@ for ii=1:es
     end
     
     [avals0,psivals0,r0,ts0,dnus0] = jac_exp_extr(tol,0,nts,da,db);
-    J0 = avals0.*exp(1i*(repmat(dnus0.',size(ts0,1),1).*psivals0-ts0*dnus0.'));
+    J0 = avals0.*exp(1i*(psivals0-ts0*dnus0.'));
     [cosvals1,sinvals1,r1,ts1,dnus1] = jac_exp_extr(tol,1,nts,da,db);
     ind = zeros(size(dnus1,1),1);
     for i = 1:size(dnus1,1)
@@ -60,7 +60,7 @@ end
    chebdata2 = cos([k2-1:-1:0]*pi/(k2-1))';
    cd0 = zeros(2,1000);
    nintscd = 0;
-   if nts < 2^12
+   if nts > 2^12
       nintscd        =  nintscd+1;
       cd0(1,nintscd) =  27.0;
       cd0(2,nintscd) =  81.0;
@@ -133,8 +133,9 @@ end
    t = getts(nt,da,db);
    w = [1/2 (-1).^[1:k1-2] 1/2*(-1)^(k1-1)]';
    [S,st,nu] = barcycheby(t,chebdata1,w,ab);
-   y = interpjac1(nt,t,dnus0(1),da,db,-1);
-   z = S*J0(:,1);
+   y = interpjac1(nt,t,dnus0(2),da,db,-1);
+   z1=interpjac1(nt,ts0,dnus0(2),da,db,-1);
+   z = S*z1;
    norm(y-z)/norm(y)
 
    t1 = unique(rand(nts,1)*(pi-2/nts)+1/nts);
@@ -143,4 +144,11 @@ end
    y = S*p(ts0);
    z = p(t1);
    norm(y-z)/norm(z)
-
+   
+   z1=interpjac1(nt,t(10),dnus0(25:end),da,db,-1);
+   nus = [28:nts-1]';
+   w = [1/2 (-1).^[1:k2-2] 1/2*(-1)^(k2-1)]';
+   S = barcycheby(nus,chebdata2,w,cd);
+   y = interpjac1(nt,t(10),nus,da,db,-1);
+   z = S*z1.';
+   norm(y.'-z)/norm(z)

@@ -7,11 +7,11 @@ use chebyshev
 implicit double precision (a-k,o-z)
 
 ! number of input arguments, number of output arguments
-integer      :: nlhs, nrhs  
+integer      :: nlhs, nrhs
 ! pointer to inputs and outputs
-mwPointer    :: plhs(*), prhs(*) 
+mwPointer    :: plhs(*), prhs(*)
 ! get some of the matlab mex functions
-mwPointer    :: mxGetPr, mxGetPi, mxCreateDoubleMatrix 
+mwPointer    :: mxGetPr, mxGetPi, mxCreateDoubleMatrix
 ! define a size integer so that we can get its type
 mwSize       :: n,n1,n2,m1,m2,nts,nnu
 
@@ -29,7 +29,7 @@ pi=acos(-1.0d0)
 
 if (n .lt. (2**12)) then
 it = 10
-else 
+else
 it = 28
 end if
 
@@ -62,26 +62,33 @@ call jacobi_phase_disc(nints,ab)
 
 allocate(psivals(kk*nints),avals(kk*nints))
 !allocate(r(kk*nints),m(kk*nints,nnu))
-allocate(r(nts),m(nts,nnu))
-allocate(avals0(nts),psivals0(nts))
+allocate(r(kk*nints),m(kk*nints,nnu))
+!allocate(avals0(nts),psivals0(nts))
 
 do i=1,nnu
     dnu = nu(i)
     call jacobi_phase(chebdata,dnu,da,db,nints,ab,avals,psivals)
-    call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,nts,ts,avals0,psivals0)
-
+    !call jacobi_phase_eval(chebdata,dnu,da,db,nints,ab,avals,psivals,nts,ts,avals0,psivals0)
     if (flag .lt. 0) then
-       r = avals0*exp(dcmplx(0,1)*(psivals0-dnu*ts))
+       r = avals*exp(dcmplx(0,1)*(psivals-dnu*ts))
     else
-       r = avals0*exp(dcmplx(0,1)*(psivals0-dnu*xs))
+       r = avals*exp(dcmplx(0,1)*(psivals-dnu*xs))
     end if
-    
+
     m(:,i) = r
 end do
+
+allocate(ier(1))
+if (nts .eq. int(kk*nints)) then
+ier(1) = 1
+else
+ier(1) = 0
+endif
 plhs(1)=mxCreateDoubleMatrix(nts, nnu, 1)
-!plhs(2)=mxCreateDoubleMatrix(2, 1, 0)
+plhs(2)=mxCreateDoubleMatrix(1, 1, 0)
 call mxCopyComplex16ToPtr(m, mxGetPr(plhs(1)),mxGetPi(plhs(1)),nts*nnu)
-!call mxCopyReal8ToPtr(ier, mxGetPr(plhs(2)),2)
+call mxCopyReal8ToPtr(ier, mxGetPr(plhs(2)),1)
 deallocate(ab,m,r,ts,nu,xs,avals,psivals)
 
 end subroutine
+
