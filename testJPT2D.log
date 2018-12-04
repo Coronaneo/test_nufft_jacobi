@@ -26,3 +26,12 @@ tol =
   7     11         11         3.544417E-09   1.796616E-01   5.673475E+02   1.314934E-01
 
   8     12         12         7.877734E-09   9.951465E-01   5.161779E+03   4.998263E-01
+
+  9     14         14         2.461211E-09   5.559839E+00   4.798514E+04   2.199683E+00
+
+  10    15         15         1.489208E-08   2.670710E+01   4.466982E+05   9.408949E+00
+>> >> >> [Warning: MATLAB has disabled some advanced graphics rendering features by
+switching to software OpenGL. For more information, click <a
+href="matlab:opengl('problems')">here</a>.] 
+>> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> MATLAB: management.cpp:671: find: Assertion `' failed.
+MATLAB: management.cpp:671: find: Assertion `' failed.

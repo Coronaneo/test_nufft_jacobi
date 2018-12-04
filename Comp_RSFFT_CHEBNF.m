@@ -1,5 +1,5 @@
 format long
-flag = 1%don't change this value, now just works for flag > 0
+flag = -1%don't change this value, now just works for flag > 0
 num=8;
 da=0.25;
 db=0.25;
@@ -26,7 +26,7 @@ fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-15s%-15s%-15s%-15s%-15s\n',str1,str2,str3,str6,str4,str5,str12,str7,str8,str13,str9,str10,str11,str14);
 %funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
 %funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
-vd = [8:16];
+vd = [8:17];
 es = length(vd);
 rank1 = zeros(es,1);
 errorour1 = zeros(es,1);
@@ -98,9 +98,15 @@ for ii=1:es
     %end
     %tR=K+2;
     %mR=K;
-    p = 6;
+    p = 16;
+    dd         = 1/nts;
+    dd         = min(0.01,dd);
+
+    dd         = log(dd)/log(2);
+    nints      = ceil(-dd)+1;
+    nints    = 2*nints;
     mR = ceil(1.5*log2(nts));
-    tR = p*mR;
+    tR = p*nints;
 
 
 %    [U1,V1]=lowrank(nts,funnyu,da,db,tol,tR,mR,ts,nu);
