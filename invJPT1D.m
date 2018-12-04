@@ -39,16 +39,18 @@ if  opt >= 1
     JTM = @(ts,nu)interpjac1(nt,ts,nu,da,db,R_or_N);
     %JTM = @(rs,cs,n,da,db,ts,nu,wghts)JTM1d(rs,cs,n,da,db,ts,nu,wghts,R_or_N);
     [U,V] = lowrank(nts,JTM,ts,nu,tol,tR,mR);
-    U = diag(sqrt(wghts))*U;
+    U = repmat(sqrt(wghts),1,size(U,2)).*U;
     V = conj(V);
 elseif 0 <= opt && opt<1
     %JTM = @(rs,cs,ts,nu)JTM1d(rs,cs,nts,da,db,ts,nu,wghts);
     %grid = cos(((2*[nts:-1:1]'-1)*pi/2/nts)+1)*pi/2;
     [U,V] = ID_Cheby(nts,ts,nu,da,db,tol,1,R_or_N,tR,mR);
-    U = diag(sqrt(wghts))*U;
+    U = repmat(sqrt(wghts),1,size(U,2)).*U;
+    %U = diag(sqrt(wghts))*U;
 elseif opt < 0
     [U,V] = ID_Cheby(nts,ts,nu,da,db,tol,-1,R_or_N,tR,mR);
-    U = diag(sqrt(wghts))*U;
+    U = repmat(sqrt(wghts),1,size(U,2)).*U;
+    %U = diag(sqrt(wghts))*U;
 end
 rank = size(U,2);
 V = [zeros(it,rank);V];
@@ -66,6 +68,7 @@ end
         ncol = size(c,2);
         c = c.*repmat(sqrt(wghts),1,ncol);
         d = repmat(U,1,ncol).*reshape(repmat(c,rank,1),nts,rank*ncol);
+	%d = repmat(sqrt(wghts),1,ncol*rank).*d;
         d = P*d;
         fftc = conj(fft(conj(d)));
         y = squeeze(sum(reshape(repmat(V,1,ncol).*fftc,nts,rank,ncol),2));

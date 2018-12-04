@@ -71,7 +71,7 @@ end
         fftc = ifft(d);
         fftc = fftc(xs,:);
         y = nts*squeeze(sum(reshape(repmat(U,1,ncol).*fftc,nts,rank,ncol),2));
-        y = real(y)./sqrt(wghts);
+        y = real(y);
         y = y + vals*c(1:it,:);
     %    y = y + vals0*c(1:it,:);
     end

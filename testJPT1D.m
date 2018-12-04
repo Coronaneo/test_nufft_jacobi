@@ -22,7 +22,7 @@ fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-15s%-15s%-15s%-15s\n',str1,str2,str7,str4,str9,str10);
 %funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
 %funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
-vd = [7:16];
+vd = [8:17];
 es = length(vd);
 rank = zeros(es,1);
 errorour = zeros(es,1);
@@ -51,7 +51,7 @@ for ii=1:es
     [result3,t]=directjac1(nt,d,da,db,n1,ts,nu,wghts);
     result3 = result3./sqrt(wghts(n1));
     vals = jacrecur(nts,ts,it-1,da,db);
-    result3 = result3 + vals(n1,:)*d(1:it,:)./sqrt(wghts(n1));
+    result3 = result3 + vals(n1,:)*d(1:it,:);
     %size(v)
 %    norm(result3)    
     timedir = nts/m*(toc);

@@ -42,14 +42,17 @@ PP = kron(P2,P1);
 if opt >= 1
     JTM = @(ts,nu)interpjac1(nt,ts,nu,da,db,R_or_N);
     [U,V] = lowrank(nts,JTM,ts,nu,tol,tR,mR);
-    U = diag(sqrt(wghts))*U;
+    %U = diag(sqrt(wghts))*U;
+    U = repmat(sqrt(wghts),1,size(U,2)).*U;
     V = conj(V);
 elseif 0 <= opt && opt<1
     [U,V] = ID_Cheby(nts,ts,nu,da,db,tol,1,R_or_N,tR,mR);
-    U = diag(sqrt(wghts))*U;
+    U = repmat(sqrt(wghts),1,size(U,2)).*U;
+    %U = diag(sqrt(wghts))*U;
 elseif opt < 0
     [U,V] = ID_Cheby(nts,ts,nu,da,db,tol,-1,R_or_N,tR,mR);
-    U = diag(sqrt(wghts))*U;
+    U = repmat(sqrt(wghts),1,size(U,2)).*U;
+    %U = diag(sqrt(wghts))*U;
 end
 U1 = U;
 U2 = U;

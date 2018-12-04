@@ -19,19 +19,10 @@ tol =
 >> da = 0.25,db = 0.25
 >> >> size  our_rank1  our_rank2  error_our      our_time       dir_time       fac_time       
 >> >> >> >> >> >> >> >> >> >> 
-  5     8          8          1.335269E-08   9.756600E-03   2.553324E+01   2.723970E-02
+  5     8          8          5.586671E-08   1.059540E-02   2.713723E+01   2.896285E-02
 
-  6     9          9          2.628675E-08   2.673470E-02   5.748531E+01   5.786795E-02
+  6     9          9          3.983374E-08   2.940490E-02   5.892028E+01   6.150675E-02
 
-  7     11         11         1.318602E-08   1.781022E-01   5.554153E+02   1.934536E-01
+  7     11         11         1.394078E-08   1.860246E-01   5.608407E+02   2.047402E-01
 
-  8     12         12         1.016301E-08   9.781230E-01   5.275394E+03   6.252874E-01
-
-  9     14         14         6.219332E-09   5.454834E+00   4.843020E+04   2.549369E+00
-
-  10    14         14         1.366560E-08   2.354976E+01   4.404199E+05   9.232285E+00
->> >> >> [Warning: MATLAB has disabled some advanced graphics rendering features by
-switching to software OpenGL. For more information, click <a
-href="matlab:opengl('problems')">here</a>.] 
->> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> MATLAB: management.cpp:671: find: Assertion `' failed.
-MATLAB: management.cpp:671: find: Assertion `' failed.
+  8     12         12         2.174342E-08   9.863393E-01   5.212217E+03   6.423514E-01
