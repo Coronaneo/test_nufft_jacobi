@@ -33,16 +33,16 @@ if opt >= 1
     JTM = @(ts,nu)interpjac1(nt,ts,nu,da,db,R_or_N);
     %JTM = @(rs,cs,n,da,db,ts,nu,wghts)JTM1d(rs,cs,n,da,db,ts,nu,wghts,R_or_N);
     [U,V] = lowrank(nts,JTM,ts,nu,tol,tR,mR);
-    U = diag(sqrt(wghts))*U;
+    %U = diag(sqrt(wghts))*U;
     V = conj(V);
 elseif 0 <= opt && opt<1
     %JTM = @(rs,cs,ts,nu)JTM1d(rs,cs,nts,da,db,ts,nu,wghts);
     %grid = cos(((2*[nts:-1:1]'-1)*pi/2/nts)+1)*pi/2;
     [U,V] = ID_Cheby(nts,ts,nu,da,db,tol,1,R_or_N,tR,mR);
-    U = diag(sqrt(wghts))*U;
+    %U = diag(sqrt(wghts))*U;
 elseif opt < 0
     [U,V] = ID_Cheby(nts,ts,nu,da,db,tol,-1,R_or_N,tR,mR);
-    U = diag(sqrt(wghts))*U;
+    %U = diag(sqrt(wghts))*U;
 end
 rank = size(U,2);
 V = [zeros(it,rank);V];
@@ -72,7 +72,7 @@ end
         fftc = fftc(xs,:);
         y = nts*squeeze(sum(reshape(repmat(U,1,ncol).*fftc,nts,rank,ncol),2));
         y = real(y)./sqrt(wghts);
-        y = y + vals*c(1:it,:)./sqrt(wghts);
+        y = y + vals*c(1:it,:);
     %    y = y + vals0*c(1:it,:);
     end
 
@@ -82,8 +82,8 @@ end
             cj = nufft1dIInyumex(ts,1,tol,V(:,i).*c);
             y = y + U(:,i).*cj;
         end
-	    y = real(y)./sqrt(wghts);
-        y = y + vals*c(1:it,:)./sqrt(wghts);
+	    y = real(y);
+        y = y + vals*c(1:it,:);
     end
 
     function y = JacPT1d3(c)
@@ -99,8 +99,8 @@ end
             end
             y = y + U(:,i).*y1;
         end
-	    y = real(y)./sqrt(wghts);
-        y = y + vals*c(1:it,:)./sqrt(wghts);
+	    y = real(y);
+        y = y + vals*c(1:it,:);
     end
 
 
