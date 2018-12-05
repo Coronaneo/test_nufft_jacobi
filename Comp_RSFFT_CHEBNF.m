@@ -251,21 +251,21 @@ end
     h(4) = plot(vd,vd+2*log2(vd)-vd(1)-2*log2(vd(1))+ag,'-m','LineWidth',4);
     h(5) = plot(vd,log2(timeour1),'-^r','LineWidth',2);
     h(6) = plot(vd,log2(timeour2),'-^b','LineWidth',2);
-    h(7) = plot(vd,log2(timeour3),'-^m','LineWidth',2);
-    h(8) = plot(vd,log2(timefac1),'-xg','LineWidth',2);
-    h(9) = plot(vd,log2(timefac2),'-xc','LineWidth',2);
-    h(10) = plot(vd,log2(timefac3),'-xk','LineWidth',2);
-    legend('N','N^2','N log N','N(log N)^2','timeRSFFTapp','timesCHNFapp','timesdCHNFapp','timeRSFFTfac','timesCHNFfac','timesdCHNFfac','Location','NorthWest');
-    if flag > 0
-       title('RS FFT vs CHEB NUFFT time, uni JPT');
-    else
-        title('RS FFT vs CHEB NUFFT time, non JPT');
-    end
+    h(7) = plot(vd,log2(timeour3),'-^g','LineWidth',2);
+    h(8) = plot(vd,log2(timefac1),'-xr','LineWidth',2);
+    h(9) = plot(vd,log2(timefac2),'-xb','LineWidth',2);
+    h(10) = plot(vd,log2(timefac3),'-xg','LineWidth',2);
+    legend('N','N^2','N log N','N(log N)^2','RSNPMapp','QRNPMapp','ONPMapp','RSNPMfac','QRNPMfac','ONPMfac','Location','bestoutside');
+    %if flag > 0
+    %   title('RS FFT vs CHEB NUFFT time, uni JPT');
+    %else
+    %    title('RS FFT vs CHEB NUFFT time, non JPT');
+    %end
     axis square;
     xlabel('log_2(N)'); ylabel('log_{2}(time)');
-    set(gca, 'FontSize', 16);
+    set(gca, 'FontSize', 20);
     b=get(gca);
-    set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
+    set(b.XLabel, 'FontSize', 20);set(b.YLabel, 'FontSize', 20);set(b.ZLabel, 'FontSize', 20);set(b.Title, 'FontSize', 20);
     if flag > 0
        saveas(pic,['Comp_RSFFT_CHEBNF_uni.eps'],'epsc');
     else 
@@ -277,17 +277,17 @@ end
     h(1) = plot(vd,log10(errorour1),'-^k','LineWidth',2);
     h(2) = plot(vd,log10(errorour2),'-^g','LineWidth',2);
     h(3) = plot(vd,log10(errorour3),'-^b','LineWidth',2);
-    legend('RSFFT_relerr','sCHNF_relerr','sdCHNF_relerr','Location','NorthWest');
-    if flag > 0
-       title('relerr, uni JPT');
-    else
-        title('relerr, non JPT');
-    end
+    legend('RSNPMrelerr','QRNPMrelerr','ONPMrelerr','Location','NorthWest');
+    %if flag > 0
+    %   title('relerr, uni JPT');
+    %else
+    %    title('relerr, non JPT');
+    %end
     axis square;
     xlabel('log_2(N)'); ylabel('log_{10}(time)');
-    set(gca, 'FontSize', 16);
+    set(gca, 'FontSize', 20);
     b=get(gca);
-    set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
+    set(b.XLabel, 'FontSize', 20);set(b.YLabel, 'FontSize', 20);set(b.ZLabel, 'FontSize', 20);set(b.Title, 'FontSize', 20);
     if flag > 0
        saveas(pic1,['CompFN_relerr_uni.eps'],'epsc');
     else 
@@ -299,17 +299,17 @@ end
     h(1) = plot(vd,rank1,'-^k','LineWidth',2);
     h(2) = plot(vd,rank2,'-^g','LineWidth',2);
     h(3) = plot(vd,rank3,'-^b','LineWidth',2);
-    legend('RSFFT_rank','sCHNF_rank','sdCHNF_rank','Location','NorthWest');
-    if flag > 0
-       title('rank, uni JPT');
-    else
-        title('rank, non JPT');
-    end
+    legend('RSNPMrank','QRNPMrank','ONPMrank','Location','NorthWest');
+    %if flag > 0
+    %   title('rank, uni JPT');
+    %else
+    %    title('rank, non JPT');
+    %end
     axis square;
     xlabel('log_2(N)'); ylabel('rank');
-    set(gca, 'FontSize', 16);
+    set(gca, 'FontSize', 20);
     b=get(gca);
-    set(b.XLabel, 'FontSize', 16);set(b.YLabel, 'FontSize', 16);set(b.ZLabel, 'FontSize', 16);set(b.Title, 'FontSize', 16);
+    set(b.XLabel, 'FontSize', 20);set(b.YLabel, 'FontSize', 20);set(b.ZLabel, 'FontSize', 20);set(b.Title, 'FontSize', 20);
     if flag > 0
        saveas(pic2,['CompFN_rank_uni.eps'],'epsc');
     else 

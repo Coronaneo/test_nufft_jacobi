@@ -181,7 +181,7 @@ end
     hold off;
     pic2 = figure;
     hold on;
-    h(1) = plot(vd,rank1.*rank2,'--b','LineWidth',2);
+    h(1) = plot(vd,rank1.*rank2,'--k','LineWidth',2);
     legend('rank','Location','NorthWest');
     %title('2D uniform JPT, rank');
     axis square;

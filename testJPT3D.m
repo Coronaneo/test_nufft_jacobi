@@ -159,7 +159,7 @@ end
     figure('visible','off');
     pic = figure;
     hold on;
-    vd = log2(round(2.^vd));
+    %vd = log2(round(2.^vd));
     ag = (log2(timeour(1))+log2(timefac(1)))/2;
     h(1) = plot(vd,3*vd+log2(vd)-3*vd(1)-log2(vd(1))+ag,'--k','LineWidth',2);
     h(2) = plot(vd,3*vd+2*log2(vd)-3*vd(1)-2*log2(vd(1))+ag,'--b','LineWidth',2);
@@ -190,7 +190,7 @@ end
     hold off;
     pic2 = figure;
     hold on;
-    h(1) = plot(vd,rank1.*rank2.*rank3,'--r','LineWidth',2);
+    h(1) = plot(vd,rank1.*rank2.*rank3,'--k','LineWidth',2);
     legend('rank','Location','NorthWest');
     %title('3D uniform JPT, rank');
     axis square;
