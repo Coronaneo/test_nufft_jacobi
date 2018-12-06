@@ -93,12 +93,11 @@ end
     hold on;
     ag = (log2(timeour(1))+log2(timefac(1)))/2;
     h(1) = plot(vd,vd+log2(vd)-vd(1)-log2(vd(1))+ag,'--k','LineWidth',2);
-    h(2) = plot(vd,2*vd-vd(1)*2+ag,'--b','LineWidth',2);
-    h(3) = plot(vd,log2(timeour),'-^r','LineWidth',2);
-    h(4) = plot(vd,log2(timefac),'-^g','LineWidth',2);
-    legend('N log(N)','N^2','timeapp','timefac','Location','NorthWest');
+    h(2) = plot(vd,log2(timeour),'-^r','LineWidth',2);
+    h(3) = plot(vd,log2(timefac),'-^g','LineWidth',2);
+    legend('N log(N)','time app','time fac','Location','NorthWest');
     %title('1D nonuniform JPT, time');
-    axis square;
+    axis tight;
     xlabel('log_2(N)'); ylabel('log_{2}(time)');
     set(gca, 'FontSize', 20);
     b=get(gca);
@@ -110,7 +109,7 @@ end
     h(1) = plot(vd,log10(errorour),'--k','LineWidth',2);
     legend('relerr','Location','NorthWest');
     %title('1D nonuniform JPT, relerr');
-    axis square;
+    axis tight;
     xlabel('log_2(N)'); ylabel('log_{10}(relerr)');
     set(gca, 'FontSize', 20);
     b=get(gca);
@@ -122,7 +121,7 @@ end
     h(1) = plot(vd,rank,'--b','LineWidth',2);
     legend('rank','Location','NorthWest');
     %title('1D nonuniform JPT, rank');
-    axis square;
+    axis tight;
     xlabel('log_2(N)'); ylabel('rank');
     set(gca, 'FontSize', 20);
     b=get(gca);
