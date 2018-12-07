@@ -1,0 +1,31 @@
+MATLAB is selecting SOFTWARE OPENGL rendering.
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2018 The MathWorks, Inc.
+                   R2018a (9.4.0.813654) 64-bit (glnxa64)
+                             February 23, 2018
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+>> >> 
+flag =
+
+     1
+
+>> >> >> >> 
+tol =
+
+     1.000000000000000e-08
+
+>> >> >> >> >> >> >> >> >> >> >> >> >> >> >> 
+>> start RS SVD vs CHEB ID comparison:>> 
+>> da = -0.50,db = -0.50
+>> >> size  RS_rank    sCH_rank   sdCH_rank  RSapp_time     sChapp_time    sdChapp_time   error_RS       error_sCh      error_sdCh     dir_time       RSfac_time     sChfac_time    sdChfac_time   
+>> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> 
+  8     2         1         1         4.522625E-03   2.078000E-03   1.880000E-04   NaN   NaN   NaN   5.158208E+00   3.235695E-01   2.371899E-01   1.921260E-01
+
+  9     2         1         1         1.357500E-04   1.067500E-04   1.063750E-04   NaN   NaN   NaN   6.823993E+00   4.331687E-01   2.208526E-01   9.912087E-02
+
+  10    2         1         1         2.460000E-04   1.740000E-04   1.702500E-04   NaN   NaN   NaN   3.093238E+01   8.755674E-01   5.155374E-01   2.060568E-01

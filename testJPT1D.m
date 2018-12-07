@@ -1,7 +1,7 @@
 format long
 num=20;
-da=0.25;
-db=0.25;
+da=-0.50;
+db=-0.50;
 tol=1e-8
 str1='size';
 str2='our_rank';
@@ -156,7 +156,7 @@ end
     set(gca, 'FontSize', 20);
     b=get(gca);
     set(b.XLabel, 'FontSize', 20);set(b.YLabel, 'FontSize', 20);set(b.ZLabel, 'FontSize', 20);set(b.Title, 'FontSize', 20);
-    saveas(pic,['testJPT1D_time.eps'],'epsc');
+    saveas(pic,['testJPT1D_time_-050.eps'],'epsc');
     hold off;
     pic1 = figure;
     hold on;
@@ -168,7 +168,7 @@ end
     set(gca, 'FontSize', 20);
     b=get(gca);
     set(b.XLabel, 'FontSize', 20);set(b.YLabel, 'FontSize', 20);set(b.ZLabel, 'FontSize', 20);set(b.Title, 'FontSize', 20);
-    saveas(pic1,['testJPT1D_err.eps'],'epsc');
+    saveas(pic1,['testJPT1D_err_-050.eps'],'epsc');
     hold off;
     pic2 = figure;
     hold on;
@@ -180,4 +180,4 @@ end
     set(gca, 'FontSize', 20);
     b=get(gca);
     set(b.XLabel, 'FontSize', 20);set(b.YLabel, 'FontSize', 20);set(b.ZLabel, 'FontSize', 20);set(b.Title, 'FontSize', 20);
-    saveas(pic2,['testJPT1D_rank.eps'],'epsc');
+    saveas(pic2,['testJPT1D_rank_-050.eps'],'epsc');
