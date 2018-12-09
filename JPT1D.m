@@ -57,12 +57,12 @@ else
     %U = U.*repmat(ex,1,rank);
     %fun = @(c)JacPT1d2(c);
     
-    nufft = @(x,k)exp(1i*(x-floor(x*nts/2/pi)*2*pi/nts)*k.');
-    [X,Y] = lowrank(nts,nufft,ts,[0:nts-1]',tol,tR,mR);
-    Y = conj(Y);
-    rankn = size(X,2);
-    fun = @(c)JacPT1d3(c);
-    
+    %nufft = @(x,k)exp(1i*(x-floor(x*nts/2/pi)*2*pi/nts)*k.');
+    %[X,Y] = lowrank(nts,nufft,ts,[0:nts-1]',tol,tR,mR);
+    %Y = conj(Y);
+    %rankn = size(X,2);
+    %fun = @(c)JacPT1d3(c);
+    fun = @(c)JacPT1d1(c);
 end
 
     function y = JacPT1d1(c)

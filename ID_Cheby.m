@@ -113,6 +113,8 @@ function [U,V] = ID_Cheby(n,x,k,da,db,tol,opt,R_or_N,tR,mR)
 if opt > 0
     nt = zeros(n,1);
     A = interpjac1(nt,ts,nu,da,db,R_or_N);
+    sigma = pi*chebdata1;
+    A = [A;exp(1i*sigma*nu'/n)];
     [~,R,E] = qr(A',0);
     rr = find( abs(diag(R)/R(1)) > tol, 1, 'last');
     rr = min(rr,mR);
@@ -122,8 +124,8 @@ if opt > 0
     T = T';
     V1 = A(sk,:);
     V1 = V1.';
-    U1 = zeros(size(ts,1),rr);
-    for i = 1:size(ts,1)
+    U1 = zeros(size(ts,1)+k1,rr);
+    for i = 1:size(ts,1)+k1
         flag = find(sk == i);
         if ~isempty(flag)
             U1(i,flag) = 1;
@@ -136,16 +138,24 @@ if opt > 0
 %%%%%%%%% construct right factor U in fun(x,k) = U*V.'
     w = [1/2 (-1).^[1:k1-2] 1/2*(-1)^(k1-1)]';
     S = barcycheby(x,chebdata1,w,ab);
-    U = S*U1;
+    U = S*U1(1:size(ts,1),:);
+    rx = x - floor(x*n/2/pi)*2*pi/n;
+    SS = barcycheby(rx,chebdata1,w,[-pi;pi]);
+    U = (SS*U1(size(ts,1)+1:end,:)).*U;
 %%%%%%%%%% construct left factor V in fun(x,k) = U*V.'
     V = V1;
 else
     nt = zeros(n,1);
     A = interpjac1(nt,ts,nu,da,db,R_or_N);
+    sigma = pi*chebdata1;
+    A = [A;exp(1i*sigma*nu'/n)];
     [U1,S1,V1] = svdtrunc(A,mR,tol);
     w = [1/2 (-1).^[1:k1-2] 1/2*(-1)^(k1-1)]';
     S = barcycheby(x,chebdata1,w,ab);
-    U = S*U1*S1;
+    U = S*U1(1:size(ts,1),:)*S1;
+    rx = x - floor(x*n/2/pi)*2*pi/n;
+    SS = barcycheby(rx,chebdata1,w,[-pi;pi]);
+    U = (SS*U1(size(ts,1)+1:end,:)*S1).*U;
     w = [1/2 (-1).^[1:k2-2] 1/2*(-1)^(k2-1)]';
     P = barcycheby(k,chebdata2,w,cd);
     V = P*conj(V1);
