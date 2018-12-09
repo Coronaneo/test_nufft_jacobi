@@ -149,16 +149,36 @@ else
     A = interpjac1(nt,ts,nu,da,db,R_or_N);
     sigma = pi*chebdata1;
     A = [A;exp(1i*sigma*nu'/n)];
-    [U1,S1,V1] = svdtrunc(A,mR,tol);
+    [~,R,E] = qr(A,0);
+    rr = find( abs(diag(R)/R(1)) > tol, 1, 'last');
+    rr = min(mR,rr);
+    sk = E(1:rr);
+    rd = E(rr+1:end);
+    T = R(1:rr,1:rr)\R(1:rr,rr+1:end);
+    U1 = A(:,sk);
+    V1 = zeros(rr,size(nu,1));
+    for i = 1:size(nu,1)
+        flag = find(sk == i);
+        if ~isempty(flag)
+            V1(flag,i) = 1;
+        else
+            flag1 = find(rd == i);
+            V1(:,i) = T(:,flag1);
+        end
+    end
+    V1 = V1.';
+    %[U1,S1,V1] = svdtrunc(A,mR,tol);
     w = [1/2 (-1).^[1:k1-2] 1/2*(-1)^(k1-1)]';
     S = barcycheby(x,chebdata1,w,ab);
-    U = S*U1(1:size(ts,1),:)*S1;
+    %U = S*U1(1:size(ts,1),:)*S1;
+    U = S*U1(1:size(ts,1),:);
     rx = x - floor(x*n/2/pi)*2*pi/n;
     SS = barcycheby(rx,chebdata1,w,[-pi;pi]);
-    U = (SS*U1(size(ts,1)+1:end,:)*S1).*U;
+    U = (SS*U1(size(ts,1)+1:end,:)).*U;
     w = [1/2 (-1).^[1:k2-2] 1/2*(-1)^(k2-1)]';
     P = barcycheby(k,chebdata2,w,cd);
-    V = P*conj(V1);
+    %V = P*conj(V1);
+    V = P*V1;
 end
 
 end
