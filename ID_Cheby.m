@@ -113,7 +113,7 @@ function [U,V] = ID_Cheby(n,x,k,da,db,tol,opt,R_or_N,tR,mR)
 if opt > 0
     nt = zeros(n,1);
     A = interpjac1(nt,ts,nu,da,db,R_or_N);
-    sigma = pi*chebdata1;
+    sigma = pi*chebdata1+pi;
     A = [A;exp(1i*sigma*nu'/n)];
     [~,R,E] = qr(A',0);
     rr = find( abs(diag(R)/R(1)) > tol, 1, 'last');
@@ -134,20 +134,27 @@ if opt > 0
             U1(i,:) = T(flag1,:);
         end
     end
-
+   
 %%%%%%%%% construct right factor U in fun(x,k) = U*V.'
     w = [1/2 (-1).^[1:k1-2] 1/2*(-1)^(k1-1)]';
     S = barcycheby(x,chebdata1,w,ab);
     U = S*U1(1:size(ts,1),:);
     rx = x - floor(x*n/2/pi)*2*pi/n;
-    SS = barcycheby(rx,chebdata1,w,[-pi;pi]);
+    [rx1,I] = sort(rx);
+    J = zeros(size(rx,1),1);
+    for i = 1:size(rx,1)
+        J(I(i)) = i;
+    end
+
+    SS = barcycheby(rx1,chebdata1,w,[0.0;2*pi/n]);
+    SS = SS(J,:);
     U = (SS*U1(size(ts,1)+1:end,:)).*U;
 %%%%%%%%%% construct left factor V in fun(x,k) = U*V.'
     V = V1;
 else
     nt = zeros(n,1);
     A = interpjac1(nt,ts,nu,da,db,R_or_N);
-    sigma = pi*chebdata1;
+    sigma = pi*chebdata1+pi;
     A = [A;exp(1i*sigma*nu'/n)];
     [~,R,E] = qr(A,0);
     rr = find( abs(diag(R)/R(1)) > tol, 1, 'last');
@@ -173,7 +180,14 @@ else
     %U = S*U1(1:size(ts,1),:)*S1;
     U = S*U1(1:size(ts,1),:);
     rx = x - floor(x*n/2/pi)*2*pi/n;
-    SS = barcycheby(rx,chebdata1,w,[-pi;pi]);
+    [rx1,I] = sort(rx);
+    J = zeros(size(rx,1),1);
+    for i = 1:size(rx,1)
+	J(I(i)) = i;
+    end
+    
+    SS = barcycheby(rx1,chebdata1,w,[0.0;2*pi/n]);
+    SS = SS(J,:);
     U = (SS*U1(size(ts,1)+1:end,:)).*U;
     w = [1/2 (-1).^[1:k2-2] 1/2*(-1)^(k2-1)]';
     P = barcycheby(k,chebdata2,w,cd);

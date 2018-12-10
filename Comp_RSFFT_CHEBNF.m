@@ -1,8 +1,8 @@
 format long
 flag = 1%don't change this value, now just works for flag > 0
 num=8;
-da=-0.95;
-db=-0.95;
+da=0.25;
+db=0.25;
 tol=1e-8
 str1='size';
 str2='RS_rank';
@@ -105,7 +105,7 @@ for ii=1:es
     dd         = log(dd)/log(2);
     nints      = ceil(-dd)+1;
     nints    = 2*nints;
-    mR = ceil(1.5*log2(nts));
+    mR = ceil(2.0*log2(nts));
     tR = p*nints;
 
 
