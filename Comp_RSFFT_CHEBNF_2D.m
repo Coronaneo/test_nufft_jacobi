@@ -26,7 +26,7 @@ fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-15s%-15s\n',str1,str2,str6,str4,str12,str7,str13,str9,str10,str14);
 %funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
 %funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
-vd = [5:10];
+vd = [5:11];
 es = length(vd);
 rank1 = zeros(es,1);
 errorour1 = zeros(es,1);
@@ -278,12 +278,12 @@ end
     hold on;
     %ag = (log2(timefac1(1))+log2(timefac1(1))+log2(timefac3(1)))/3;
     ag = (log2(timefac1(1))+log2(timefac2(1)))/2;
-    h(1) = plot(vd,vd+log2(vd)-vd(1)-log2(vd(1))+ag,'--c','LineWidth',4);
-    h(2) = plot(vd,vd+2*log2(vd)-vd(1)-2*log2(vd(1))+ag,'--k','LineWidth',4);
+    h(1) = plot(vd,2*vd+log2(vd)-2*vd(1)-log2(vd(1))+ag,'--c','LineWidth',4);
+    h(2) = plot(vd,2*vd+2*log2(vd)-2*vd(1)-2*log2(vd(1))+ag,'--k','LineWidth',4);
     h(3) = plot(vd,log2(timefac1),'-xr','LineWidth',2);
     %h(4) = plot(vd,log2(timefac2),'-xb','LineWidth',2);
     h(4) = plot(vd,log2(timefac2),'-xg','LineWidth',2);
-    legend('N log N','N log^2 N','NP1 fac','NP0 fac','Location','bestoutside');
+    legend('N^2 log N','N^2 log^2 N','NP1 fac','NP0 fac','Location','bestoutside');
     %if flag > 0
     %   title('RS FFT vs CHEB NUFFT time, uni JPT');
     %else
