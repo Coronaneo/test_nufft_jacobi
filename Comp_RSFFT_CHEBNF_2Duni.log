@@ -1,0 +1,42 @@
+MATLAB is selecting SOFTWARE OPENGL rendering.
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2018 The MathWorks, Inc.
+                   R2018a (9.4.0.813654) 64-bit (glnxa64)
+                             February 23, 2018
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+>> >> 
+flag =
+
+     1
+
+>> >> >> >> 
+tol =
+
+     1.000000000000000e-08
+
+>> >> >> >> >> >> >> >> >> >> >> >> >> >> >> 
+>> start RS SVD vs CHEB ID comparison 2D:>> 
+>> da = 0.25,db = 0.25
+>> >> size  RS_rank    sdCH_rank  RSapp_time     sdChapp_time   error_RS       error_sdCh     dir_time       RSfac_time     sdChfac_time   
+>> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> 
+  5     64        100       1.188900E-02   9.147100E-03   1.119405E-08   1.554110E-08   2.403779E+01   2.723710E-02   1.862750E-02
+
+  6     100       144       2.816300E-02   3.854870E-02   8.712867E-09   5.683997E-09   5.389995E+01   3.697660E-02   2.411550E-02
+
+  7     121       144       1.593926E-01   1.926358E-01   2.331182E-09   2.077970E-08   5.202950E+02   1.213407E-01   7.929320E-02
+
+  8     144       196       8.845458E-01   1.142644E+00   9.019040E-09   5.873729E-09   4.808172E+03   5.488019E-01   4.275195E-01
+
+  9     196       225       4.690010E+00   5.311146E+00   7.996251E-09   6.431563E-09   4.355112E+04   1.979090E+00   1.841467E+00
+
+  10    225       256       2.212281E+01   2.490860E+01   1.015248E-08   6.593221E-09   3.888585E+05   7.918720E+00   8.104848E+00
+>> >> >> [Warning: MATLAB has disabled some advanced graphics rendering features by
+switching to software OpenGL. For more information, click <a
+href="matlab:opengl('problems')">here</a>.] 
+>> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> MATLAB: management.cpp:671: find: Assertion `' failed.
+MATLAB: management.cpp:671: find: Assertion `' failed.

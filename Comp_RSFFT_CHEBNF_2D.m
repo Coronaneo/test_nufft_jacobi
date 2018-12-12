@@ -136,7 +136,7 @@ for ii=1:es
     
         tic
         for i = 1:num
-            [fun,r1,r2] = JPT1D(nts,da,db,tR,mR,tol,-1,-1);
+            [fun,r1,r2] = JPT2D(nts,da,db,tR,mR,tol,-1,-1);
         end
         rank2(ii) = r1*r2;
         timefac2(ii)=toc/num;

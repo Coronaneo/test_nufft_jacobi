@@ -66,9 +66,9 @@ end
 if  R_or_N > 0
     fun = @(c)JacPT2d1(c);
 else
-    ex = exp(1i*nts/2*ts);
-    U = U.*repmat(ex,1,rank);
-    fun = @(c)JacPT2d2(c);
+    %ex = exp(1i*nts/2*ts);
+    %U = U.*repmat(ex,1,rank);
+    fun = @(c)JacPT2d1(c);
 end
 
     function y = JacPT2d1(c)
