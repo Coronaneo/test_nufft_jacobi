@@ -155,7 +155,8 @@ else
     nt = zeros(n,1);
     A = interpjac1(nt,ts,nu,da,db,R_or_N);
     sigma = pi*chebdata1+pi;
-    A = [A;exp(1i*sigma*nu'/n)];
+    B = exp(1i*sigma*nu'/n);
+    A = [A;B];
     [~,R,E] = qr(A,0);
     rr = find( abs(diag(R)/R(1)) > tol, 1, 'last');
     rr = min(mR,rr);
@@ -174,10 +175,14 @@ else
         end
     end
     V1 = V1.';
-    %[U1,S1,V1] = svdtrunc(A,mR,tol);
+    %[U1,S1,V1] = svdtrunc([A;B],mR,tol);
+    %[U1,S1,V1] = svd([A;B]);
+    %U1 = U1(:,1:rr);
+    %V1 = V1(:,1:rr);
+    %S1 = S1(1:rr,1:rr);
     w = [1/2 (-1).^[1:k1-2] 1/2*(-1)^(k1-1)]';
     S = barcycheby(x,chebdata1,w,ab);
-    %U = S*U1(1:size(ts,1),:)*S1;
+    %U = S*U1(1:size(ts,1),:);
     U = S*U1(1:size(ts,1),:);
     rx = x - floor(x*n/2/pi)*2*pi/n;
     [rx1,I] = sort(rx);
@@ -188,10 +193,23 @@ else
     
     SS = barcycheby(rx1,chebdata1,w,[0.0;2*pi/n]);
     SS = SS(J,:);
+
+    %[~,R,E] = qr([A;B],0);
+    %rr = find( abs(diag(R)/R(1)) > tol/10, 1, 'last');
+    %rr = min(mR,rr);
+    %rr = size(S1,1);
+    %sk = E(1:rr);
+    %rd = E(rr+1:end);
+    %T = R(1:rr,1:rr)\R(1:rr,rr+1:end);
+    %U2 = B(:,sk);
+    
     U = (SS*U1(size(ts,1)+1:end,:)).*U;
+    %U = (SS*U2).*U;
     w = [1/2 (-1).^[1:k2-2] 1/2*(-1)^(k2-1)]';
     P = barcycheby(k,chebdata2,w,cd);
-    %V = P*conj(V1);
+    %V = P*conj(V1)*S1;
+    %TE = interpjac1(nt,x,k,da,db,R_or_N);
+    %norm(TE-U*V.')/norm(TE)
     V = P*V1;
 end
 

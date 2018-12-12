@@ -1,6 +1,6 @@
 format long
 flag = 1%don't change this value, now just works for flag > 0
-num=8;
+num=10;
 da=0.25;
 db=0.25;
 tol=1e-8
