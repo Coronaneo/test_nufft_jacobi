@@ -1,0 +1,48 @@
+MATLAB is selecting SOFTWARE OPENGL rendering.
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2018 The MathWorks, Inc.
+                   R2018a (9.4.0.813654) 64-bit (glnxa64)
+                             February 23, 2018
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+>> >> 
+flag =
+
+     1
+
+>> >> >> >> 
+tol =
+
+     1.000000000000000e-08
+
+>> >> >> >> >> >> >> >> >> >> >> >> >> >> >> 
+>> start RS SVD vs CHEB ID comparison:>> 
+>> da = 0.10,db = 0.10
+>> >> size  RS_rank    CHEB_rank  RSapp_time     CHEBapp_time   error_RS       error_CHEB     dir_time       RSfac_time     CHEBfac_time   
+>> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> 
+  8     12        14        3.540800E-03   3.440000E-04   1.487121E-08   1.570434E-09   4.312640E+00   3.035253E-01   3.663840E-02
+
+  9     14        15        3.466000E-04   3.048000E-04   3.157578E-09   1.073836E-08   6.824562E+00   4.453717E-01   3.325900E-02
+
+  10    15        16        6.640000E-04   6.231000E-04   1.634207E-09   6.766700E-09   3.106120E+01   9.083400E-01   5.244580E-02
+
+  11    17        18        1.391100E-03   1.387700E-03   1.616047E-09   2.094335E-09   1.555793E+02   2.050828E+00   6.814290E-02
+
+  12    16        17        3.024800E-03   3.118400E-03   6.395841E-09   6.305177E-09   8.609543E+02   4.549327E+00   1.272142E-01
+
+  13    17        18        6.769000E-03   6.934000E-03   3.236801E-09   4.775634E-09   5.215249E+03   1.051546E+01   2.428846E-01
+
+  14    19        20        1.620120E-02   1.599390E-02   9.826752E-10   6.066751E-09   3.432446E+04   2.236040E+01   4.983342E-01
+
+  15    19        21        3.914000E-02   3.774930E-02   4.461409E-09   4.543696E-09   2.380944E+05   4.880404E+01   1.096163E+00
+
+  16    19        23        6.721790E-02   7.810450E-02   1.582975E-08   1.965600E-09   1.713173E+06   1.013259E+02   2.103252E+00
+>> >> >> [Warning: MATLAB has disabled some advanced graphics rendering features by
+switching to software OpenGL. For more information, click <a
+href="matlab:opengl('problems')">here</a>.] 
+>> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> MATLAB: management.cpp:671: find: Assertion `' failed.
+MATLAB: management.cpp:671: find: Assertion `' failed.

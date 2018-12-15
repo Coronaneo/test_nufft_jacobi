@@ -26,7 +26,7 @@ fprintf('da = %1.2f,db = %1.2f\n',da,db);
 fprintf('%-6s%-11s%-11s%-15s%-15s%-15s%-15s%-15s%-15s%-15s\n',str1,str2,str6,str4,str12,str7,str13,str9,str10,str14);
 %funnyu = @(rs,cs,n,da,db,ts,nu)funnyu1d(rs,cs,n,da,db,ts,nu);
 %funour = @(rs,cs,n,da,db,ts,nu)funour1d(rs,cs,n,da,db,ts,nu);
-vd = [5:11];
+vd = [5:0.5:13];
 es = length(vd);
 rank1 = zeros(es,1);
 errorour1 = zeros(es,1);
@@ -42,7 +42,7 @@ timeour3 = zeros(es,1);
 timefac3 = zeros(es,1);
 for ii=1:es
     m = vd(ii);
-    nts=2^m;
+    nts=round(2^m);
     if nts < 2^12
        it = 10;
     else
@@ -67,7 +67,7 @@ for ii=1:es
     end
     %ts = unique(rand(nts,1)*(pi-2/nts)+1/nts);
     nu = [0:nts-1]';
-    n1 = randsample(nts*nts,m);
+    n1 = randsample(nts*nts,ceil(m));
 
 
     tic;
@@ -237,7 +237,7 @@ for ii=1:es
 %    error1=norm(result1-result2)/norm(result2)
 %    errornyu=norm(result1(n1)-result3)/norm(result3);
     
-    fprintf('\n  %-5d %-9d %-9d %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E\n',m,rank1(ii),rank2(ii),timeour1(ii),timeour2(ii),errorour1(ii),errorour2(ii),timedir,timefac1(ii),timefac2(ii));
+    fprintf('\n  %-5d %-9d %-9d %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E\n',nts,rank1(ii),rank2(ii),timeour1(ii),timeour2(ii),errorour1(ii),errorour2(ii),timedir,timefac1(ii),timefac2(ii));
   
 %    fprintf('\n   %-5d %-9d  %-9d  %-9d  %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E   %-1.6E  %-1.6E\n',m,rank3,rank2,rank1,timeour,timenyu,timeratio,errorcheb,errorour,errornyu,timedir);
 %    gc=imagesc(real(jacobi1(:,it+1:end)));
@@ -248,6 +248,7 @@ for ii=1:es
 %    saveas(bf,'image13a.jpg');
 end
     figure('visible','off');
+    vd = log2(round(2.^vd));
     pic = figure;
     hold on;
     %ag = (log2(timeour1(1))+log2(timeour2(1))+log2(timeour3(1)))/3;
@@ -257,7 +258,7 @@ end
     h(3) = plot(vd,log2(timeour1),'-^r','LineWidth',2);
     %h(4) = plot(vd,log2(timeour2),'-^b','LineWidth',2);
     h(4) = plot(vd,log2(timeour2),'-^g','LineWidth',2);
-    legend('N^2 log N','N^2 log^2 N','NP1 app','NP0 app','Location','bestoutside');
+    legend('N^2 log N','N^2 log^2 N','RS app','CHEB app','Location','bestoutside');
     %if flag > 0
     %   title('RS FFT vs CHEB NUFFT time, uni JPT');
     %else
@@ -283,7 +284,7 @@ end
     h(3) = plot(vd,log2(timefac1),'-xr','LineWidth',2);
     %h(4) = plot(vd,log2(timefac2),'-xb','LineWidth',2);
     h(4) = plot(vd,log2(timefac2),'-xg','LineWidth',2);
-    legend('N^2 log N','N^2 log^2 N','NP1 fac','NP0 fac','Location','bestoutside');
+    legend('N^2 log N','N^2 log^2 N','RS fac','CHEB fac','Location','bestoutside');
     %if flag > 0
     %   title('RS FFT vs CHEB NUFFT time, uni JPT');
     %else
@@ -305,7 +306,7 @@ end
     h(1) = plot(vd,log10(errorour1),'-^r','LineWidth',2);
     %h(2) = plot(vd,log10(errorour2),'-^b','LineWidth',2);
     h(2) = plot(vd,log10(errorour2),'-^g','LineWidth',2);
-    legend('NP1 relerr','NP0 relerr','Location','bestoutside');
+    legend('RS relerr','CHEB relerr','Location','bestoutside');
     %if flag > 0
     %   title('relerr, uni JPT');
     %else
@@ -327,7 +328,7 @@ end
     h(1) = plot(vd,rank1,'-^r','LineWidth',2);
     %h(2) = plot(vd,rank2,'-^b','LineWidth',2);
     h(2) = plot(vd,rank2,'-^g','LineWidth',2);
-    legend('NP1 rank','NP0 rank','Location','bestoutside');
+    legend('RS rank','CHEB rank','Location','bestoutside');
     %if flag > 0
     %   title('rank, uni JPT');
     %else

@@ -268,7 +268,7 @@ end
     h(3) = plot(vd,log2(timeour1),'-^r','LineWidth',2);
     %h(4) = plot(vd,log2(timeour2),'-^b','LineWidth',2);
     h(4) = plot(vd,log2(timeour2),'-^g','LineWidth',2);
-    legend('N^3 log N','N^3 log^2 N','NP1 app','NP0 app','Location','bestoutside');
+    legend('N^3 log N','N^3 log^2 N','RS app','CHEB app','Location','bestoutside');
     %if flag > 0
     %   title('RS FFT vs CHEB NUFFT time, uni JPT');
     %else
@@ -294,7 +294,7 @@ end
     h(3) = plot(vd,log2(timefac1),'-xr','LineWidth',2);
     %h(4) = plot(vd,log2(timefac2),'-xb','LineWidth',2);
     h(4) = plot(vd,log2(timefac2),'-xg','LineWidth',2);
-    legend('N^3 log N','N^3 log^2 N','NP1 fac','NP0 fac','Location','bestoutside');
+    legend('N^3 log N','N^3 log^2 N','RS fac','CHEB fac','Location','bestoutside');
     %if flag > 0
     %   title('RS FFT vs CHEB NUFFT time, uni JPT');
     %else
@@ -316,7 +316,7 @@ end
     h(1) = plot(vd,log10(errorour1),'-^r','LineWidth',2);
     %h(2) = plot(vd,log10(errorour2),'-^b','LineWidth',2);
     h(2) = plot(vd,log10(errorour2),'-^g','LineWidth',2);
-    legend('NP1 relerr','NP0 relerr','Location','bestoutside');
+    legend('RS relerr','CHEB relerr','Location','bestoutside');
     %if flag > 0
     %   title('relerr, uni JPT');
     %else
@@ -338,7 +338,7 @@ end
     h(1) = plot(vd,rank1,'-^r','LineWidth',2);
     %h(2) = plot(vd,rank2,'-^b','LineWidth',2);
     h(2) = plot(vd,rank2,'-^g','LineWidth',2);
-    legend('NP1 rank','NP0 rank','Location','bestoutside');
+    legend('RS rank','CHEB rank','Location','bestoutside');
     %if flag > 0
     %   title('rank, uni JPT');
     %else

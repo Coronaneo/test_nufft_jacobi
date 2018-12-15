@@ -22,10 +22,27 @@ tol =
 >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> 
 >> start RS SVD vs CHEB ID comparison:>> 
 >> da = -0.50,db = -0.50
->> >> size  RS_rank    sCH_rank   sdCH_rank  RSapp_time     sChapp_time    sdChapp_time   error_RS       error_sCh      error_sdCh     dir_time       RSfac_time     sChfac_time    sdChfac_time   
+>> >> size  RS_rank    CHEB_rank  RSapp_time     CHEBapp_time   error_RS       error_CHEB     dir_time       RSfac_time     CHEBfac_time   
 >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> 
-  8     2         1         1         4.522625E-03   2.078000E-03   1.880000E-04   NaN   NaN   NaN   5.158208E+00   3.235695E-01   2.371899E-01   1.921260E-01
+  8     2         9         3.580300E-03   3.191000E-04   NaN   NaN   4.247680E+00   3.030763E-01   3.498110E-02
 
-  9     2         1         1         1.357500E-04   1.067500E-04   1.063750E-04   NaN   NaN   NaN   6.823993E+00   4.331687E-01   2.208526E-01   9.912087E-02
+  9     2         9         1.420000E-04   2.334000E-04   NaN   NaN   6.752484E+00   4.238411E-01   3.153150E-02
 
-  10    2         1         1         2.460000E-04   1.740000E-04   1.702500E-04   NaN   NaN   NaN   3.093238E+01   8.755674E-01   5.155374E-01   2.060568E-01
+  10    2         9         1.510000E-04   4.026000E-04   NaN   NaN   3.063921E+01   8.644911E-01   4.612720E-02
+
+  11    2         9         2.535000E-04   7.632000E-04   NaN   NaN   1.559673E+02   1.795703E+00   6.817870E-02
+
+  12    2         9         5.323000E-04   1.602800E-03   NaN   NaN   8.580574E+02   3.974633E+00   1.226349E-01
+
+  13    2         9         9.155000E-04   3.069300E-03   NaN   NaN   5.182386E+03   8.826152E+00   2.147557E-01
+
+  14    2         9         1.933100E-03   7.340500E-03   NaN   NaN   3.409155E+04   1.920617E+01   4.074844E-01
+
+  15    2         9         4.922300E-03   1.638080E-02   NaN   NaN   2.372834E+05   4.322717E+01   9.316329E-01
+
+  16    3         9         1.115670E-02   3.274310E-02   NaN   NaN   1.711785E+06   9.504614E+01   1.772549E+00
+>> >> >> [Warning: MATLAB has disabled some advanced graphics rendering features by
+switching to software OpenGL. For more information, click <a
+href="matlab:opengl('problems')">here</a>.] 
+>> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> >> MATLAB: management.cpp:671: find: Assertion `' failed.
+MATLAB: management.cpp:671: find: Assertion `' failed.
